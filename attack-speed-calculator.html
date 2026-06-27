@@ -1,0 +1,1332 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 攻速 ASPD 計算器</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ee;
+      --paper: #fffdf9;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --field: #ffffff;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(165, 40, 45, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(35, 108, 95, 0.09), transparent 38%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .brand > div:not(.mark) {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: var(--radius);
+      background: #fff8ed;
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .source-pill {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255, 253, 249, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      max-width: 100%;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.92);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border-radius: 6px;
+      background: rgba(35, 108, 95, 0.1);
+      color: var(--mint);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .form {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .character-panel {
+      display: grid;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #eef2f8;
+    }
+
+    .character-row,
+    .stat-line {
+      display: grid;
+      align-items: center;
+      min-height: 52px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .character-row:last-child,
+    .stat-line:last-child {
+      border-bottom: 0;
+    }
+
+    .level-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .character-label,
+    .level-field label,
+    .stat-name {
+      color: #05080d;
+      font-size: 16px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .level-field {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      align-items: center;
+      min-width: 0;
+    }
+
+    .level-field + .level-field {
+      border-left: 1px solid var(--line);
+    }
+
+    .stat-line {
+      grid-template-columns: 64px minmax(0, 1fr) 28px 72px 28px 50px 28px 56px;
+      gap: 0;
+      background: #dfe5f0;
+    }
+
+    .stat-name {
+      display: grid;
+      place-items: center;
+      height: 100%;
+      background: #eef2f8;
+    }
+
+    .stat-operator,
+    .stat-job-input,
+    .stat-total {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      color: #05080d;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .stat-total {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-job-input {
+      width: 100%;
+      height: 46px;
+      padding: 6px 8px;
+      border: 1px solid #cfc6ba;
+      border-radius: 6px;
+      background: var(--field);
+      color: #05080d;
+      outline: none;
+      text-align: center;
+    }
+
+    .stat-total {
+      color: var(--accent-strong);
+    }
+
+    .job-toggle-row {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      min-height: 54px;
+      padding: 8px 14px;
+      background: rgba(255, 253, 249, 0.92);
+      border-top: 1px solid var(--line);
+    }
+
+    .job-toggle-label {
+      font-size: 16px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .job-note {
+      min-width: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .points-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      border-top: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .point-cell {
+      display: grid;
+      gap: 4px;
+      min-height: 62px;
+      padding: 9px 10px;
+      background: rgba(255, 253, 249, 0.94);
+      text-align: center;
+    }
+
+    .point-cell span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .point-cell strong {
+      color: var(--ink);
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .point-cell strong.negative {
+      color: var(--accent-strong);
+    }
+
+    .point-input {
+      width: 100%;
+      height: 30px;
+      padding: 4px 6px;
+      border: 1px solid #cfc6ba;
+      border-radius: 6px;
+      background: var(--field);
+      color: var(--ink);
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .field label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      height: 48px;
+      padding: 9px 12px;
+      border: 1px solid #cfc6ba;
+      border-radius: var(--radius);
+      background: var(--field);
+      color: var(--ink);
+      outline: none;
+      font-size: 17px;
+      font-weight: 800;
+      min-width: 0;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.14);
+    }
+
+    .quick-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .quick-button,
+    .primary-button,
+    .ghost-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 900;
+      min-width: 0;
+      transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
+    }
+
+    .quick-button {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      background: #fffaf1;
+      color: #4e5662;
+      font-size: 13px;
+      white-space: normal;
+    }
+
+    .quick-button:hover {
+      border-color: rgba(165, 40, 45, 0.36);
+      color: var(--accent-strong);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .primary-button,
+    .ghost-button {
+      padding: 9px 12px;
+      border: 1px solid transparent;
+      font-size: 14px;
+    }
+
+    .primary-button {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .primary-button:hover {
+      background: var(--accent-strong);
+      transform: translateY(-1px);
+    }
+
+    .ghost-button {
+      border-color: var(--line);
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .ghost-button:hover {
+      border-color: rgba(165, 40, 45, 0.36);
+      color: var(--accent-strong);
+    }
+
+    .result-main {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(165, 40, 45, 0.08), rgba(200, 146, 45, 0.1));
+    }
+
+    .result-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .result-value {
+      color: var(--accent-strong);
+      font-size: clamp(42px, 8vw, 72px);
+      font-weight: 900;
+      line-height: 0.95;
+    }
+
+    .result-sub {
+      color: #4e5662;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .stat {
+      min-height: 92px;
+      padding: 14px;
+      background: rgba(255, 253, 249, 0.96);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 25px;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .stat strong.negative {
+      color: var(--accent-strong);
+    }
+
+    .formula-panel {
+      margin-top: 18px;
+    }
+
+    .formula-body {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      color: #4e5662;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .formula-line {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      color: var(--ink);
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .source-pill {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100% - 20px, 1120px);
+        padding-top: 18px;
+      }
+
+      .brand {
+        align-items: flex-start;
+      }
+
+      .brand > div:not(.mark) {
+        width: calc(100vw - 86px);
+        max-width: calc(100vw - 86px);
+      }
+
+      h1 {
+        font-size: 22px;
+        word-break: break-all;
+      }
+
+      .subtitle {
+        font-size: 13px;
+        word-break: break-all;
+      }
+
+      .field label .hint {
+        display: none;
+      }
+
+      .field-row,
+      .actions,
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .level-row {
+        grid-template-columns: 1fr;
+      }
+
+      .level-field + .level-field {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .character-label {
+        min-height: 42px;
+        display: grid;
+        place-items: center;
+      }
+
+      .stat-line {
+        grid-template-columns: 42px 88px 18px 44px 18px 30px 18px 34px;
+        justify-content: start;
+        width: 100%;
+        min-width: 0;
+      }
+
+      .stat-name,
+      .stat-operator,
+      .stat-job-input,
+      .stat-total {
+        font-size: 14px;
+      }
+
+      .stat-line input[type="number"] {
+        height: 42px;
+        padding: 6px 7px;
+        font-size: 15px;
+      }
+
+      .job-toggle-row {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 7px;
+      }
+
+      .job-note {
+        grid-column: 1 / -1;
+        text-align: center;
+      }
+
+      .points-row {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .quick-button {
+        width: 100%;
+        min-height: 40px;
+        padding-inline: 6px;
+        font-size: 12px;
+      }
+
+      .panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .result-value {
+        font-size: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">AS</div>
+        <div>
+          <h1>RO樂園 攻速 ASPD 計算器</h1>
+          <p class="subtitle">AGI、DEX、藥水、技能、後延遲與 ASPD+。</p>
+        </div>
+      </div>
+      <a class="source-pill" href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=2072" target="_blank" rel="noreferrer">公式參考</a>
+    </header>
+
+    <div class="layout">
+      <section class="panel" aria-labelledby="input-title">
+        <div class="panel-header">
+          <h2 class="panel-title" id="input-title">攻速輸入</h2>
+          <span class="badge">ZERO / 樂園公式</span>
+        </div>
+        <form class="form" id="speedForm">
+          <div class="character-panel" aria-label="角色素質面板">
+            <div class="character-row level-row">
+              <div class="level-field">
+                <label for="baseLevel">Level</label>
+                <input id="baseLevel" type="number" min="1" max="200" step="1" value="68">
+              </div>
+              <div class="level-field">
+                <label for="jobLevel">JobLevel</label>
+                <input id="jobLevel" type="number" min="1" max="70" step="1" value="50">
+              </div>
+            </div>
+
+            <div class="stat-line" data-stat="str">
+              <label class="stat-name" for="strBase">STR</label>
+              <input class="stat-base" id="strBase" type="number" min="1" step="1" value="36">
+              <span class="stat-operator">+</span>
+              <input class="stat-extra" id="strExtra" type="number" step="1" value="0" aria-label="STR 裝備或其他加成">
+              <span class="stat-operator">+</span>
+              <input class="stat-job-input" id="strJob" type="number" step="1" value="0" aria-label="STR Job 加成">
+              <span class="stat-operator">=</span>
+              <span class="stat-total" id="strTotal">0</span>
+            </div>
+
+            <div class="stat-line" data-stat="agi">
+              <label class="stat-name" for="agiBase">AGI</label>
+              <input class="stat-base" id="agiBase" type="number" min="1" step="1" value="80">
+              <span class="stat-operator">+</span>
+              <input class="stat-extra" id="agiExtra" type="number" step="1" value="0" aria-label="AGI 裝備或其他加成">
+              <span class="stat-operator">+</span>
+              <input class="stat-job-input" id="agiJob" type="number" step="1" value="0" aria-label="AGI Job 加成">
+              <span class="stat-operator">=</span>
+              <span class="stat-total" id="agiTotal">0</span>
+            </div>
+
+            <div class="stat-line" data-stat="vit">
+              <label class="stat-name" for="vitBase">VIT</label>
+              <input class="stat-base" id="vitBase" type="number" min="1" step="1" value="1">
+              <span class="stat-operator">+</span>
+              <input class="stat-extra" id="vitExtra" type="number" step="1" value="0" aria-label="VIT 裝備或其他加成">
+              <span class="stat-operator">+</span>
+              <input class="stat-job-input" id="vitJob" type="number" step="1" value="0" aria-label="VIT Job 加成">
+              <span class="stat-operator">=</span>
+              <span class="stat-total" id="vitTotal">0</span>
+            </div>
+
+            <div class="stat-line" data-stat="int">
+              <label class="stat-name" for="intBase">INT</label>
+              <input class="stat-base" id="intBase" type="number" min="1" step="1" value="1">
+              <span class="stat-operator">+</span>
+              <input class="stat-extra" id="intExtra" type="number" step="1" value="0" aria-label="INT 裝備或其他加成">
+              <span class="stat-operator">+</span>
+              <input class="stat-job-input" id="intJob" type="number" step="1" value="0" aria-label="INT Job 加成">
+              <span class="stat-operator">=</span>
+              <span class="stat-total" id="intTotal">0</span>
+            </div>
+
+            <div class="stat-line" data-stat="dex">
+              <label class="stat-name" for="dexBase">DEX</label>
+              <input class="stat-base" id="dexBase" type="number" min="1" step="1" value="1">
+              <span class="stat-operator">+</span>
+              <input class="stat-extra" id="dexExtra" type="number" step="1" value="0" aria-label="DEX 裝備或其他加成">
+              <span class="stat-operator">+</span>
+              <input class="stat-job-input" id="dexJob" type="number" step="1" value="0" aria-label="DEX Job 加成">
+              <span class="stat-operator">=</span>
+              <span class="stat-total" id="dexTotal">0</span>
+            </div>
+
+            <div class="stat-line" data-stat="luk">
+              <label class="stat-name" for="lukBase">LUK</label>
+              <input class="stat-base" id="lukBase" type="number" min="1" step="1" value="39">
+              <span class="stat-operator">+</span>
+              <input class="stat-extra" id="lukExtra" type="number" step="1" value="0" aria-label="LUK 裝備或其他加成">
+              <span class="stat-operator">+</span>
+              <input class="stat-job-input" id="lukJob" type="number" step="1" value="0" aria-label="LUK Job 加成">
+              <span class="stat-operator">=</span>
+              <span class="stat-total" id="lukTotal">0</span>
+            </div>
+
+            <div class="job-toggle-row">
+              <div class="job-toggle-label">JOB加成</div>
+              <div class="job-note" id="jobBonusNote">未取得可驗證的樂園職業表，請依樂園資料或遊戲面板手動填寫。</div>
+            </div>
+
+            <div class="points-row" aria-label="素質點數">
+              <label class="point-cell" for="availablePoints">
+                <span>可用素質點</span>
+                <input class="point-input" id="availablePoints" type="number" min="0" step="1" value="678">
+              </label>
+              <div class="point-cell">
+                <span>已消耗點數</span>
+                <strong id="spentPoints">0</strong>
+              </div>
+              <div class="point-cell">
+                <span>剩餘點數</span>
+                <strong id="remainingPoints">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="characterClass">職業 <span class="hint">依 Google Sheet 攻速表</span></label>
+            <select id="characterClass">
+              <option value="刺客" selected>刺客</option>
+              <option value="十字刺客">十字刺客</option>
+              <option value="盜賊">盜賊</option>
+              <option value="流氓">流氓</option>
+              <option value="神行太保">神行太保</option>
+              <option value="劍士">劍士</option>
+              <option value="騎士">騎士</option>
+              <option value="騎士領主">騎士領主</option>
+              <option value="十字軍">十字軍</option>
+              <option value="聖殿十字軍">聖殿十字軍</option>
+              <option value="弓箭手">弓箭手</option>
+              <option value="獵人">獵人</option>
+              <option value="神射手">神射手</option>
+              <option value="詩人">詩人</option>
+              <option value="搞笑藝人">搞笑藝人</option>
+              <option value="舞孃">舞孃</option>
+              <option value="冷豔舞姬">冷豔舞姬</option>
+              <option value="服事">服事</option>
+              <option value="祭司">祭司</option>
+              <option value="神官">神官</option>
+              <option value="武僧">武僧</option>
+              <option value="武術宗師">武術宗師</option>
+              <option value="魔法師">魔法師</option>
+              <option value="巫師">巫師</option>
+              <option value="超魔導士">超魔導士</option>
+              <option value="賢者">賢者</option>
+              <option value="智者">智者</option>
+              <option value="商人">商人</option>
+              <option value="鐵匠">鐵匠</option>
+              <option value="神工匠">神工匠</option>
+              <option value="煉金術師">煉金術師</option>
+              <option value="創造者">創造者</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="weaponPreset">武器 <span class="hint">帶入基礎攻速/懲罰</span></label>
+            <select id="weaponPreset">
+              <option value="拳刃" selected>拳刃</option>
+              <option value="短劍">短劍</option>
+              <option value="單手劍">單手劍</option>
+              <option value="雙手劍">雙手劍</option>
+              <option value="單手斧">單手斧</option>
+              <option value="雙手斧">雙手斧</option>
+              <option value="鈍器">鈍器</option>
+              <option value="單手杖">單手杖</option>
+              <option value="雙手杖">雙手杖</option>
+              <option value="弓">弓</option>
+              <option value="單手矛">單手矛</option>
+              <option value="雙手矛">雙手矛</option>
+              <option value="書">書</option>
+              <option value="拳套">拳套</option>
+              <option value="樂器">樂器</option>
+              <option value="鞭子">鞭子</option>
+              <option value="空手">空手</option>
+              <option value="custom">自訂武器（手動填下方數值）</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="offhandPreset">副手 <span class="hint">盾或刺客左手武器</span></label>
+            <select id="offhandPreset">
+              <option value="無" selected>無</option>
+              <option value="盾">盾</option>
+              <option value="短劍">短劍</option>
+              <option value="單手劍">單手劍</option>
+              <option value="單手斧">單手斧</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="baseSpeed">武器基礎攻速 <span class="hint">樂園公式用值</span></label>
+              <input id="baseSpeed" type="number" step="0.1" value="156">
+            </div>
+            <div class="field">
+              <label for="weaponPenalty">武器/盾牌修正 <span class="hint">刺客拳刃 -2</span></label>
+              <input id="weaponPenalty" type="number" step="0.1" value="-2">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="potionSelect">藥水</label>
+            <select id="potionSelect">
+              <option value="none" data-bonus="0">無 Modifier 0</option>
+              <option value="concentration" data-bonus="4">集中藥水 Modifier 4</option>
+              <option value="awakening" data-bonus="6">覺醒藥水 Modifier 6</option>
+              <option value="berserk" data-bonus="9">菠色克藥水 Modifier 9</option>
+              <option value="edp" data-bonus="0">毒藥瓶 Modifier 0</option>
+              <option value="custom">自訂</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="potionBonus">Status Modifier</label>
+              <input id="potionBonus" type="number" min="0" step="0.1" value="0">
+            </div>
+            <div class="field">
+              <label for="skillBonus">額外 Modifier</label>
+              <input id="skillBonus" type="number" min="0" step="0.1" value="0">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="afterDelay">裝備/技能 ASPD %</label>
+              <input id="afterDelay" type="number" min="0" max="100" step="0.1" value="0">
+            </div>
+            <div class="field">
+              <label for="flatApsd">額外 ASPD+</label>
+              <input id="flatApsd" type="number" step="0.1" value="0">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cap">攻速上限 <span class="hint">Lv100 前 190 / Lv100+ 191</span></label>
+            <input id="cap" type="number" min="1" step="0.1" value="190">
+          </div>
+
+          <div class="quick-row" aria-label="快速設定">
+            <button class="quick-button" type="button" data-preset="katar">刺客拳刃 156 / -2</button>
+            <button class="quick-button" type="button" data-preset="customWeapon">自訂武器</button>
+            <button class="quick-button" type="button" data-preset="berserk">菠色克 Mod 9</button>
+            <button class="quick-button" type="button" data-preset="edp">毒藥瓶 Mod 0</button>
+          </div>
+
+          <div class="actions">
+            <button class="primary-button" type="button" id="copySummary">複製結果</button>
+            <button class="ghost-button" type="reset">重設</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="result-title">
+        <div class="panel-header">
+          <h2 class="panel-title" id="result-title">計算結果</h2>
+          <span class="badge" id="capBadge">上限 190</span>
+        </div>
+        <div class="result-main">
+          <div class="result-label">最終 ASPD</div>
+          <div class="result-value" id="finalApsd">0.00</div>
+          <div class="result-sub" id="resultSummary">輸入數值後自動計算。</div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span>ASPD#1</span>
+            <strong id="aspdOne">0.00</strong>
+          </div>
+          <div class="stat">
+            <span>ASPD#2</span>
+            <strong id="aspdTwo">0.00</strong>
+          </div>
+          <div class="stat">
+            <span>未封頂 ASPD</span>
+            <strong id="rawApsd">0.00</strong>
+          </div>
+          <div class="stat">
+            <span>距離上限</span>
+            <strong id="capGap">0.00</strong>
+          </div>
+          <div class="stat">
+            <span>CRI</span>
+            <strong id="critRate">0</strong>
+          </div>
+          <div class="stat">
+            <span>剩餘素質點</span>
+            <strong id="remainingPointsCard">0</strong>
+          </div>
+          <div class="stat">
+            <span>每秒攻擊次數</span>
+            <strong id="hitsPerSecond">0.00</strong>
+          </div>
+          <div class="stat">
+            <span>攻擊間隔</span>
+            <strong id="attackInterval">0.000 秒</strong>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel formula-panel" aria-labelledby="formula-title">
+      <div class="panel-header">
+        <h2 class="panel-title" id="formula-title">使用公式</h2>
+        <span class="badge">可依伺服器差異微調</span>
+      </div>
+      <div class="formula-body">
+        <div class="formula-line">計算 AGI / DEX = 配點 + 裝備/其他加成 + Job 加成</div>
+        <div class="formula-line">可用素質點預設依 Level 自動帶入；若與遊戲內不同，可直接修改「可用素質點」欄位。</div>
+        <div class="formula-line">已消耗點數只計算六圍配點欄；裝備、狀態、Job 加成不消耗點數。</div>
+        <div class="formula-line">Lv100 前可用素質點：Lv1 起始 48；Lv X 升到 X+1 取得 floor(X / 5) + 3</div>
+        <div class="formula-line">CRI = 1 + floor(LUK / 3)</div>
+        <div class="formula-line">攻速上限預設：Base Lv 100 前 190，Base Lv 100 以上 191</div>
+        <div class="formula-line">ASPD#1 = floor(武器基礎攻速 + 武器/盾牌修正 + sqrt(DEX² / 5 + AGI² / 2) / 4 + ((Status Modifier 總和) × AGI / 200))</div>
+        <div class="formula-line">ASPD#2 = floor(ASPD#1 + (195 - ASPD#1) × 裝備/技能 ASPD%)</div>
+        <div class="formula-line">最終 ASPD = min(攻速上限, ASPD#2 + 固定 ASPD+)</div>
+        <p class="note">左側面板的第二個加號欄位可填裝備、料理、狀態等額外素質；第三個加號欄位請填樂園版 Job 加成。目前沒有抓到可驗證的樂園職業加成表，所以不自動代入原版資料，避免混用版本。攻速公式已依 Google Sheet：覺醒藥水是 Modifier 6，不是 15%；刺客拳刃武器修正為 -2；ASPD#1 與 ASPD#2 都會先無條件捨去。攻速上限只在最後封頂，預設 Lv100 前 190 / Lv100+ 191。可用素質點依 Base Lv 自動帶入，也可手動覆蓋。</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STAT_KEYS = ["str", "agi", "vit", "int", "dex", "luk"];
+    const DELAY_ASPD_BASE = 195;
+    const ASPD_CLASS_TABLE = {
+      "服事": { base: 156, penalties: { "盾": -7, "鈍器": -5, "單手杖": -20, "雙手杖": -20 } },
+      "弓箭手": { base: 156, penalties: { "盾": -9, "短劍": -15, "弓": -10 } },
+      "魔法師": { base: 146, penalties: { "盾": -10, "單手杖": -5, "雙手杖": -5, "短劍": 0 } },
+      "商人": { base: 156, penalties: { "盾": -5, "鈍器": -10, "短劍": -12, "單手劍": -12, "單手斧": -8, "雙手斧": -15 } },
+      "劍士": { base: 156, penalties: { "盾": -5, "鈍器": -10, "短劍": -7, "單手劍": -7, "雙手劍": -14, "單手斧": -15, "雙手斧": -20, "單手矛": -17, "雙手矛": -25 } },
+      "盜賊": { base: 156, penalties: { "盾": -6, "短劍": -8, "弓": -13, "單手劍": -10 } },
+      "祭司": { base: 156, penalties: { "盾": -5, "鈍器": -3, "單手杖": -20, "雙手杖": -20, "書": -4, "拳套": -20 } },
+      "武僧": { base: 156, penalties: { "盾": -3, "鈍器": -3, "單手杖": -20, "雙手杖": -18, "拳套": 0 } },
+      "神官": { base: 156, penalties: { "盾": -3, "鈍器": -3, "單手杖": -20, "雙手杖": -20, "書": -4, "拳套": -20 } },
+      "武術宗師": { base: 156, penalties: { "盾": -3, "鈍器": -3, "單手杖": -20, "雙手杖": -18, "拳套": 0 } },
+      "獵人": { base: 156, penalties: { "盾": -9, "短劍": -13, "弓": -7 } },
+      "詩人": { base: 156, penalties: { "盾": -5, "短劍": -13, "弓": -8, "樂器": -5 } },
+      "舞孃": { base: 156, penalties: { "盾": -5, "短劍": -13, "弓": -8, "鞭子": -5 } },
+      "神射手": { base: 156, penalties: { "盾": -9, "短劍": -13, "弓": -7 } },
+      "搞笑藝人": { base: 156, penalties: { "盾": -5, "短劍": -13, "弓": -8, "樂器": -5 } },
+      "冷豔舞姬": { base: 156, penalties: { "盾": -5, "短劍": -13, "弓": -8, "鞭子": -5 } },
+      "巫師": { base: 146, penalties: { "盾": -8, "單手杖": -3, "雙手杖": -3, "短劍": -4 } },
+      "賢者": { base: 151, penalties: { "盾": -3, "單手杖": -10, "雙手杖": -10, "短劍": -8, "書": 2 } },
+      "超魔導士": { base: 146, penalties: { "盾": -8, "單手杖": -3, "雙手杖": -3, "短劍": -4 } },
+      "智者": { base: 151, penalties: { "盾": -3, "單手杖": -10, "雙手杖": -10, "短劍": -8, "書": 2 } },
+      "鐵匠": { base: 156, penalties: { "盾": -5, "鈍器": -8, "短劍": -10, "單手劍": -10, "單手斧": -6, "雙手斧": -10 } },
+      "煉金術師": { base: 156, penalties: { "盾": -4, "鈍器": -5, "短劍": -10, "單手劍": -5, "單手斧": -5, "雙手斧": -12 } },
+      "神工匠": { base: 156, penalties: { "盾": -5, "鈍器": -8, "短劍": -10, "單手劍": -10, "單手斧": -6, "雙手斧": -10 } },
+      "創造者": { base: 156, penalties: { "盾": -4, "鈍器": -5, "短劍": -10, "單手劍": -5, "單手斧": -5, "雙手斧": -12 } },
+      "騎士": { base: 156, penalties: { "盾": -5, "鈍器": -5, "短劍": -9, "單手劍": -5, "雙手劍": -2, "單手斧": -10, "雙手斧": -15, "單手矛": -15, "雙手矛": -20 } },
+      "十字軍": { base: 156, penalties: { "盾": -5, "鈍器": -5, "短劍": -8, "單手劍": -3, "雙手劍": -15, "單手斧": -10, "雙手斧": -15, "單手矛": -13, "雙手矛": -10 } },
+      "騎士領主": { base: 156, penalties: { "盾": -5, "鈍器": -5, "短劍": -9, "單手劍": -5, "雙手劍": -3, "單手斧": -10, "雙手斧": -15, "單手矛": -15, "雙手矛": -20 } },
+      "聖殿十字軍": { base: 156, penalties: { "盾": -5, "鈍器": -5, "短劍": -8, "單手劍": -3, "雙手劍": -15, "單手斧": -10, "雙手斧": -15, "單手矛": -13, "雙手矛": -10 } },
+      "刺客": { base: 156, penalties: { "短劍": -2, "單手劍": -10, "單手斧": -11, "拳刃": -2 }, offhand: { "盾": -6, "短劍": -10, "單手劍": -12, "單手斧": -12 } },
+      "流氓": { base: 156, penalties: { "盾": -3, "短劍": -5, "弓": -10, "單手劍": -10 } },
+      "十字刺客": { base: 156, penalties: { "短劍": -2, "單手劍": -10, "單手斧": -11, "拳刃": -2 }, offhand: { "盾": -6, "短劍": -10, "單手劍": -12, "單手斧": -12 } },
+      "神行太保": { base: 156, penalties: { "盾": -3, "短劍": -5, "弓": -10, "單手劍": -10 } }
+    };
+
+    const fields = {
+      characterClass: document.querySelector("#characterClass"),
+      baseLevel: document.querySelector("#baseLevel"),
+      jobLevel: document.querySelector("#jobLevel"),
+      availablePoints: document.querySelector("#availablePoints"),
+      weaponPreset: document.querySelector("#weaponPreset"),
+      offhandPreset: document.querySelector("#offhandPreset"),
+      baseSpeed: document.querySelector("#baseSpeed"),
+      weaponPenalty: document.querySelector("#weaponPenalty"),
+      potionSelect: document.querySelector("#potionSelect"),
+      potionBonus: document.querySelector("#potionBonus"),
+      skillBonus: document.querySelector("#skillBonus"),
+      afterDelay: document.querySelector("#afterDelay"),
+      flatApsd: document.querySelector("#flatApsd"),
+      cap: document.querySelector("#cap")
+    };
+
+    const output = {
+      finalApsd: document.querySelector("#finalApsd"),
+      resultSummary: document.querySelector("#resultSummary"),
+      aspdOne: document.querySelector("#aspdOne"),
+      aspdTwo: document.querySelector("#aspdTwo"),
+      rawApsd: document.querySelector("#rawApsd"),
+      capGap: document.querySelector("#capGap"),
+      critRate: document.querySelector("#critRate"),
+      spentPoints: document.querySelector("#spentPoints"),
+      remainingPoints: document.querySelector("#remainingPoints"),
+      remainingPointsCard: document.querySelector("#remainingPointsCard"),
+      hitsPerSecond: document.querySelector("#hitsPerSecond"),
+      attackInterval: document.querySelector("#attackInterval"),
+      capBadge: document.querySelector("#capBadge")
+    };
+
+    const statControls = Object.fromEntries(STAT_KEYS.map((stat) => [
+      stat,
+      {
+        base: document.querySelector(`#${stat}Base`),
+        extra: document.querySelector(`#${stat}Extra`),
+        job: document.querySelector(`#${stat}Job`),
+        total: document.querySelector(`#${stat}Total`)
+      }
+    ]));
+
+    function numberOf(input, fallback = 0) {
+      const value = Number(input.value);
+      return Number.isFinite(value) ? value : fallback;
+    }
+
+    function percentValue(input) {
+      return Math.max(0, numberOf(input));
+    }
+
+    function format(value, digits = 2) {
+      if (!Number.isFinite(value)) {
+        return "0.00";
+      }
+      return value.toFixed(digits);
+    }
+
+    let autoAvailablePoints = true;
+    let autoSpeedCap = true;
+
+    function floorApsd(value) {
+      return Math.floor(value + Number.EPSILON);
+    }
+
+    function totalStatusPoints(level) {
+      let points = 48;
+      for (let previousLevel = 1; previousLevel < level; previousLevel += 1) {
+        if (previousLevel < 100) {
+          points += Math.floor(previousLevel / 5) + 3;
+        } else if (previousLevel <= 150) {
+          points += Math.floor(previousLevel / 10) + 13;
+        } else {
+          points += Math.floor((previousLevel - 150) / 7) + 28;
+        }
+      }
+      return points;
+    }
+
+    function statPointCost(value) {
+      const target = Math.max(1, Math.floor(value));
+      let cost = 0;
+      for (let stat = 1; stat < target; stat += 1) {
+        cost += stat < 99
+          ? Math.floor((stat - 1) / 10) + 2
+          : 4 * Math.floor((stat - 100) / 5) + 16;
+      }
+      return cost;
+    }
+
+    function syncAvailablePoints() {
+      if (!autoAvailablePoints) {
+        return;
+      }
+      const level = Math.max(1, Math.floor(numberOf(fields.baseLevel, 1)));
+      fields.availablePoints.value = totalStatusPoints(level);
+    }
+
+    function defaultSpeedCap(level) {
+      return level >= 100 ? 191 : 190;
+    }
+
+    function syncSpeedCap() {
+      if (!autoSpeedCap) {
+        return;
+      }
+      const level = Math.max(1, Math.floor(numberOf(fields.baseLevel, 1)));
+      fields.cap.value = defaultSpeedCap(level);
+    }
+
+    function updateStatPanel() {
+      const jobLevel = Math.max(1, numberOf(fields.jobLevel, 50));
+      const totals = {};
+      STAT_KEYS.forEach((stat) => {
+        const base = Math.max(0, numberOf(statControls[stat].base));
+        const extra = numberOf(statControls[stat].extra);
+        const job = numberOf(statControls[stat].job);
+        const total = Math.max(0, base + extra + job);
+        statControls[stat].total.textContent = format(total, 0);
+        totals[stat] = total;
+      });
+
+      const note = document.querySelector("#jobBonusNote");
+      note.textContent = `Job ${format(jobLevel, 0)}：請填樂園版 Job 加成，不使用原版自動表。`;
+      return totals;
+    }
+
+    function calculate() {
+      syncAvailablePoints();
+      syncSpeedCap();
+      const totals = updateStatPanel();
+      const agi = totals.agi;
+      const dex = totals.dex;
+      const luk = totals.luk;
+      const spentPoints = STAT_KEYS.reduce((sum, stat) => {
+        return sum + statPointCost(numberOf(statControls[stat].base, 1));
+      }, 0);
+      const availablePoints = Math.max(0, Math.floor(numberOf(fields.availablePoints, 0)));
+      const remainingPoints = availablePoints - spentPoints;
+      const critRate = 1 + Math.floor(luk / 3);
+      const baseSpeed = numberOf(fields.baseSpeed, 156);
+      const weaponAdjustment = numberOf(fields.weaponPenalty);
+      const statusModifier = percentValue(fields.potionBonus);
+      const extraModifier = percentValue(fields.skillBonus);
+      const aspdPercent = Math.min(100, percentValue(fields.afterDelay));
+      const flatApsd = numberOf(fields.flatApsd);
+      const cap = Math.max(1, numberOf(fields.cap, 190));
+
+      const statBonus = Math.sqrt((dex * dex) / 5 + (agi * agi) / 2) / 4;
+      const statusBonus = ((statusModifier + extraModifier) * agi) / 200;
+      const aspdOneRaw = baseSpeed + weaponAdjustment + statBonus + statusBonus;
+      const aspdOne = floorApsd(aspdOneRaw);
+      const delayBase = Math.max(0, DELAY_ASPD_BASE - aspdOne);
+      const delayGain = delayBase * aspdPercent / 100;
+      const aspdTwo = floorApsd(aspdOne + delayGain);
+      const rawApsd = aspdTwo + flatApsd;
+      const cappedApsd = Math.min(cap, rawApsd);
+      const finalApsd = floorApsd(cappedApsd);
+      const gap = Math.max(0, cap - finalApsd);
+      const interval = Math.max(0, (200 - finalApsd) / 50);
+      const hitsPerSecond = interval > 0 ? 1 / interval : 0;
+
+      output.finalApsd.textContent = format(finalApsd, 0);
+      output.aspdOne.textContent = format(aspdOne);
+      output.aspdTwo.textContent = format(aspdTwo);
+      output.rawApsd.textContent = format(rawApsd);
+      output.capGap.textContent = format(gap);
+      output.critRate.textContent = format(critRate, 0);
+      output.spentPoints.textContent = format(spentPoints, 0);
+      output.remainingPoints.textContent = format(remainingPoints, 0);
+      output.remainingPointsCard.textContent = format(remainingPoints, 0);
+      output.remainingPoints.classList.toggle("negative", remainingPoints < 0);
+      output.remainingPointsCard.classList.toggle("negative", remainingPoints < 0);
+      output.hitsPerSecond.textContent = `${format(hitsPerSecond)} 次`;
+      output.attackInterval.textContent = `${format(interval, 3)} 秒`;
+      output.capBadge.textContent = `上限 ${format(cap, 0)}`;
+      output.resultSummary.textContent = `計算 AGI ${format(agi, 0)} / DEX ${format(dex, 0)} / LUK ${format(luk, 0)}，CRI ${format(critRate, 0)}。武器 ${format(baseSpeed, 1)} + 修正 ${format(weaponAdjustment, 1)}，Modifier ${format(statusModifier + extraModifier, 1)}，剩餘素質點 ${format(remainingPoints, 0)}。`;
+
+      return {
+        totals,
+        agi,
+        dex,
+        luk,
+        critRate,
+        spentPoints,
+        remainingPoints,
+        finalApsd,
+        baseSpeed,
+        weaponAdjustment,
+        aspdOneRaw,
+        aspdOne,
+        aspdTwo,
+        rawApsd,
+        interval,
+        hitsPerSecond,
+        cap
+      };
+    }
+
+    function syncPotionFromSelect() {
+      const selected = fields.potionSelect.selectedOptions[0];
+      if (fields.potionSelect.value !== "custom" && selected) {
+        fields.potionBonus.value = selected.dataset.bonus || "0";
+      }
+      calculate();
+    }
+
+    function syncEquipmentFromSelect() {
+      const classData = ASPD_CLASS_TABLE[fields.characterClass.value];
+      if (fields.weaponPreset.value !== "custom" && classData) {
+        const mainWeapon = fields.weaponPreset.value;
+        const offhand = fields.offhandPreset.value;
+        const mainAdjustment = Number(classData.penalties[mainWeapon] || 0);
+        const offhandAdjustment = offhand === "無"
+          ? 0
+          : Number((classData.offhand && classData.offhand[offhand]) || (offhand === "盾" ? classData.penalties["盾"] : 0) || 0);
+        fields.baseSpeed.value = classData.base || "156";
+        fields.weaponPenalty.value = mainAdjustment + offhandAdjustment;
+      }
+      calculate();
+    }
+
+    function verifyReferenceCase() {
+      const agi = 76;
+      const dex = 37;
+      const modifier = 6;
+      const statBonus = Math.sqrt((dex * dex) / 5 + (agi * agi) / 2) / 4;
+      const statusBonus = modifier * agi / 200;
+      const aspdOne = floorApsd(156 - 2 + statBonus + statusBonus);
+      const aspdTwo = floorApsd(aspdOne + Math.max(0, DELAY_ASPD_BASE - aspdOne) * 33 / 100);
+      const finalApsd = floorApsd(Math.min(190, aspdTwo));
+      if (finalApsd !== 178) {
+        console.warn("ASPD reference case mismatch", { aspdOne, aspdTwo, finalApsd });
+      }
+    }
+
+    fields.potionSelect.addEventListener("change", syncPotionFromSelect);
+    fields.characterClass.addEventListener("change", syncEquipmentFromSelect);
+    fields.weaponPreset.addEventListener("change", syncEquipmentFromSelect);
+    fields.offhandPreset.addEventListener("change", syncEquipmentFromSelect);
+    document.querySelectorAll("#speedForm input, #speedForm select").forEach((field) => {
+      field.addEventListener("input", () => {
+        if (field === fields.availablePoints) {
+          autoAvailablePoints = false;
+        }
+        if (field === fields.cap) {
+          autoSpeedCap = false;
+        }
+        if (field === fields.baseLevel) {
+          autoAvailablePoints = true;
+          autoSpeedCap = true;
+        }
+        calculate();
+      });
+      field.addEventListener("change", calculate);
+    });
+
+    document.querySelectorAll("[data-preset]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const preset = button.dataset.preset;
+        if (preset === "katar") {
+          fields.characterClass.value = "刺客";
+          fields.weaponPreset.value = "拳刃";
+          fields.offhandPreset.value = "無";
+          fields.baseSpeed.value = "156";
+          fields.weaponPenalty.value = "-2";
+        }
+        if (preset === "customWeapon") {
+          fields.weaponPreset.value = "custom";
+          fields.weaponPenalty.value = "0";
+        }
+        if (preset === "berserk" || preset === "edp") {
+          fields.potionSelect.value = preset;
+          fields.potionBonus.value = preset === "berserk" ? "9" : "0";
+        }
+        calculate();
+      });
+    });
+
+    document.querySelector("#speedForm").addEventListener("reset", () => {
+      window.setTimeout(() => {
+        autoAvailablePoints = true;
+        autoSpeedCap = true;
+        fields.potionSelect.value = "none";
+        syncAvailablePoints();
+        syncSpeedCap();
+        calculate();
+      }, 0);
+    });
+
+    document.querySelector("#copySummary").addEventListener("click", async () => {
+      const result = calculate();
+      const text = `計算 AGI ${format(result.agi, 0)} / DEX ${format(result.dex, 0)} / LUK ${format(result.luk, 0)}，CRI ${format(result.critRate, 0)}，剩餘素質點 ${format(result.remainingPoints, 0)}，最終 ASPD ${format(result.finalApsd, 0)}。`;
+      try {
+        await navigator.clipboard.writeText(text);
+        document.querySelector("#copySummary").textContent = "已複製";
+        window.setTimeout(() => {
+          document.querySelector("#copySummary").textContent = "複製結果";
+        }, 1200);
+      } catch (error) {
+        window.prompt("複製這段結果", text);
+      }
+    });
+
+    verifyReferenceCase();
+    calculate();
+  </script>
+</body>
+</html>

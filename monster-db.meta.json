@@ -1,0 +1,11 @@
+{
+  "source": "https://assets.twroz.wiki/monsters_display_index.json",
+  "fetchedAt": "2026-06-27T10:05:21.163Z",
+  "fullCount": 526,
+  "lightCount": 521,
+  "files": [
+    "monster-db-full.json",
+    "monster-db-full.js",
+    "monster-db.js"
+  ]
+}

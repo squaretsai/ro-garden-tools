@@ -1,0 +1,1310 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 音速投擲命中率計算</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ee;
+      --paper: #fffdf9;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --field: #ffffff;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(165, 40, 45, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(35, 108, 95, 0.09), transparent 38%),
+        var(--bg);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: 8px;
+      background: #fff8ed;
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .source-pill {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 253, 249, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .secondary-layout {
+      margin-top: 18px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.92);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel.shared-panel {
+      margin-bottom: 18px;
+      overflow: visible;
+      position: relative;
+      z-index: 50;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border-radius: 6px;
+      background: rgba(35, 108, 95, 0.1);
+      color: var(--mint);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .form {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .mode {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f2ece4;
+    }
+
+    .mode input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mode label {
+      display: grid;
+      place-items: center;
+      min-height: 40px;
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .mode input:checked + label {
+      background: var(--paper);
+      color: var(--accent-strong);
+      box-shadow: 0 8px 18px rgba(47, 39, 29, 0.1);
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field-inline {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    .field label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .control {
+      position: relative;
+    }
+
+    .monster-combobox {
+      position: relative;
+      min-width: 0;
+    }
+
+    .monster-dropdown {
+      position: absolute;
+      z-index: 100;
+      top: calc(100% + 6px);
+      right: 0;
+      left: 0;
+      max-height: 320px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 6px;
+    }
+
+    .monster-dropdown[hidden] {
+      display: none;
+    }
+
+    .monster-dropdown.open {
+      display: block;
+    }
+
+    .monster-option {
+      display: grid;
+      width: 100%;
+      min-height: 48px;
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .monster-option:hover,
+    .monster-option.active {
+      background: #f2ece4;
+    }
+
+    .monster-option strong {
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .monster-option span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      height: 48px;
+      padding: 9px 12px;
+      border: 1px solid #cfc6ba;
+      border-radius: 8px;
+      background: var(--field);
+      color: var(--ink);
+      outline: none;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    input[type="number"]:focus,
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.14);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbf7f0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    select {
+      width: 100%;
+      height: 48px;
+      padding: 9px 12px;
+      border: 1px solid #cfc6ba;
+      border-radius: 8px;
+      background: var(--field);
+      color: var(--ink);
+      outline: none;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.14);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 9px 13px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .button.primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .button.ghost {
+      border-color: var(--line);
+      background: #fffdf9;
+      color: var(--ink);
+    }
+
+    .results {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .hero-result {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid rgba(165, 40, 45, 0.22);
+      border-radius: 8px;
+      background: linear-gradient(135deg, #fff7ea, #fffdf9 62%);
+    }
+
+    .result-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .result-label {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .result-value {
+      color: var(--accent-strong);
+      font-size: clamp(40px, 8vw, 68px);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .meter {
+      height: 14px;
+      border-radius: 999px;
+      background: #e7ded3;
+      overflow: hidden;
+    }
+
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      transition: width 180ms ease;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .status strong {
+      color: var(--ink);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      min-height: 110px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffdf9;
+    }
+
+    .metric .name {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .metric .value {
+      margin-top: 8px;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .metric .note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .formula {
+      padding: 16px 18px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+      background: #fbf7f0;
+    }
+
+    .formula code {
+      padding: 2px 5px;
+      border-radius: 5px;
+      background: #efe6da;
+      color: var(--accent-strong);
+      font-family: Consolas, "Cascadia Mono", monospace;
+      font-size: 12px;
+    }
+
+    .formula a {
+      color: var(--accent-strong);
+      font-weight: 800;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      max-width: min(360px, calc(100% - 36px));
+      padding: 12px 14px;
+      border: 1px solid rgba(35, 108, 95, 0.22);
+      border-radius: 8px;
+      background: #f4fffb;
+      color: var(--mint);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      font-weight: 800;
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 860px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .shell {
+        width: min(100% - 20px, 1120px);
+        padding-top: 18px;
+      }
+
+      .brand {
+        align-items: flex-start;
+      }
+
+      .mark {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+      }
+
+      .row,
+      .mode {
+        grid-template-columns: 1fr;
+      }
+
+      .field-inline {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-header,
+      .result-head,
+      .status {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">SB</div>
+        <div>
+          <h1>音速投擲命中與迴避率計算</h1>
+          <p class="subtitle">RO樂園向，音投命中套用「超音速投擲」HIT 倍率，並可用 95% 迴避所需 FLEE 回推自身迴避率。</p>
+        </div>
+      </div>
+      <a class="source-pill" href="https://roidv.com/job/12" target="_blank" rel="noreferrer">技能資料來源</a>
+    </header>
+
+    <section class="panel shared-panel" aria-labelledby="monster-title">
+      <div class="panel-header">
+        <h2 class="panel-title" id="monster-title">魔物資料</h2>
+        <span class="badge" id="monsterDbStatus">讀取魔物資料中</span>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label for="monsterSearch">
+            搜尋並選擇魔物
+            <span class="hint">模糊搜尋名稱、ID、等級、命中或迴避</span>
+          </label>
+          <div class="field-inline">
+            <div class="monster-combobox">
+              <input id="monsterSearch" name="monsterSearch" type="text" autocomplete="off" placeholder="例如：深淵騎士、深騎、Lv.90、370">
+              <div class="monster-dropdown" id="monsterDropdown" role="listbox" hidden></div>
+            </div>
+            <button class="button ghost" type="button" id="clearMonsterSearch">清除</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout" aria-label="音速投擲命中率計算器">
+      <section class="panel" aria-labelledby="input-title">
+        <div class="panel-header">
+          <h2 class="panel-title" id="input-title">命中輸入</h2>
+          <span class="badge">Sonic Acceleration</span>
+        </div>
+
+        <form class="form" id="calcForm">
+          <div class="field">
+            <label for="playerHit">
+              自身 HIT
+              <span class="hint">角色面板或加總後 HIT</span>
+            </label>
+            <div class="control">
+              <input id="playerHit" name="playerHit" type="number" inputmode="numeric" min="0" max="9999" step="1" value="253">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="requiredHit">
+              怪物 100% 命中值
+              <span class="hint">選魔物會自動帶入，也可手動改</span>
+            </label>
+            <div class="control">
+              <input id="requiredHit" name="requiredHit" type="number" inputmode="numeric" min="0" max="9999" step="1" value="300">
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="check">
+              <input id="floorFive" type="checkbox">
+              顯示 5% 命中保底
+            </label>
+            <label class="check">
+              <input id="roundDown" type="checkbox" checked>
+              結果小數無條件捨去
+            </label>
+          </div>
+
+          <div class="actions">
+            <button class="button primary" type="submit">重新計算</button>
+            <button class="button ghost" type="button" id="copyResult">複製結果</button>
+            <button class="button ghost" type="button" id="resetSample">重設範例</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="result-title">
+        <div class="panel-header">
+          <h2 class="panel-title" id="result-title">計算結果</h2>
+          <span class="badge" id="thresholdBadge">滿命中 HIT 253</span>
+        </div>
+
+        <div class="results">
+          <div class="hero-result">
+            <div class="result-head">
+              <div>
+                <div class="result-label">已學超音速投擲的音投命中率</div>
+                <div class="result-value" id="sonicRate">100%</div>
+              </div>
+              <div class="result-label" id="sonicRaw">原始計算 100.7%</div>
+            </div>
+            <div class="meter" aria-hidden="true"><span id="sonicMeter"></span></div>
+            <div class="status">
+              <span id="statusText">已達音速投擲 100% 命中。</span>
+              <strong id="deltaText">HIT 剛好達標</strong>
+            </div>
+          </div>
+
+          <div class="hero-result">
+            <div class="result-head">
+              <div>
+                <div class="result-label">非音投一般命中率</div>
+                <div class="result-value" id="normalHeroRate">53%</div>
+              </div>
+              <div class="result-label" id="normalRaw">原始計算 53%</div>
+            </div>
+            <div class="meter" aria-hidden="true"><span id="normalMeter"></span></div>
+            <div class="status">
+              <span id="normalStatusText">一般攻擊尚未達 100% 命中。</span>
+              <strong id="normalDeltaText">還差 47 HIT</strong>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="name">一般命中率</div>
+              <div class="value" id="normalRate">53%</div>
+              <div class="note">未套用超音速投擲 HIT 倍率。</div>
+            </div>
+            <div class="metric">
+              <div class="name">音投滿命中所需 HIT</div>
+              <div class="value" id="sonicNeed">253</div>
+              <div class="note">公式等同怪物 100% 命中值 - 47。</div>
+            </div>
+            <div class="metric">
+              <div class="name">一般滿命中所需 HIT</div>
+              <div class="value" id="normalNeed">300</div>
+              <div class="note">怪物資料的 100% 命中值。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="formula">
+          <div>一般相對命中：<code>100 - (怪物100%命中值 - 自身HIT)</code></div>
+          <div>學會超音速投擲：<code>音投命中率 = 一般相對命中 x 1.9</code>，最高顯示 100%。</div>
+          <div>滿命中門檻：<code>ceil(100 / 1.9) = 53</code>，所以 <code>怪物100%命中值 - (100 - 53) = 怪物100%命中值 - 47</code>。</div>
+          <div>技能倍率參考：<a href="https://roidv.com/job/12" target="_blank" rel="noreferrer">天野幻境刺客技能資料</a>；RO樂園社群常用 100% 命中值算法可對照怪物資料欄位。</div>
+        </div>
+      </section>
+    </section>
+
+    <section class="layout secondary-layout" aria-label="迴避率計算器">
+      <section class="panel" aria-labelledby="evasion-input-title">
+        <div class="panel-header">
+          <h2 class="panel-title" id="evasion-input-title">迴避輸入</h2>
+          <span class="badge">FLEE</span>
+        </div>
+
+        <form class="form" id="evasionForm">
+          <div class="field">
+            <label for="monsterFleeNeed">
+              怪物 95% 迴避所需 FLEE
+              <span class="hint">選魔物會自動帶入，也可手動改</span>
+            </label>
+            <div class="control">
+              <input id="monsterFleeNeed" name="monsterFleeNeed" type="number" inputmode="numeric" min="0" max="9999" step="1" value="370">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="playerFlee">
+              自身 FLEE
+              <span class="hint">目前角色面板迴避</span>
+            </label>
+            <div class="control">
+              <input id="playerFlee" name="playerFlee" type="number" inputmode="numeric" min="0" max="9999" step="1" value="294">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="extraFlee">
+              額外增加 FLEE
+              <span class="hint">可填裝備、料理或狀態加成</span>
+            </label>
+            <div class="control">
+              <input id="extraFlee" name="extraFlee" type="number" inputmode="numeric" min="-999" max="9999" step="1" value="41">
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="button primary" type="submit">重新計算</button>
+            <button class="button ghost" type="button" id="copyEvasionResult">複製迴避結果</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="evasion-result-title">
+        <div class="panel-header">
+          <h2 class="panel-title" id="evasion-result-title">迴避結果</h2>
+          <span class="badge" id="evasionBadge">加成後 FLEE 335</span>
+        </div>
+
+        <div class="results">
+          <div class="hero-result">
+            <div class="result-head">
+              <div>
+                <div class="result-label">加成後迴避率</div>
+                <div class="result-value" id="evasionBoostedRate">60%</div>
+              </div>
+              <div class="result-label" id="evasionCompare">目前 19%，提升 41%</div>
+            </div>
+            <div class="meter" aria-hidden="true"><span id="evasionMeter"></span></div>
+            <div class="status">
+              <span id="evasionStatus">怪物大約 40% 會打中你。</span>
+              <strong id="evasionDelta">距離 95% 還差 35 FLEE</strong>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="name">目前迴避率</div>
+              <div class="value" id="evasionCurrentRate">19%</div>
+              <div class="note">未加入額外 FLEE 前。</div>
+            </div>
+            <div class="metric">
+              <div class="name">怪物命中率</div>
+              <div class="value" id="monsterHitRate">40%</div>
+              <div class="note">以加成後迴避率反推。</div>
+            </div>
+            <div class="metric">
+              <div class="name">加成後 FLEE</div>
+              <div class="value" id="boostedFlee">335</div>
+              <div class="note">自身 FLEE + 額外增加 FLEE。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="formula">
+          <div>迴避率：<code>95 - (怪物95%迴避所需FLEE - 自身FLEE)</code>，最高顯示 95%，最低顯示 0%。</div>
+          <div>以你的例子：<code>95 - (370 - 294) = 19%</code>；增加 41 FLEE 後：<code>95 - (370 - 335) = 60%</code>。</div>
+          <div>怪物命中率以 <code>100 - 迴避率</code> 顯示；若被多隻怪圍住，實戰迴避會再下降。</div>
+          <div>魔物資料來自 <code>monster-db.js</code>；選擇魔物後會同步帶入命中與迴避欄位。</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">已複製</div>
+
+  <script src="monster-db.js"></script>
+  <script>
+    const state = {
+      multiplier: 1.9,
+      sample: {
+        playerHit: 253,
+        requiredHit: 300,
+        monsterFleeNeed: 370,
+        playerFlee: 294,
+        extraFlee: 41
+      }
+    };
+
+    const form = document.getElementById("calcForm");
+    const evasionForm = document.getElementById("evasionForm");
+    const playerHitInput = document.getElementById("playerHit");
+    const requiredHitInput = document.getElementById("requiredHit");
+    const floorFiveInput = document.getElementById("floorFive");
+    const roundDownInput = document.getElementById("roundDown");
+    const monsterSearchInput = document.getElementById("monsterSearch");
+    const monsterDropdown = document.getElementById("monsterDropdown");
+    const monsterDbStatus = document.getElementById("monsterDbStatus");
+    const monsterFleeNeedInput = document.getElementById("monsterFleeNeed");
+    const playerFleeInput = document.getElementById("playerFlee");
+    const extraFleeInput = document.getElementById("extraFlee");
+    const toast = document.getElementById("toast");
+
+    const fallbackMonsterDatabase = [
+      {
+        id: "sample-370",
+        name: "範例：95%迴避 370",
+        level: "",
+        hit100: 300,
+        flee95: 370
+      }
+    ];
+    let monsterDatabase = Array.isArray(window.RO_MONSTER_DB) && window.RO_MONSTER_DB.length > 0
+      ? window.RO_MONSTER_DB
+      : fallbackMonsterDatabase;
+    let selectedMonsterId = String(monsterDatabase[0].id);
+    let visibleMonsters = [...monsterDatabase];
+
+    const output = {
+      sonicRate: document.getElementById("sonicRate"),
+      sonicRaw: document.getElementById("sonicRaw"),
+      sonicMeter: document.getElementById("sonicMeter"),
+      normalHeroRate: document.getElementById("normalHeroRate"),
+      normalRaw: document.getElementById("normalRaw"),
+      normalMeter: document.getElementById("normalMeter"),
+      normalStatusText: document.getElementById("normalStatusText"),
+      normalDeltaText: document.getElementById("normalDeltaText"),
+      normalRate: document.getElementById("normalRate"),
+      sonicNeed: document.getElementById("sonicNeed"),
+      normalNeed: document.getElementById("normalNeed"),
+      thresholdBadge: document.getElementById("thresholdBadge"),
+      statusText: document.getElementById("statusText"),
+      deltaText: document.getElementById("deltaText"),
+      evasionBoostedRate: document.getElementById("evasionBoostedRate"),
+      evasionCompare: document.getElementById("evasionCompare"),
+      evasionMeter: document.getElementById("evasionMeter"),
+      evasionStatus: document.getElementById("evasionStatus"),
+      evasionDelta: document.getElementById("evasionDelta"),
+      evasionCurrentRate: document.getElementById("evasionCurrentRate"),
+      monsterHitRate: document.getElementById("monsterHitRate"),
+      boostedFlee: document.getElementById("boostedFlee"),
+      evasionBadge: document.getElementById("evasionBadge")
+    };
+
+    function toNumber(input) {
+      const value = Number(input.value);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function formatPercent(value, roundDown) {
+      const rounded = roundDown ? Math.floor(value) : Math.round(value * 10) / 10;
+      return `${rounded}%`;
+    }
+
+    function getRequiredHit() {
+      return toNumber(requiredHitInput);
+    }
+
+    function firstNumber(...values) {
+      for (const value of values) {
+        const number = Number(value);
+        if (Number.isFinite(number)) {
+          return number;
+        }
+      }
+
+      return null;
+    }
+
+    function getMonsterName(monster) {
+      if (typeof monster.name === "string") {
+        return monster.name;
+      }
+
+      return monster.name?.zh_tw
+        || monster.name?.zh
+        || monster.name?.tw
+        || monster.zh_tw
+        || monster.displayName
+        || monster.id
+        || "未命名魔物";
+    }
+
+    function normalizeMonster(rawMonster) {
+      const stats = rawMonster.stats || rawMonster;
+      const basicInfo = rawMonster.basic_info || rawMonster.basicInfo || {};
+      const flee95 = firstNumber(
+        stats.flee_95_percent,
+        rawMonster.flee_95_percent,
+        rawMonster.flee95,
+        rawMonster.fleePercent
+      );
+      const hit100 = firstNumber(
+        stats.hit_100_percent,
+        rawMonster.hit_100_percent,
+        rawMonster.hit100,
+        rawMonster.hitPercent
+      );
+
+      if (flee95 === null && hit100 === null) {
+        return null;
+      }
+
+      return {
+        id: rawMonster.id ?? rawMonster.mob_id ?? rawMonster.monster_id ?? getMonsterName(rawMonster),
+        name: getMonsterName(rawMonster),
+        level: firstNumber(basicInfo.level, rawMonster.level),
+        hit100,
+        flee95
+      };
+    }
+
+    function getMonsterOptionLabel(monster) {
+      const levelText = monster.level ? ` Lv.${monster.level}` : "";
+      const hitText = monster.hit100 === null ? "命中 ?" : `命中 ${monster.hit100}`;
+      const fleeText = monster.flee95 === null ? "迴避 ?" : `迴避 ${monster.flee95}`;
+
+      return `${monster.name}${levelText}（${fleeText} / ${hitText}）`;
+    }
+
+    function normalizeText(value) {
+      return String(value ?? "").toLowerCase().replace(/\s+/g, "");
+    }
+
+    function fuzzyScore(text, query) {
+      const haystack = normalizeText(text);
+      const needle = normalizeText(query);
+
+      if (!needle) {
+        return 1;
+      }
+
+      if (haystack.includes(needle)) {
+        return 1000 - haystack.indexOf(needle);
+      }
+
+      let score = 0;
+      let cursor = 0;
+
+      for (const char of needle) {
+        const index = haystack.indexOf(char, cursor);
+
+        if (index === -1) {
+          return 0;
+        }
+
+        score += Math.max(1, 80 - (index - cursor) * 8);
+        cursor = index + 1;
+      }
+
+      return score;
+    }
+
+    function getMonsterSearchText(monster) {
+      return [
+        monster.id,
+        monster.name,
+        monster.level ? `lv${monster.level}` : "",
+        monster.level ? `等級${monster.level}` : "",
+        monster.hit100 === null ? "" : `命中${monster.hit100}`,
+        monster.flee95 === null ? "" : `迴避${monster.flee95}`
+      ].join(" ");
+    }
+
+    function getFilteredMonsters() {
+      const filter = monsterSearchInput.value.trim().toLowerCase();
+
+      if (!filter) {
+        return monsterDatabase.slice(0, 30);
+      }
+
+      return monsterDatabase
+        .map((monster) => ({
+          monster,
+          score: fuzzyScore(getMonsterSearchText(monster), filter)
+        }))
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score || a.monster.name.localeCompare(b.monster.name, "zh-TW"))
+        .slice(0, 30)
+        .map((item) => item.monster);
+    }
+
+    function populateMonsterDropdown(showDropdown = false) {
+      visibleMonsters = getFilteredMonsters();
+      monsterDropdown.innerHTML = "";
+
+      if (visibleMonsters.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "monster-option";
+        empty.textContent = monsterDatabase.length <= 1
+          ? "魔物資料庫未載入；請確認 monster-db.js 和 HTML 放在同一個資料夾。"
+          : "找不到符合的魔物";
+        monsterDropdown.appendChild(empty);
+        monsterDbStatus.textContent = `資料庫 ${monsterDatabase.length} 筆，目前 0 筆`;
+        monsterDropdown.hidden = !showDropdown;
+        monsterDropdown.classList.toggle("open", showDropdown);
+        return;
+      }
+
+      for (const monster of visibleMonsters) {
+        const option = document.createElement("button");
+        const name = document.createElement("strong");
+        const detail = document.createElement("span");
+
+        option.type = "button";
+        option.className = `monster-option${String(monster.id) === String(selectedMonsterId) ? " active" : ""}`;
+        option.dataset.monsterId = String(monster.id);
+        name.textContent = monster.name;
+        detail.textContent = getMonsterOptionLabel(monster);
+        option.append(name, detail);
+        monsterDropdown.appendChild(option);
+      }
+
+      monsterDbStatus.textContent = `資料庫 ${monsterDatabase.length} 筆，目前 ${visibleMonsters.length} 筆`;
+      monsterDropdown.hidden = !showDropdown;
+      monsterDropdown.classList.toggle("open", showDropdown);
+    }
+
+    function applySelectedMonster() {
+      const selected = monsterDatabase.find((monster) => String(monster.id) === String(selectedMonsterId));
+
+      if (!selected) {
+        return;
+      }
+
+      monsterSearchInput.value = selected.name;
+
+      if (selected.flee95 !== null) {
+        monsterFleeNeedInput.value = selected.flee95;
+      }
+
+      if (selected.hit100 !== null) {
+        requiredHitInput.value = selected.hit100;
+      }
+
+      calculate();
+      calculateEvasion();
+      populateMonsterDropdown(false);
+    }
+
+    function calculate() {
+      const playerHit = toNumber(playerHitInput);
+      const requiredHit = getRequiredHit();
+      const minRate = floorFiveInput.checked ? 5 : 0;
+      const roundDown = roundDownInput.checked;
+      const normalRaw = 100 - (requiredHit - playerHit);
+      const normalRate = clamp(normalRaw, minRate, 100);
+      const sonicRaw = normalRaw * state.multiplier;
+      const sonicRate = clamp(sonicRaw, minRate, 100);
+      const baseNeededForSonicFull = Math.ceil(100 / state.multiplier);
+      const sonicFullHit = requiredHit - (100 - baseNeededForSonicFull);
+      const delta = playerHit - sonicFullHit;
+
+      output.sonicRate.textContent = formatPercent(sonicRate, roundDown);
+      output.sonicRaw.textContent = `原始計算 ${formatPercent(sonicRaw, false)}`;
+      output.sonicMeter.style.width = `${clamp(sonicRate, 0, 100)}%`;
+      output.normalHeroRate.textContent = formatPercent(normalRate, roundDown);
+      output.normalRaw.textContent = `原始計算 ${formatPercent(normalRaw, false)}`;
+      output.normalMeter.style.width = `${clamp(normalRate, 0, 100)}%`;
+      output.normalRate.textContent = formatPercent(normalRate, roundDown);
+      output.sonicNeed.textContent = Math.max(0, sonicFullHit);
+      output.normalNeed.textContent = Math.max(0, requiredHit);
+      output.thresholdBadge.textContent = `滿命中 HIT ${Math.max(0, sonicFullHit)}`;
+
+      if (delta >= 0) {
+        output.statusText.textContent = "已達音速投擲 100% 命中。";
+        output.deltaText.textContent = delta === 0 ? "HIT 剛好達標" : `HIT 溢出 ${delta}`;
+      } else {
+        output.statusText.textContent = "尚未達音速投擲 100% 命中。";
+        output.deltaText.textContent = `還差 ${Math.abs(delta)} HIT`;
+      }
+
+      if (playerHit >= requiredHit) {
+        output.normalStatusText.textContent = "一般攻擊已達 100% 命中。";
+        output.normalDeltaText.textContent = playerHit === requiredHit ? "HIT 剛好達標" : `HIT 溢出 ${playerHit - requiredHit}`;
+      } else {
+        output.normalStatusText.textContent = "一般攻擊尚未達 100% 命中。";
+        output.normalDeltaText.textContent = `還差 ${requiredHit - playerHit} HIT`;
+      }
+
+      return {
+        playerHit,
+        requiredHit,
+        normalRate,
+        sonicRate,
+        sonicRaw,
+        sonicFullHit,
+        delta,
+        roundDown
+      };
+    }
+
+    function calculateEvasion() {
+      const monsterFleeNeed = toNumber(monsterFleeNeedInput);
+      const playerFlee = toNumber(playerFleeInput);
+      const extraFlee = toNumber(extraFleeInput);
+      const boostedFlee = playerFlee + extraFlee;
+      const currentRaw = 95 - (monsterFleeNeed - playerFlee);
+      const boostedRaw = 95 - (monsterFleeNeed - boostedFlee);
+      const currentRate = clamp(currentRaw, 0, 95);
+      const boostedRate = clamp(boostedRaw, 0, 95);
+      const monsterHitRate = clamp(100 - boostedRate, 5, 100);
+      const improvement = boostedRate - currentRate;
+      const fleeDelta = monsterFleeNeed - boostedFlee;
+
+      output.evasionBoostedRate.textContent = formatPercent(boostedRate, true);
+      output.evasionCompare.textContent = `目前 ${formatPercent(currentRate, true)}，提升 ${formatPercent(improvement, true)}`;
+      output.evasionMeter.style.width = `${clamp(boostedRate, 0, 95)}%`;
+      output.evasionCurrentRate.textContent = formatPercent(currentRate, true);
+      output.monsterHitRate.textContent = formatPercent(monsterHitRate, true);
+      output.boostedFlee.textContent = boostedFlee;
+      output.evasionBadge.textContent = `加成後 FLEE ${boostedFlee}`;
+
+      if (fleeDelta <= 0) {
+        output.evasionStatus.textContent = "已達 95% 迴避上限。";
+        output.evasionDelta.textContent = fleeDelta === 0 ? "FLEE 剛好達標" : `FLEE 溢出 ${Math.abs(fleeDelta)}`;
+      } else {
+        output.evasionStatus.textContent = `怪物大約 ${formatPercent(monsterHitRate, true)} 會打中你。`;
+        output.evasionDelta.textContent = `距離 95% 還差 ${fleeDelta} FLEE`;
+      }
+
+      return {
+        monsterFleeNeed,
+        playerFlee,
+        extraFlee,
+        boostedFlee,
+        currentRate,
+        boostedRate,
+        monsterHitRate,
+        improvement,
+        fleeDelta
+      };
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      calculate();
+    });
+
+    form.addEventListener("input", calculate);
+
+    evasionForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      calculateEvasion();
+    });
+
+    evasionForm.addEventListener("input", calculateEvasion);
+
+    monsterSearchInput.addEventListener("input", () => {
+      populateMonsterDropdown(true);
+    });
+
+    monsterSearchInput.addEventListener("focus", () => {
+      monsterSearchInput.select();
+      populateMonsterDropdown(true);
+    });
+
+    monsterSearchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && visibleMonsters[0]) {
+        event.preventDefault();
+        selectedMonsterId = String(visibleMonsters[0].id);
+        applySelectedMonster();
+      }
+
+      if (event.key === "Escape") {
+        monsterDropdown.hidden = true;
+        monsterDropdown.classList.remove("open");
+      }
+    });
+
+    monsterDropdown.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const option = target?.closest(".monster-option");
+
+      if (!option?.dataset.monsterId) {
+        return;
+      }
+
+      selectedMonsterId = option.dataset.monsterId;
+      applySelectedMonster();
+    });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+
+      if (!target?.closest(".monster-combobox")) {
+        monsterDropdown.hidden = true;
+        monsterDropdown.classList.remove("open");
+      }
+    });
+
+    document.getElementById("clearMonsterSearch").addEventListener("click", () => {
+      monsterSearchInput.value = "";
+      populateMonsterDropdown(true);
+      monsterSearchInput.focus();
+    });
+
+    document.getElementById("resetSample").addEventListener("click", () => {
+      playerHitInput.value = state.sample.playerHit;
+      requiredHitInput.value = state.sample.requiredHit;
+      monsterFleeNeedInput.value = state.sample.monsterFleeNeed;
+      playerFleeInput.value = state.sample.playerFlee;
+      extraFleeInput.value = state.sample.extraFlee;
+      monsterSearchInput.value = "";
+      monsterDatabase = Array.isArray(window.RO_MONSTER_DB) && window.RO_MONSTER_DB.length > 0
+        ? window.RO_MONSTER_DB
+        : fallbackMonsterDatabase;
+      selectedMonsterId = String(monsterDatabase[0].id);
+      floorFiveInput.checked = false;
+      roundDownInput.checked = true;
+      populateMonsterDropdown();
+      applySelectedMonster();
+      calculateEvasion();
+    });
+
+    document.getElementById("copyResult").addEventListener("click", async () => {
+      const result = calculate();
+      const percent = formatPercent(result.sonicRate, result.roundDown);
+      const need = Math.max(0, result.sonicFullHit);
+      const deltaText = result.delta >= 0 ? `達標，溢出 ${result.delta} HIT` : `未達標，還差 ${Math.abs(result.delta)} HIT`;
+      const text = `RO樂園音投命中：自身HIT ${result.playerHit} / 100%命中值 ${result.requiredHit} / 已學超音速投擲命中率 ${percent} / 滿命中需HIT ${need} / ${deltaText}`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("結果已複製");
+      } catch (error) {
+        showToast("瀏覽器不允許複製");
+      }
+    });
+
+    document.getElementById("copyEvasionResult").addEventListener("click", async () => {
+      const result = calculateEvasion();
+      const text = `RO樂園迴避：怪物95%迴避所需FLEE ${result.monsterFleeNeed} / 自身FLEE ${result.playerFlee} / 額外增加 ${result.extraFlee} / 加成後FLEE ${result.boostedFlee} / 目前迴避 ${formatPercent(result.currentRate, true)} / 加成後迴避 ${formatPercent(result.boostedRate, true)} / 怪物命中 ${formatPercent(result.monsterHitRate, true)}`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("迴避結果已複製");
+      } catch (error) {
+        showToast("瀏覽器不允許複製");
+      }
+    });
+
+    populateMonsterDropdown();
+    applySelectedMonster();
+    calculateEvasion();
+  </script>
+</body>
+</html>

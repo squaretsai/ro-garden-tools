@@ -1,0 +1,16 @@
+# Local monitor captures and calibration images
+CheeseOBSMonitor*.png
+CheesePhoneMonitor*.png
+OBS-*.png
+RO-window-printwindow.png
+skin-*-preview.png
+
+# Local machine/user runtime files
+*.config.json
+OBS-phone-url.txt
+手機網址.txt
+
+# Temporary logs and editor state
+*.log
+.DS_Store
+Thumbs.db
