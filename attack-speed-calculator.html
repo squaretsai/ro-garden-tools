@@ -508,6 +508,20 @@
       color: var(--accent-strong);
     }
 
+    .stat.stat-wide {
+      grid-column: 1 / -1;
+      min-height: 84px;
+    }
+
+    .stat small {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
     .formula-panel {
       margin-top: 18px;
     }
@@ -888,7 +902,7 @@
           <div class="field-row">
             <div class="field">
               <label for="afterDelay">裝備/技能 ASPD %</label>
-              <input id="afterDelay" type="number" min="0" max="100" step="0.1" value="0">
+              <input id="afterDelay" type="number" min="0" max="100" step="1" value="0">
             </div>
             <div class="field">
               <label for="flatApsd">額外 ASPD+</label>
@@ -941,6 +955,11 @@
           <div class="stat">
             <span>距離上限</span>
             <strong id="capGap">0.00</strong>
+          </div>
+          <div class="stat stat-wide">
+            <span>下個 ASPD</span>
+            <strong id="nextApsdGap">差 0%</strong>
+            <small id="nextApsdDetail">已達下一點。</small>
           </div>
           <div class="stat">
             <span>CRI</span>
@@ -1044,6 +1063,8 @@
       aspdTwo: document.querySelector("#aspdTwo"),
       rawApsd: document.querySelector("#rawApsd"),
       capGap: document.querySelector("#capGap"),
+      nextApsdGap: document.querySelector("#nextApsdGap"),
+      nextApsdDetail: document.querySelector("#nextApsdDetail"),
       critRate: document.querySelector("#critRate"),
       spentPoints: document.querySelector("#spentPoints"),
       remainingPoints: document.querySelector("#remainingPoints"),
@@ -1084,6 +1105,52 @@
 
     function floorApsd(value) {
       return Math.floor(value + Number.EPSILON);
+    }
+
+    function calculateNextApsdGap({ aspdOne, aspdTwo, aspdPercent, delayBase, flatApsd, finalApsd, cap }) {
+      const capFloor = floorApsd(cap);
+      const targetFinal = finalApsd + 1;
+      if (targetFinal > capFloor) {
+        return {
+          reachable: false,
+          label: "已達上限",
+          detail: `目前已到 ${format(finalApsd, 0)}，攻速上限 ${format(cap, 0)}。`
+        };
+      }
+
+      const neededAspdTwo = Math.ceil(targetFinal - flatApsd - Number.EPSILON);
+      if (neededAspdTwo <= aspdTwo) {
+        return {
+          reachable: true,
+          label: "差 0%",
+          detail: `再一點小數就會顯示 ${format(targetFinal, 0)}。`
+        };
+      }
+
+      if (delayBase <= 0) {
+        return {
+          reachable: false,
+          label: "無法用 %",
+          detail: "ASPD#1 已貼近公式基準，裝備/技能 ASPD% 不會再推高。"
+        };
+      }
+
+      const requiredPercent = (neededAspdTwo - aspdOne) * 100 / delayBase;
+      if (requiredPercent > 100) {
+        return {
+          reachable: false,
+          label: "超過 100%",
+          detail: `要到 ${format(targetFinal, 0)} 需要約 ${format(requiredPercent, 2)}% ASPD。`
+        };
+      }
+
+      const exactGap = Math.max(0, requiredPercent - aspdPercent);
+      const integerStepGap = Math.max(0, Math.ceil(exactGap - Number.EPSILON));
+      return {
+        reachable: true,
+        label: `差 ${format(integerStepGap, 0)}%`,
+        detail: `約 ${format(exactGap, 2)}% 後到 ${format(targetFinal, 0)}；最低 ASPD% ${format(requiredPercent, 2)}%。`
+      };
     }
 
     function totalStatusPoints(level) {
@@ -1182,12 +1249,23 @@
       const gap = Math.max(0, cap - finalApsd);
       const interval = Math.max(0, (200 - finalApsd) / 50);
       const hitsPerSecond = interval > 0 ? 1 / interval : 0;
+      const nextApsdGap = calculateNextApsdGap({
+        aspdOne,
+        aspdTwo,
+        aspdPercent,
+        delayBase,
+        flatApsd,
+        finalApsd,
+        cap
+      });
 
       output.finalApsd.textContent = format(finalApsd, 0);
       output.aspdOne.textContent = format(aspdOne);
       output.aspdTwo.textContent = format(aspdTwo);
       output.rawApsd.textContent = format(rawApsd);
       output.capGap.textContent = format(gap);
+      output.nextApsdGap.textContent = nextApsdGap.label;
+      output.nextApsdDetail.textContent = nextApsdGap.detail;
       output.critRate.textContent = format(critRate, 0);
       output.spentPoints.textContent = format(spentPoints, 0);
       output.remainingPoints.textContent = format(remainingPoints, 0);
@@ -1214,6 +1292,7 @@
         aspdOne,
         aspdTwo,
         rawApsd,
+        nextApsdGap,
         interval,
         hitsPerSecond,
         cap
