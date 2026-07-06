@@ -359,9 +359,10 @@
     }
 
     input[type="number"],
-    select {
+    input[type="text"],
+    select,
+    textarea {
       width: 100%;
-      height: 48px;
       padding: 9px 12px;
       border: 1px solid #cfc6ba;
       border-radius: var(--radius);
@@ -373,7 +374,23 @@
       min-width: 0;
     }
 
+    input[type="number"],
+    input[type="text"],
+    select {
+      height: 48px;
+    }
+
+    textarea {
+      min-height: 86px;
+      resize: vertical;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
     input[type="number"]:focus,
+    input[type="text"]:focus,
+    textarea:focus,
     select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.14);
@@ -435,6 +452,39 @@
     .primary-button:hover {
       background: var(--accent-strong);
       transform: translateY(-1px);
+    }
+
+    .build-manager {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 250, 241, 0.7);
+    }
+
+    .build-manager-title {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .build-manager-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .build-message {
+      min-height: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .build-message.error {
+      color: var(--accent-strong);
     }
 
     .ghost-button {
@@ -596,6 +646,7 @@
 
       .field-row,
       .actions,
+      .build-manager-grid,
       .stat-grid {
         grid-template-columns: 1fr;
       }
@@ -922,6 +973,24 @@
             <button class="quick-button" type="button" data-preset="edp">毒藥瓶 Mod 0</button>
           </div>
 
+          <div class="build-manager" aria-label="配點儲存與匯入">
+            <div class="build-manager-title">配點儲存 / 匯入</div>
+            <div class="field">
+              <label for="buildName">配點名稱</label>
+              <input id="buildName" type="text" maxlength="40" placeholder="例如：普爆刺 Lv68">
+            </div>
+            <div class="build-manager-grid">
+              <button class="primary-button" type="button" id="saveBuild">儲存配點</button>
+              <select id="savedBuilds" aria-label="已儲存配點"></select>
+              <button class="ghost-button" type="button" id="loadBuild">載入配點</button>
+              <button class="ghost-button" type="button" id="deleteBuild">刪除配點</button>
+              <button class="ghost-button" type="button" id="exportBuild">匯出文字碼</button>
+              <button class="ghost-button" type="button" id="importBuild">匯入文字碼</button>
+            </div>
+            <textarea id="buildImportText" spellcheck="false" placeholder="匯出後會出現在這裡；也可以貼上別人的配點碼後按匯入。"></textarea>
+            <div class="build-message" id="buildMessage">儲存在這台瀏覽器；匯出文字碼可複製到其他裝置使用。</div>
+          </div>
+
           <div class="actions">
             <button class="primary-button" type="button" id="copySummary">複製結果</button>
             <button class="ghost-button" type="reset">重設</button>
@@ -1004,6 +1073,7 @@
   <script>
     const STAT_KEYS = ["str", "agi", "vit", "int", "dex", "luk"];
     const DELAY_ASPD_BASE = 195;
+    const BUILD_STORAGE_KEY = "ro-garden-aspd-builds-v1";
     const ASPD_CLASS_TABLE = {
       "服事": { base: 156, penalties: { "盾": -7, "鈍器": -5, "單手杖": -20, "雙手杖": -20 } },
       "弓箭手": { base: 156, penalties: { "盾": -9, "短劍": -15, "弓": -10 } },
@@ -1084,6 +1154,18 @@
       }
     ]));
 
+    const buildControls = {
+      name: document.querySelector("#buildName"),
+      saved: document.querySelector("#savedBuilds"),
+      importText: document.querySelector("#buildImportText"),
+      message: document.querySelector("#buildMessage"),
+      save: document.querySelector("#saveBuild"),
+      load: document.querySelector("#loadBuild"),
+      delete: document.querySelector("#deleteBuild"),
+      export: document.querySelector("#exportBuild"),
+      import: document.querySelector("#importBuild")
+    };
+
     function numberOf(input, fallback = 0) {
       const value = Number(input.value);
       return Number.isFinite(value) ? value : fallback;
@@ -1105,6 +1187,152 @@
 
     function floorApsd(value) {
       return Math.floor(value + Number.EPSILON);
+    }
+
+    function showBuildMessage(text, isError = false) {
+      buildControls.message.textContent = text;
+      buildControls.message.classList.toggle("error", isError);
+    }
+
+    function readBuilds() {
+      try {
+        const raw = window.localStorage.getItem(BUILD_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function writeBuilds(builds) {
+      window.localStorage.setItem(BUILD_STORAGE_KEY, JSON.stringify(builds));
+    }
+
+    function buildId() {
+      return `build-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function normalizeBuildName(name) {
+      const trimmed = String(name || "").trim();
+      if (trimmed) {
+        return trimmed.slice(0, 40);
+      }
+      const level = Math.max(1, Math.floor(numberOf(fields.baseLevel, 1)));
+      return `配點 Lv${level} ${new Date().toLocaleString("zh-TW", { hour12: false })}`;
+    }
+
+    function captureBuild(name, id = buildId()) {
+      const fieldValues = {};
+      Object.entries(fields).forEach(([key, input]) => {
+        fieldValues[key] = input.value;
+      });
+
+      const statValues = {};
+      STAT_KEYS.forEach((stat) => {
+        statValues[stat] = {
+          base: statControls[stat].base.value,
+          extra: statControls[stat].extra.value,
+          job: statControls[stat].job.value
+        };
+      });
+
+      return {
+        version: 1,
+        id,
+        name: normalizeBuildName(name),
+        savedAt: new Date().toISOString(),
+        autoAvailablePoints,
+        autoSpeedCap,
+        fields: fieldValues,
+        stats: statValues
+      };
+    }
+
+    function renderSavedBuilds(selectedId = "") {
+      const builds = readBuilds().sort((left, right) => String(right.savedAt).localeCompare(String(left.savedAt)));
+      buildControls.saved.innerHTML = "";
+      const emptyOption = document.createElement("option");
+      emptyOption.value = "";
+      emptyOption.textContent = builds.length ? "選擇已儲存配點" : "尚未儲存配點";
+      buildControls.saved.appendChild(emptyOption);
+
+      builds.forEach((build) => {
+        const option = document.createElement("option");
+        option.value = build.id;
+        option.textContent = build.name;
+        buildControls.saved.appendChild(option);
+      });
+
+      if (selectedId && builds.some((build) => build.id === selectedId)) {
+        buildControls.saved.value = selectedId;
+      }
+    }
+
+    function applyBuild(build) {
+      if (!build || !build.fields || !build.stats) {
+        throw new Error("配點資料格式不正確");
+      }
+
+      Object.entries(build.fields).forEach(([key, value]) => {
+        if (fields[key]) {
+          fields[key].value = value;
+        }
+      });
+
+      STAT_KEYS.forEach((stat) => {
+        const values = build.stats[stat] || {};
+        ["base", "extra", "job"].forEach((part) => {
+          if (values[part] !== undefined) {
+            statControls[stat][part].value = values[part];
+          }
+        });
+      });
+
+      autoAvailablePoints = build.autoAvailablePoints === true;
+      autoSpeedCap = build.autoSpeedCap === true;
+      buildControls.name.value = build.name || "";
+      calculate();
+    }
+
+    function saveBuild(build) {
+      const builds = readBuilds();
+      const index = builds.findIndex((item) => item.id === build.id);
+      if (index >= 0) {
+        builds[index] = build;
+      } else {
+        builds.push(build);
+      }
+      writeBuilds(builds);
+      renderSavedBuilds(build.id);
+    }
+
+    function encodeBuild(build) {
+      const json = JSON.stringify({ type: "ro-garden-aspd-build", build });
+      const bytes = new TextEncoder().encode(json);
+      let binary = "";
+      bytes.forEach((byte) => {
+        binary += String.fromCharCode(byte);
+      });
+      return btoa(binary);
+    }
+
+    function decodeBuild(text) {
+      const trimmed = String(text || "").trim();
+      if (!trimmed) {
+        throw new Error("請先貼上配點碼");
+      }
+
+      const json = trimmed.startsWith("{")
+        ? trimmed
+        : new TextDecoder().decode(Uint8Array.from(atob(trimmed), (char) => char.charCodeAt(0)));
+      const parsed = JSON.parse(json);
+      const build = parsed.build || parsed;
+      if (!build.id) {
+        build.id = buildId();
+      }
+      build.name = normalizeBuildName(build.name || buildControls.name.value || "匯入配點");
+      build.savedAt = new Date().toISOString();
+      return build;
     }
 
     function calculateNextApsdGap({ aspdOne, aspdTwo, aspdPercent, delayBase, flatApsd, finalApsd, cap }) {
@@ -1390,6 +1618,89 @@
       }, 0);
     });
 
+    buildControls.saved.addEventListener("change", () => {
+      const build = readBuilds().find((item) => item.id === buildControls.saved.value);
+      if (build) {
+        buildControls.name.value = build.name || "";
+        showBuildMessage(`已選擇「${build.name}」，按載入配點套用。`);
+      }
+    });
+
+    buildControls.save.addEventListener("click", () => {
+      try {
+        const selectedId = buildControls.saved.value;
+        const build = captureBuild(buildControls.name.value, selectedId || buildId());
+        saveBuild(build);
+        buildControls.name.value = build.name;
+        showBuildMessage(`已儲存「${build.name}」。`);
+      } catch (error) {
+        showBuildMessage(`儲存失敗：${error.message}`, true);
+      }
+    });
+
+    buildControls.load.addEventListener("click", () => {
+      try {
+        const build = readBuilds().find((item) => item.id === buildControls.saved.value);
+        if (!build) {
+          throw new Error("請先選擇已儲存配點");
+        }
+        applyBuild(build);
+        showBuildMessage(`已載入「${build.name}」。`);
+      } catch (error) {
+        showBuildMessage(`載入失敗：${error.message}`, true);
+      }
+    });
+
+    buildControls.delete.addEventListener("click", () => {
+      try {
+        const selectedId = buildControls.saved.value;
+        const builds = readBuilds();
+        const build = builds.find((item) => item.id === selectedId);
+        if (!build) {
+          throw new Error("請先選擇要刪除的配點");
+        }
+        if (!window.confirm(`刪除「${build.name}」？`)) {
+          return;
+        }
+        writeBuilds(builds.filter((item) => item.id !== selectedId));
+        buildControls.name.value = "";
+        renderSavedBuilds();
+        showBuildMessage(`已刪除「${build.name}」。`);
+      } catch (error) {
+        showBuildMessage(`刪除失敗：${error.message}`, true);
+      }
+    });
+
+    buildControls.export.addEventListener("click", async () => {
+      try {
+        const selectedId = buildControls.saved.value;
+        const build = captureBuild(buildControls.name.value, selectedId || buildId());
+        const code = encodeBuild(build);
+        buildControls.importText.value = code;
+        showBuildMessage("已產生配點碼，可複製保存或分享。");
+        try {
+          await navigator.clipboard.writeText(code);
+          showBuildMessage("已產生配點碼，並複製到剪貼簿。");
+        } catch (clipboardError) {
+          // Clipboard access can be blocked on file:// pages; the textarea still contains the code.
+        }
+      } catch (error) {
+        showBuildMessage(`匯出失敗：${error.message}`, true);
+      }
+    });
+
+    buildControls.import.addEventListener("click", () => {
+      try {
+        const build = decodeBuild(buildControls.importText.value);
+        saveBuild(build);
+        applyBuild(build);
+        renderSavedBuilds(build.id);
+        showBuildMessage(`已匯入並載入「${build.name}」。`);
+      } catch (error) {
+        showBuildMessage(`匯入失敗：${error.message}`, true);
+      }
+    });
+
     document.querySelector("#copySummary").addEventListener("click", async () => {
       const result = calculate();
       const text = `計算 AGI ${format(result.agi, 0)} / DEX ${format(result.dex, 0)} / LUK ${format(result.luk, 0)}，CRI ${format(result.critRate, 0)}，剩餘素質點 ${format(result.remainingPoints, 0)}，最終 ASPD ${format(result.finalApsd, 0)}。`;
@@ -1404,6 +1715,7 @@
       }
     });
 
+    renderSavedBuilds();
     verifyReferenceCase();
     calculate();
   </script>
