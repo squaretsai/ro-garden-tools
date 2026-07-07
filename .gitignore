@@ -13,5 +13,6 @@ OBS-phone-url.txt
 # Temporary logs and editor state
 *.log
 SaveChatExpMeter.history.csv
+BasePercentExpMeter.history.csv
 .DS_Store
 Thumbs.db
