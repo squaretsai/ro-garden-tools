@@ -42,7 +42,9 @@ RO 在這台電腦上以系統管理員權限執行，因此請雙擊 [以系統
 
 ## SAVECHAT 經驗計算
 
-雙擊 [啟動SAVECHAT經驗計算.cmd](./啟動SAVECHAT經驗計算.cmd) 可以計算 `/savechat` 產生的經驗資料。程式會讀取 `C:\Gravity\RagnarokZero\Chat\Chat_經驗*.txt`，列出最近的 SAVEDATA；你選擇要計算的那一段後，它會自動拿前一個 savechat 檔案的時間當起點，換算 Base / Job EXP/hr。
+雙擊 [啟動SAVECHAT經驗計算.cmd](./啟動SAVECHAT經驗計算.cmd) 可以計算 `/savechat` 產生的經驗資料。程式會讀取 `C:\Gravity\RagnarokZero\Chat\Chat_經驗*.txt`，列出最近的 SAVEDATA；你先選擇要計算的結束點，再確認起點，換算 Base / Job EXP/hr。
+
+如果多開 RO 並用不同帳號輸入 `/savechat`，檔名會共用同一組流水號。這時不要直接相信「自動前一筆」，請在起點選單手動選同帳號上一筆 SAVEDATA；也可以輸入帳號或角色備註，方便寫入 `SaveChatExpMeter.history.csv` 後回看。
 
 若 RO 安裝在不同位置，可在 PowerShell 手動指定：
 

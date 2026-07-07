@@ -2,6 +2,7 @@
     [string]$ChatPath = "C:\Gravity\RagnarokZero\Chat",
     [int]$List = 20,
     [string]$MapName = "",
+    [string]$AccountName = "",
     [switch]$NoHistory
 )
 
@@ -153,17 +154,16 @@ if (-not $expFiles -or $expFiles.Count -eq 0) {
     exit 0
 }
 
-$start = [Math]::Max(0, $expFiles.Count - $List)
-$rows = @()
-for ($i = $start; $i -lt $expFiles.Count; $i++) {
+$allRows = @()
+for ($i = 0; $i -lt $expFiles.Count; $i++) {
     $current = $expFiles[$i]
     $previous = if ($i -gt 0) { $expFiles[$i - 1] } else { $null }
     $currentTime = Get-CheckpointTime $current
     $previousTime = if ($previous) { Get-CheckpointTime $previous } else { $null }
     $elapsed = if ($previous) { $currentTime - $previousTime } else { $null }
 
-    $rows += [pscustomobject]@{
-        No = $rows.Count + 1
+    $allRows += [pscustomobject]@{
+        No = $i + 1
         SourceIndex = $i
         File = $current
         PreviousFile = $previous
@@ -173,9 +173,11 @@ for ($i = $start; $i -lt $expFiles.Count; $i++) {
     }
 }
 
+$rows = $allRows | Select-Object -Last $List
+
 Write-Host ""
 Write-Host "可選擇的 SAVEDATA / savechat 時段" -ForegroundColor Cyan
-Write-Host "編號  結束時間              經驗檔案                 自動起點"
+Write-Host "編號  結束時間              經驗檔案                 自動前一筆"
 Write-Host "----  -------------------   ----------------------   -------------------"
 foreach ($row in $rows) {
     $prevText = if ($row.PreviousTime) { $row.PreviousTime.ToString("yyyy-MM-dd HH:mm:ss") } else { "無前一筆" }
@@ -192,18 +194,66 @@ if ([string]::IsNullOrWhiteSpace($choiceText)) {
     exit 1
 }
 
-$selected = $rows | Where-Object { $_.No -eq $choice } | Select-Object -First 1
+$selected = $allRows | Where-Object { $_.No -eq $choice } | Select-Object -First 1
 if (-not $selected) {
     Write-Host "找不到編號 $choice。" -ForegroundColor Red
     exit 1
+}
+
+$defaultStart = if ($selected.SourceIndex -gt 0) { $allRows[$selected.SourceIndex - 1] } else { $null }
+$startCandidates = $allRows |
+    Where-Object { $_.SourceIndex -lt $selected.SourceIndex } |
+    Select-Object -Last $List
+
+if ($startCandidates) {
+    Write-Host ""
+    Write-Host "可選擇的起點 SAVEDATA" -ForegroundColor Cyan
+    Write-Host "多開不同帳號時，請選同帳號上一筆；直接 Enter 使用自動前一筆。"
+    Write-Host "編號  起點時間              經驗檔案"
+    Write-Host "----  -------------------   ----------------------"
+    foreach ($row in $startCandidates) {
+        Write-Host ("{0,4}  {1}   {2}" -f $row.No, $row.Time.ToString("yyyy-MM-dd HH:mm:ss"), $row.File.Name)
+    }
+}
+
+$startPoint = $defaultStart
+if ($defaultStart) {
+    $startChoiceText = Read-Host "輸入起點編號，直接 Enter 使用 [$($defaultStart.No)] $($defaultStart.File.Name)"
+    if (-not [string]::IsNullOrWhiteSpace($startChoiceText)) {
+        $startChoice = 0
+        if (-not [int]::TryParse($startChoiceText, [ref]$startChoice)) {
+            Write-Host "起點編號格式不正確。" -ForegroundColor Red
+            exit 1
+        }
+
+        $manualStart = $allRows | Where-Object { $_.No -eq $startChoice } | Select-Object -First 1
+        if (-not $manualStart) {
+            Write-Host "找不到起點編號 $startChoice。" -ForegroundColor Red
+            exit 1
+        }
+
+        if ($manualStart.SourceIndex -ge $selected.SourceIndex) {
+            Write-Host "起點必須早於結束點。" -ForegroundColor Red
+            exit 1
+        }
+
+        $startPoint = $manualStart
+    }
+} else {
+    Write-Host "這是第一筆 SAVEDATA，沒有可用起點，無法計算每小時效率。" -ForegroundColor Yellow
 }
 
 if (-not $MapName) {
     $MapName = Read-Host "地圖名稱，可直接 Enter 略過"
 }
 
+if (-not $AccountName) {
+    $AccountName = Read-Host "帳號或角色備註，可直接 Enter 略過"
+}
+
 $exp = Get-ExpStats -Path $selected.File.FullName
-$elapsedSeconds = if ($selected.Elapsed) { [Math]::Max(0, [int][Math]::Round($selected.Elapsed.TotalSeconds)) } else { 0 }
+$elapsed = if ($startPoint) { $selected.Time - $startPoint.Time } else { $null }
+$elapsedSeconds = if ($elapsed) { [Math]::Max(0, [int][Math]::Round($elapsed.TotalSeconds)) } else { 0 }
 $basePerHour = if ($elapsedSeconds -gt 0) { $exp.BaseExp / $elapsedSeconds * 3600 } else { 0 }
 $jobPerHour = if ($elapsedSeconds -gt 0) { $exp.JobExp / $elapsedSeconds * 3600 } else { 0 }
 $suffix = Get-SaveChatSuffix -FileName $selected.File.Name
@@ -215,10 +265,11 @@ $dropStats = Get-DropStats -Files $dropFiles
 Write-Host ""
 Write-Host "EXP Meter 結果" -ForegroundColor Green
 Write-Host ("SAVEDATA：{0}" -f $selected.File.Name)
-if ($selected.PreviousFile) {
-    Write-Host ("自動起點：{0} ({1})" -f $selected.PreviousFile.Name, $selected.PreviousTime.ToString("yyyy-MM-dd HH:mm:ss"))
+if ($startPoint) {
+    $startLabel = if ($defaultStart -and $startPoint.No -eq $defaultStart.No) { "起點" } else { "手動起點" }
+    Write-Host ("{0}：{1} ({2})" -f $startLabel, $startPoint.File.Name, $startPoint.Time.ToString("yyyy-MM-dd HH:mm:ss"))
 } else {
-    Write-Host "自動起點：無前一筆，無法計算每小時效率" -ForegroundColor Yellow
+    Write-Host "起點：無前一筆，無法計算每小時效率" -ForegroundColor Yellow
 }
 Write-Host ("結束時間：{0}" -f $selected.Time.ToString("yyyy-MM-dd HH:mm:ss"))
 if ($elapsedSeconds -gt 0) {
@@ -226,6 +277,9 @@ if ($elapsedSeconds -gt 0) {
 }
 if ($MapName) {
     Write-Host ("地圖：{0}" -f $MapName)
+}
+if ($AccountName) {
+    Write-Host ("帳號/角色：{0}" -f $AccountName)
 }
 Write-Host ("Base EXP：{0}" -f (Format-Number $exp.BaseExp))
 Write-Host ("Job EXP ：{0}" -f (Format-Number $exp.JobExp))
@@ -252,10 +306,11 @@ if (-not $NoHistory) {
     $historyPath = Join-Path $PSScriptRoot "SaveChatExpMeter.history.csv"
     [pscustomobject]@{
         Savedata = $selected.File.Name
-        PreviousSavedata = if ($selected.PreviousFile) { $selected.PreviousFile.Name } else { "" }
-        StartedAt = if ($selected.PreviousTime) { $selected.PreviousTime.ToString("yyyy-MM-dd HH:mm:ss") } else { "" }
+        PreviousSavedata = if ($startPoint) { $startPoint.File.Name } else { "" }
+        StartedAt = if ($startPoint) { $startPoint.Time.ToString("yyyy-MM-dd HH:mm:ss") } else { "" }
         EndedAt = $selected.Time.ToString("yyyy-MM-dd HH:mm:ss")
         ElapsedSeconds = $elapsedSeconds
+        AccountName = $AccountName
         MapName = $MapName
         BaseExp = $exp.BaseExp
         JobExp = $exp.JobExp
@@ -266,5 +321,6 @@ if (-not $NoHistory) {
     Write-Host ""
     Write-Host ("已記錄到：{0}" -f $historyPath)
 }
+
 
 
