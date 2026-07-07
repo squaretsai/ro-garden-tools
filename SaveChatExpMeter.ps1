@@ -4,6 +4,7 @@
     [string]$MapName = "",
     [string]$AccountName = "",
     [int]$BaseLevel = 0,
+    [int64]$ManualBaseExpToNext = 0,
     [switch]$AskDeleteChat,
     [switch]$NoHistory
 )
@@ -23,86 +24,97 @@ function Format-Percent {
     return ("{0:N2}%" -f $Value)
 }
 
+$script:BaseExpTableSource = "巴哈姆特 RO樂園升級經驗值調整紀錄：第四次(2026/01/13)，目前公開整理至 Lv90。"
 $script:BaseExpToNextByLevel = @{
     1 = 2443
-    2 = 2760
-    3 = 3118
-    4 = 3523
-    5 = 3980
-    6 = 4497
-    7 = 5081
-    8 = 5741
-    9 = 6487
-    10 = 7330
-    11 = 8282
-    12 = 9358
-    13 = 10574
-    14 = 11948
-    15 = 13501
-    16 = 15256
-    17 = 17239
-    18 = 19480
-    19 = 22012
-    20 = 24873
-    21 = 28106
-    22 = 31759
-    23 = 35887
-    24 = 40552
-    25 = 45823
-    26 = 51779
-    27 = 58510
-    28 = 66116
-    29 = 74711
-    30 = 84423
-    31 = 95397
-    32 = 107798
-    33 = 121811
-    34 = 137646
-    35 = 155539
-    36 = 175759
-    37 = 198607
-    38 = 224425
-    39 = 253600
-    40 = 286568
-    41 = 323821
-    42 = 365917
-    43 = 413486
-    44 = 467239
-    45 = 527980
-    46 = 596617
-    47 = 674177
-    48 = 761820
-    49 = 860856
-    50 = 1058852
-    51 = 2117366
-    52 = 3112529
-    53 = 4575417
-    54 = 6725863
-    55 = 9887019
-    56 = 14533917
-    57 = 21364858
-    58 = 31406342
-    59 = 46167322
-    60 = 52630747
-    61 = 59999051
-    62 = 68398918
-    63 = 77974766
-    64 = 88891233
-    65 = 101336006
-    66 = 115523046
-    67 = 131696273
-    68 = 150133750
-    69 = 171152475
-    70 = 193402296
-    71 = 218544594
-    72 = 246955391
-    73 = 279059591
-    74 = 315337337
-    75 = 356331190
-    76 = 402654244
-    77 = 454999295
-    78 = 514149203
-    79 = 580888599
+    2 = 2736
+    3 = 3064
+    4 = 3431
+    5 = 3842
+    6 = 4303
+    7 = 4819
+    8 = 5397
+    9 = 6044
+    10 = 6769
+    11 = 7581
+    12 = 8490
+    13 = 9508
+    14 = 10648
+    15 = 11925
+    16 = 13356
+    17 = 14958
+    18 = 16752
+    19 = 18762
+    20 = 21013
+    21 = 23534
+    22 = 26358
+    23 = 29520
+    24 = 33062
+    25 = 37029
+    26 = 41472
+    27 = 46448
+    28 = 52021
+    29 = 58263
+    30 = 65254
+    31 = 73084
+    32 = 81854
+    33 = 91676
+    34 = 102677
+    35 = 114998
+    36 = 128797
+    37 = 144252
+    38 = 161562
+    39 = 180949
+    40 = 202662
+    41 = 226981
+    42 = 254218
+    43 = 284724
+    44 = 318890
+    45 = 357156
+    46 = 400014
+    47 = 448015
+    48 = 501776
+    49 = 561989
+    50 = 680006
+    51 = 1482156
+    52 = 2178770
+    53 = 3202791
+    54 = 4708104
+    55 = 6920913
+    56 = 10173741
+    57 = 14955400
+    58 = 21984439
+    59 = 32317125
+    60 = 36841522
+    61 = 41999335
+    62 = 47879242
+    63 = 54582336
+    64 = 62223863
+    65 = 70935204
+    66 = 80866132
+    67 = 92187391
+    68 = 105093625
+    69 = 119806732
+    70 = 135381607
+    71 = 152981215
+    72 = 172868773
+    73 = 195341713
+    74 = 220736135
+    75 = 249431833
+    76 = 281857970
+    77 = 318499506
+    78 = 359904442
+    79 = 406692019
+    80 = 455495061
+    81 = 510154468
+    82 = 571373004
+    83 = 639937764
+    84 = 716730295
+    85 = 802737930
+    86 = 899066481
+    87 = 1006954458
+    88 = 1127788992
+    89 = 1263123671
 }
 
 function Read-ChatText {
@@ -387,7 +399,25 @@ if ($BaseLevel -gt 0) {
     if ($script:BaseExpToNextByLevel.ContainsKey($BaseLevel)) {
         $baseExpToNext = [double]$script:BaseExpToNextByLevel[$BaseLevel]
     } else {
-        Write-Host ("目前內建 Base 經驗表支援 Lv1~79；Lv{0} 無法換算 %/hr。" -f $BaseLevel) -ForegroundColor Yellow
+        $maxSupportedBaseLevel = ($script:BaseExpToNextByLevel.Keys | Measure-Object -Maximum).Maximum
+        Write-Host ("目前內建 Base 經驗表支援 Lv1~{0}；Lv{1} 無法換算 %/hr。" -f $maxSupportedBaseLevel, $BaseLevel) -ForegroundColor Yellow
+        Write-Host ("資料來源：{0}" -f $script:BaseExpTableSource) -ForegroundColor Yellow
+        if ($ManualBaseExpToNext -le 0) {
+            $manualExpText = Read-Host ("可手動輸入 Lv{0} -> Lv{1} 需求經驗以換算 %/hr，直接 Enter 略過" -f $BaseLevel, ($BaseLevel + 1))
+            if (-not [string]::IsNullOrWhiteSpace($manualExpText)) {
+                $manualExpText = $manualExpText -replace ",", ""
+                $parsedManualBaseExp = [int64]0
+                if ([int64]::TryParse($manualExpText, [ref]$parsedManualBaseExp) -and $parsedManualBaseExp -gt 0) {
+                    $ManualBaseExpToNext = $parsedManualBaseExp
+                } else {
+                    Write-Host "手動需求經驗格式不正確，略過 %/hr。" -ForegroundColor Yellow
+                }
+            }
+        }
+
+        if ($ManualBaseExpToNext -gt 0) {
+            $baseExpToNext = [double]$ManualBaseExpToNext
+        }
     }
 }
 
@@ -473,6 +503,4 @@ if (-not $NoHistory) {
 if ($AskDeleteChat) {
     Invoke-ChatCleanupPrompt -TargetPath $ChatPath
 }
-
-
 
