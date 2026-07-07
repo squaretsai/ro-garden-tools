@@ -42,7 +42,7 @@ RO 在這台電腦上以系統管理員權限執行，因此請雙擊 [以系統
 
 ## SAVECHAT 經驗計算
 
-雙擊 [啟動SAVECHAT經驗計算.cmd](./啟動SAVECHAT經驗計算.cmd) 可以計算 `/savechat` 產生的經驗資料。程式會讀取 `C:\Gravity\RagnarokZero\Chat\Chat_經驗*.txt`，列出最近的 SAVEDATA；你先選擇要計算的結束點，再確認起點，換算 Base / Job EXP/hr。
+雙擊 [啟動SAVECHAT經驗計算.cmd](./啟動SAVECHAT經驗計算.cmd) 可以計算 `/savechat` 產生的經驗資料。程式會讀取 `C:\Gravity\RagnarokZero\Chat\Chat_經驗*.txt`，列出最近的 SAVEDATA；你先選擇要計算的結束點，再確認起點，換算 Base / Job EXP/hr。若輸入目前 Base 等級，會依內建 Lv1~79 升級需求表換算 Base %/hr。
 
 如果多開 RO 並用不同帳號輸入 `/savechat`，檔名會共用同一組流水號。這時不要直接相信「自動前一筆」，請在起點選單手動選同帳號上一筆 SAVEDATA；也可以輸入帳號或角色備註，方便寫入 `SaveChatExpMeter.history.csv` 後回看。
 
@@ -52,6 +52,6 @@ RO 在這台電腦上以系統管理員權限執行，因此請雙擊 [以系統
 .\SaveChatExpMeter.ps1 -ChatPath "D:\Gravity\RagnarokZero\Chat"
 ```
 
-計算結果會追加到 `SaveChatExpMeter.history.csv`，方便之後回看各段效率。原始交接筆記已整理到 [docs/RO_EXP_METER_交接筆記.md](./docs/RO_EXP_METER_交接筆記.md)。
+計算結果會追加到 `SaveChatExpMeter.history.csv`，方便之後回看各段效率。Base 經驗需求表參考 RO 樂園官網公告的等級需求優化方向，並取自 RO 樂園資訊站升級計算器目前公開的 Lv1~80 表。原始交接筆記已整理到 [docs/RO_EXP_METER_交接筆記.md](./docs/RO_EXP_METER_交接筆記.md)。
 
 雙擊啟動檔計算完成後，程式會詢問是否清空 `Chat_*.txt`。只有輸入 `DELETE` 才會刪除；直接 Enter 會取消。刪除範圍限於指定 Chat 資料夾內的 `Chat_*.txt`，但如果多開帳號共用同一個 Chat 資料夾，所有帳號的 savechat 文字檔都會一起清掉。

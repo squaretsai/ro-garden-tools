@@ -3,6 +3,7 @@
     [int]$List = 20,
     [string]$MapName = "",
     [string]$AccountName = "",
+    [int]$BaseLevel = 0,
     [switch]$AskDeleteChat,
     [switch]$NoHistory
 )
@@ -15,6 +16,93 @@ try {
 function Format-Number {
     param([double]$Value)
     return ("{0:N0}" -f $Value)
+}
+
+function Format-Percent {
+    param([double]$Value)
+    return ("{0:N2}%" -f $Value)
+}
+
+$script:BaseExpToNextByLevel = @{
+    1 = 2443
+    2 = 2760
+    3 = 3118
+    4 = 3523
+    5 = 3980
+    6 = 4497
+    7 = 5081
+    8 = 5741
+    9 = 6487
+    10 = 7330
+    11 = 8282
+    12 = 9358
+    13 = 10574
+    14 = 11948
+    15 = 13501
+    16 = 15256
+    17 = 17239
+    18 = 19480
+    19 = 22012
+    20 = 24873
+    21 = 28106
+    22 = 31759
+    23 = 35887
+    24 = 40552
+    25 = 45823
+    26 = 51779
+    27 = 58510
+    28 = 66116
+    29 = 74711
+    30 = 84423
+    31 = 95397
+    32 = 107798
+    33 = 121811
+    34 = 137646
+    35 = 155539
+    36 = 175759
+    37 = 198607
+    38 = 224425
+    39 = 253600
+    40 = 286568
+    41 = 323821
+    42 = 365917
+    43 = 413486
+    44 = 467239
+    45 = 527980
+    46 = 596617
+    47 = 674177
+    48 = 761820
+    49 = 860856
+    50 = 1058852
+    51 = 2117366
+    52 = 3112529
+    53 = 4575417
+    54 = 6725863
+    55 = 9887019
+    56 = 14533917
+    57 = 21364858
+    58 = 31406342
+    59 = 46167322
+    60 = 52630747
+    61 = 59999051
+    62 = 68398918
+    63 = 77974766
+    64 = 88891233
+    65 = 101336006
+    66 = 115523046
+    67 = 131696273
+    68 = 150133750
+    69 = 171152475
+    70 = 193402296
+    71 = 218544594
+    72 = 246955391
+    73 = 279059591
+    74 = 315337337
+    75 = 356331190
+    76 = 402654244
+    77 = 454999295
+    78 = 514149203
+    79 = 580888599
 }
 
 function Read-ChatText {
@@ -282,11 +370,33 @@ if (-not $AccountName) {
     $AccountName = Read-Host "帳號或角色備註，可直接 Enter 略過"
 }
 
+if ($BaseLevel -le 0) {
+    $baseLevelText = Read-Host "目前 Base 等級，可直接 Enter 略過 %/hr"
+    if (-not [string]::IsNullOrWhiteSpace($baseLevelText)) {
+        $parsedBaseLevel = 0
+        if (-not [int]::TryParse($baseLevelText, [ref]$parsedBaseLevel)) {
+            Write-Host "Base 等級格式不正確，略過 %/hr。" -ForegroundColor Yellow
+        } else {
+            $BaseLevel = $parsedBaseLevel
+        }
+    }
+}
+
+$baseExpToNext = $null
+if ($BaseLevel -gt 0) {
+    if ($script:BaseExpToNextByLevel.ContainsKey($BaseLevel)) {
+        $baseExpToNext = [double]$script:BaseExpToNextByLevel[$BaseLevel]
+    } else {
+        Write-Host ("目前內建 Base 經驗表支援 Lv1~79；Lv{0} 無法換算 %/hr。" -f $BaseLevel) -ForegroundColor Yellow
+    }
+}
+
 $exp = Get-ExpStats -Path $selected.File.FullName
 $elapsed = if ($startPoint) { $selected.Time - $startPoint.Time } else { $null }
 $elapsedSeconds = if ($elapsed) { [Math]::Max(0, [int][Math]::Round($elapsed.TotalSeconds)) } else { 0 }
 $basePerHour = if ($elapsedSeconds -gt 0) { $exp.BaseExp / $elapsedSeconds * 3600 } else { 0 }
 $jobPerHour = if ($elapsedSeconds -gt 0) { $exp.JobExp / $elapsedSeconds * 3600 } else { 0 }
+$basePercentPerHour = if ($baseExpToNext -and $baseExpToNext -gt 0) { $basePerHour / $baseExpToNext * 100 } else { $null }
 $suffix = Get-SaveChatSuffix -FileName $selected.File.Name
 $battleFiles = Get-CompanionFiles -Suffix $suffix -Names @("Chat_戰鬥", "Chat_戰鬥訊息")
 $dropFiles = Get-CompanionFiles -Suffix $suffix -Names @("Chat_一般訊息", "Chat_一般")
@@ -316,6 +426,10 @@ Write-Host ("Base EXP：{0}" -f (Format-Number $exp.BaseExp))
 Write-Host ("Job EXP ：{0}" -f (Format-Number $exp.JobExp))
 Write-Host ("Base EXP/hr：{0}" -f (Format-Number $basePerHour))
 Write-Host ("Job EXP/hr ：{0}" -f (Format-Number $jobPerHour))
+if ($baseExpToNext) {
+    Write-Host ("Base Lv{0} 升級需求：{1}" -f $BaseLevel, (Format-Number $baseExpToNext))
+    Write-Host ("Base %/hr：{0}" -f (Format-Percent $basePercentPerHour))
+}
 
 if ($monsterStats) {
     Write-Host ""
@@ -343,10 +457,13 @@ if (-not $NoHistory) {
         ElapsedSeconds = $elapsedSeconds
         AccountName = $AccountName
         MapName = $MapName
+        BaseLevel = if ($baseExpToNext) { $BaseLevel } else { "" }
+        BaseExpToNext = if ($baseExpToNext) { [int64]$baseExpToNext } else { "" }
         BaseExp = $exp.BaseExp
         JobExp = $exp.JobExp
         BaseExpPerHour = [int64][Math]::Round($basePerHour)
         JobExpPerHour = [int64][Math]::Round($jobPerHour)
+        BasePercentPerHour = if ($baseExpToNext) { [Math]::Round($basePercentPerHour, 4) } else { "" }
     } | Export-Csv -LiteralPath $historyPath -Append -NoTypeInformation -Encoding UTF8
 
     Write-Host ""
@@ -356,5 +473,6 @@ if (-not $NoHistory) {
 if ($AskDeleteChat) {
     Invoke-ChatCleanupPrompt -TargetPath $ChatPath
 }
+
 
 
