@@ -224,6 +224,7 @@ function Get-ExpStats {
         BaseExp = $baseExp
         JobExp = $jobExp
         Lines = ([regex]::Matches($text, $pattern)).Count
+        TextLines = ($text -split "\r?\n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }).Count
     }
 }
 
@@ -520,6 +521,7 @@ $basePerHour = if ($elapsedSeconds -gt 0) { $exp.BaseExp / $elapsedSeconds * 360
 $jobPerHour = if ($elapsedSeconds -gt 0) { $exp.JobExp / $elapsedSeconds * 3600 } else { 0 }
 $basePercentPerHour = if ($baseExpToNext -and $baseExpToNext -gt 0) { $basePerHour / $baseExpToNext * 100 } else { $null }
 $gamePercentBasePerHour = if ($baseExpToNext -and $gamePercentPerHour -ne $null) { $gamePercentPerHour / 100 * $baseExpToNext } else { $null }
+$saveChatClipRisk = $elapsedSeconds -ge 600 -or $exp.Lines -ge 150
 $suffix = Get-SaveChatSuffix -FileName $selected.File.Name
 $battleFiles = Get-CompanionFiles -Suffix $suffix -Names @("Chat_戰鬥", "Chat_戰鬥訊息")
 $dropFiles = Get-CompanionFiles -Suffix $suffix -Names @("Chat_一般訊息", "Chat_一般")
@@ -547,6 +549,7 @@ if ($AccountName) {
 }
 Write-Host ("Base EXP：{0}" -f (Format-Number $exp.BaseExp))
 Write-Host ("Job EXP ：{0}" -f (Format-Number $exp.JobExp))
+Write-Host ("EXP 訊息筆數：{0} / 檔案非空白行：{1}" -f (Format-Number $exp.Lines), (Format-Number $exp.TextLines))
 Write-Host ("Base EXP/hr：{0}" -f (Format-Number $basePerHour))
 Write-Host ("Job EXP/hr ：{0}" -f (Format-Number $jobPerHour))
 if ($baseExpToNext) {
@@ -563,6 +566,12 @@ if ($gamePercentPerHour -ne $null) {
     if ($gamePercentBasePerHour -ne $null) {
         Write-Host ("等效 Base EXP/hr：{0}" -f (Format-Number $gamePercentBasePerHour))
     }
+}
+if ($saveChatClipRisk) {
+    Write-Host ""
+    Write-Host "savechat 覆蓋提醒" -ForegroundColor Yellow
+    Write-Host "如果練功時間太久或經驗訊息太多，聊天視窗前段可能已被洗掉；程式只能加總目前 savechat 檔裡還存在的 EXP，因此 EXP/hr 可能偏低。"
+    Write-Host "建議每 5~10 分鐘 /savechat 一次，或使用上方的遊戲%校正結果交叉確認。"
 }
 
 if ($monsterStats) {
