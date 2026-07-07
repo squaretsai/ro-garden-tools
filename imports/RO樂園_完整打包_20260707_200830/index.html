@@ -1,0 +1,1524 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="RO樂園刺客音速投擲命中計算機"
+    />
+    <title>RO樂園 | 音投命中計算機</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --canvas: #10141b;
+        --surface: #181e28;
+        --surface-raised: #202936;
+        --line: #334155;
+        --text: #eef4fb;
+        --muted: #9baabe;
+        --cyan: #50d5d1;
+        --cyan-deep: #247f83;
+        --gold: #f0b858;
+        --rose: #ff7a7a;
+        --green: #72d29c;
+        --radius: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        background: var(--canvas);
+        color: var(--text);
+        font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        color: inherit;
+      }
+
+      .app-shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 48px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        place-items: center;
+        border: 1px solid var(--cyan-deep);
+        border-radius: 6px;
+        color: var(--cyan);
+        font-weight: 800;
+      }
+
+      .reset-button {
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .reset-button:hover,
+      .reset-button:focus-visible {
+        border-color: var(--cyan);
+        color: var(--cyan);
+        outline: none;
+      }
+
+      .page-heading {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+        padding: 34px 0 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--cyan);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 30px;
+        padding: 5px 10px;
+        border: 1px solid #355a50;
+        border-radius: 6px;
+        color: #b6e8cc;
+        font-size: 12px;
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: 190px minmax(0, 1fr);
+        gap: 20px;
+      }
+
+      .module-nav {
+        align-self: start;
+        border-top: 1px solid var(--line);
+      }
+
+      .module-nav h2 {
+        margin: 14px 0 8px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .module-list {
+        display: grid;
+        gap: 4px;
+      }
+
+      .module-item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 9px;
+        min-height: 38px;
+        padding: 0 10px;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 14px;
+        text-align: left;
+      }
+
+      .module-item.active {
+        border-color: var(--cyan-deep);
+        background: #123237;
+        color: var(--text);
+      }
+
+      .module-item:not([disabled]):hover,
+      .module-item:not([disabled]):focus-visible {
+        color: var(--text);
+        outline: none;
+      }
+
+      .module-item[disabled] {
+        cursor: default;
+        opacity: 0.55;
+      }
+
+      .module-icon {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .calculator {
+        display: grid;
+        gap: 16px;
+      }
+
+      .calculator[hidden] {
+        display: none;
+      }
+
+      .formula-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 13px 15px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      .formula-bar span {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .formula-bar code {
+        color: var(--gold);
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 12px;
+      }
+
+      .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .section-panel {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      .panel-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 51px;
+        padding: 0 16px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .panel-heading h2 {
+        margin: 0;
+        font-size: 15px;
+      }
+
+      .panel-heading span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .field-list {
+        display: grid;
+        gap: 0;
+      }
+
+      .field {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 130px;
+        align-items: center;
+        gap: 16px;
+        min-height: 72px;
+        padding: 12px 16px;
+        border-bottom: 1px solid #2b3645;
+      }
+
+      .field:last-child {
+        border-bottom: 0;
+      }
+
+      .field label {
+        color: var(--text);
+        font-size: 14px;
+      }
+
+      .field small {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .number-input {
+        width: 100%;
+        height: 39px;
+        padding: 0 10px;
+        border: 1px solid #455569;
+        border-radius: 5px;
+        background: #111720;
+        color: var(--text);
+        font-size: 16px;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+
+      .select-input {
+        text-align: left;
+      }
+
+      .number-input:focus {
+        border-color: var(--cyan);
+        outline: 2px solid rgba(80, 213, 209, 0.18);
+      }
+
+      .skill-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 150px;
+        align-items: center;
+        gap: 20px;
+        padding: 17px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-raised);
+      }
+
+      .skill-name {
+        margin: 0 0 5px;
+        font-size: 17px;
+        font-weight: 750;
+      }
+
+      .skill-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .skill-control label {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .result-panel {
+        display: grid;
+        grid-template-columns: 1.35fr 0.65fr;
+        gap: 1px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--line);
+      }
+
+      .result-primary,
+      .result-details {
+        background: var(--surface);
+      }
+
+      .result-primary {
+        padding: 24px;
+      }
+
+      .result-label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .chance {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin: 7px 0 18px;
+      }
+
+      .chance strong {
+        font-size: 48px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+
+      .chance span {
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .meter {
+        position: relative;
+        height: 10px;
+        overflow: hidden;
+        border-radius: 4px;
+        background: #0f151e;
+      }
+
+      .meter-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--cyan);
+        transition: width 160ms ease, background-color 160ms ease;
+      }
+
+      .verdict {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .verdict-icon {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+
+      .cheese-range {
+        margin: 14px 0 0;
+        color: var(--cyan);
+        font-size: 16px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .result-note {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .result-details {
+        display: grid;
+        align-content: stretch;
+      }
+
+      .metric {
+        display: grid;
+        align-content: center;
+        min-height: 88px;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .metric:last-child {
+        border-bottom: 0;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .metric strong {
+        margin-top: 5px;
+        color: var(--text);
+        font-size: 24px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .metric strong.positive {
+        color: var(--green);
+      }
+
+      .metric strong.negative {
+        color: var(--rose);
+      }
+
+      .comparison-panel {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      .comparison-item {
+        min-height: 92px;
+        padding: 16px;
+        border-right: 1px solid var(--line);
+      }
+
+      .comparison-item:last-child {
+        border-right: 0;
+      }
+
+      .comparison-item span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .comparison-item strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 21px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .attribute-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        padding: 14px 16px 16px;
+      }
+
+      .attribute-field label {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .choice-list {
+        display: grid;
+        gap: 8px;
+        padding: 14px 16px 16px;
+      }
+
+      .choice-control {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-height: 36px;
+        color: var(--text);
+        font-size: 13px;
+      }
+
+      .choice-control input {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--cyan);
+      }
+
+      .choice-control small {
+        color: var(--muted);
+      }
+
+      .formula-note {
+        padding: 13px 15px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #141a23;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      [data-tooltip] {
+        position: relative;
+      }
+
+      [data-tooltip]::after {
+        position: absolute;
+        z-index: 3;
+        right: 0;
+        bottom: calc(100% + 7px);
+        width: max-content;
+        max-width: 220px;
+        padding: 7px 9px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        background: #0b1017;
+        color: var(--text);
+        content: attr(data-tooltip);
+        font-size: 12px;
+        line-height: 1.35;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(3px);
+        transition: opacity 120ms ease, transform 120ms ease;
+      }
+
+      [data-tooltip]:hover::after,
+      [data-tooltip]:focus-visible::after {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 820px) {
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+
+        .module-nav {
+          overflow-x: auto;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding-bottom: 2px;
+        }
+
+        .module-nav h2 {
+          flex: 0 0 auto;
+          margin: 0;
+        }
+
+        .module-list {
+          display: flex;
+          flex: 0 0 auto;
+        }
+
+        .module-item {
+          white-space: nowrap;
+        }
+
+        .result-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .result-details {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .metric {
+          min-height: 82px;
+          padding: 14px;
+          border-right: 1px solid var(--line);
+          border-bottom: 0;
+        }
+
+        .metric:last-child {
+          border-right: 0;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .app-shell {
+          width: min(100% - 24px, 1180px);
+          padding-top: 18px;
+        }
+
+        .page-heading {
+          grid-template-columns: 1fr;
+          gap: 14px;
+          padding: 26px 0 20px;
+        }
+
+        h1 {
+          font-size: 26px;
+        }
+
+        .input-grid,
+        .skill-panel,
+        .comparison-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .attribute-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          padding: 12px;
+        }
+
+        .field {
+          grid-template-columns: minmax(0, 1fr) 112px;
+          gap: 12px;
+          padding: 12px;
+        }
+
+        .comparison-item {
+          min-height: 70px;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .comparison-item:last-child {
+          border-bottom: 0;
+        }
+
+        .result-details {
+          grid-template-columns: 1fr;
+        }
+
+        .metric {
+          min-height: 64px;
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: center;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .metric strong {
+          margin-top: 0;
+        }
+
+        .formula-bar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">R</span>
+          <span>RO樂園 · 刺客工具</span>
+        </div>
+        <button
+          class="reset-button"
+          id="resetButton"
+          type="button"
+          aria-label="還原預設數值"
+          data-tooltip="還原預設數值"
+        >
+          ↺
+        </button>
+      </header>
+
+      <section class="page-heading" aria-labelledby="pageTitle">
+        <div>
+          <p class="eyebrow">實用試算</p>
+          <h1 id="pageTitle">刺客計算工具</h1>
+        </div>
+        <div class="status-chip"><span class="status-dot"></span>命中與起司回魔</div>
+      </section>
+
+      <div class="workspace">
+        <aside class="module-nav" aria-label="計算模組">
+          <h2>計算模組</h2>
+          <nav class="module-list">
+            <button class="module-item active" type="button" data-calculator-tab="hit" aria-controls="hitCalculator" aria-selected="true">
+              <i class="module-icon"></i>命中
+            </button>
+            <button class="module-item" type="button" data-calculator-tab="cheese" aria-controls="cheeseCalculator" aria-selected="false">
+              <i class="module-icon"></i>起司
+            </button>
+            <button class="module-item" type="button" data-calculator-tab="character" aria-controls="characterCalculator" aria-selected="false">
+              <i class="module-icon"></i>HP / SP
+            </button>
+            <button class="module-item" type="button" data-calculator-tab="spRecovery" aria-controls="spRecoveryCalculator" aria-selected="false">
+              <i class="module-icon"></i>自動回魔
+            </button>
+            <button class="module-item" type="button" disabled aria-disabled="true"><i class="module-icon"></i>傷害</button>
+            <button class="module-item" type="button" disabled aria-disabled="true"><i class="module-icon"></i>攻速</button>
+          </nav>
+        </aside>
+
+        <section class="calculator" id="hitCalculator" data-calculator-panel="hit" aria-label="音速投擲命中計算">
+          <div class="formula-bar">
+            <span>超音投以一般命中率套用乘算補正，再以 100% 為上限。</span>
+            <code>Hit rate × (1 + correction)</code>
+          </div>
+
+          <div class="input-grid">
+            <section class="section-panel" aria-labelledby="characterTitle">
+              <div class="panel-heading">
+                <h2 id="characterTitle">角色命中</h2>
+                <span>面板 + 額外</span>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <div>
+                    <label for="baseHit">面板 Hit</label>
+                    <small>人物狀態欄的 Hit</small>
+                  </div>
+                  <input class="number-input" id="baseHit" type="number" min="0" max="999" value="300" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="bonusHit">額外 Hit</label>
+                    <small>料理、技能、裝備臨時加成</small>
+                  </div>
+                  <input class="number-input" id="bonusHit" type="number" min="0" max="999" value="0" inputmode="numeric" />
+                </div>
+              </div>
+            </section>
+
+            <section class="section-panel" aria-labelledby="targetTitle">
+              <div class="panel-heading">
+                <h2 id="targetTitle">目標魔物</h2>
+                <span>資料庫數值</span>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <div>
+                    <label for="targetHit">100% 命中需求</label>
+                    <small>樂園怪物資料的 Hit 需求</small>
+                  </div>
+                  <input class="number-input" id="targetHit" type="number" min="0" max="999" value="340" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="correction">超音投補正</label>
+                    <small>預設依 +90% 命中補正</small>
+                  </div>
+                  <input class="number-input" id="correction" type="number" min="0" max="300" value="90" inputmode="numeric" />
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="skill-panel" aria-labelledby="skillTitle">
+            <div>
+              <h2 class="skill-name" id="skillTitle">超音速投擲</h2>
+              <p class="skill-note">將一般命中率乘上補正倍率。若日後技能敘述或等級不同，直接調整右側補正即可。</p>
+            </div>
+            <div class="skill-control">
+              <label for="multiplier">命中倍率</label>
+              <input class="number-input" id="multiplier" type="text" value="×1.90" readonly aria-readonly="true" />
+            </div>
+          </section>
+
+          <section class="result-panel" aria-live="polite" aria-label="計算結果">
+            <div class="result-primary">
+              <p class="result-label">超音速投擲命中率</p>
+              <div class="chance"><strong id="sonicChance">100.0</strong><span>%</span></div>
+              <div class="meter" aria-hidden="true"><div class="meter-fill" id="meterFill"></div></div>
+              <p class="verdict"><span class="verdict-icon" id="verdictIcon"></span><span id="verdictText">剛好達成 100% 命中。</span></p>
+            </div>
+            <div class="result-details">
+              <div class="metric"><span>有效 Hit</span><strong id="effectiveHit">300</strong></div>
+              <div class="metric"><span>一般攻擊命中</span><strong id="normalChance">60.0%</strong></div>
+              <div class="metric"><span>達標餘裕</span><strong id="hitMargin">+7</strong></div>
+            </div>
+          </section>
+
+          <section class="comparison-panel" aria-label="命中門檻對照">
+            <div class="comparison-item">
+              <span>超音投達 100% 所需有效 Hit</span>
+              <strong id="requiredHit">293</strong>
+            </div>
+            <div class="comparison-item">
+              <span>還需要額外 Hit</span>
+              <strong id="neededHit">0</strong>
+            </div>
+            <div class="comparison-item">
+              <span>補正前最低命中率</span>
+              <strong id="minimumRate">52.7%</strong>
+            </div>
+          </section>
+        </section>
+
+        <section class="calculator" id="cheeseCalculator" data-calculator-panel="cheese" aria-label="起司回魔計算" hidden>
+          <div class="formula-bar">
+            <span>起司的基礎回復為 10 至 15 SP；總 INT 每 1 點增加 SP 補品回復量 2%。</span>
+            <code>base SP × (1 + INT × 2%)</code>
+          </div>
+
+          <div class="input-grid">
+            <section class="section-panel" aria-labelledby="cheeseStatsTitle">
+              <div class="panel-heading">
+                <h2 id="cheeseStatsTitle">角色數值</h2>
+                <span>計算總 INT</span>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <div>
+                    <label for="totalInt">總 INT</label>
+                    <small>包含配點、裝備、料理與技能加成</small>
+                  </div>
+                  <input class="number-input" id="totalInt" type="number" min="0" max="999" value="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="itemRecoveryBonus">SP 補品額外加成</label>
+                    <small>僅填明確寫「SP 補品回復」的技能或裝備</small>
+                  </div>
+                  <input class="number-input" id="itemRecoveryBonus" type="number" min="0" max="300" value="0" inputmode="numeric" />
+                </div>
+              </div>
+            </section>
+
+            <section class="section-panel" aria-labelledby="cheeseUsageTitle">
+              <div class="panel-heading">
+                <h2 id="cheeseUsageTitle">使用量</h2>
+                <span>估算總回復</span>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <div>
+                    <label for="cheeseCount">起司數量</label>
+                    <small>連續使用時的預估總 SP</small>
+                  </div>
+                  <input class="number-input" id="cheeseCount" type="number" min="1" max="9999" value="1" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <span>不會影響</span>
+                    <small>最大 SP、自然 SP 回復、一般 SP 回復力</small>
+                  </div>
+                  <div class="number-input" aria-hidden="true">--</div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="skill-panel" aria-labelledby="cheeseTitle">
+            <div>
+              <h2 class="skill-name" id="cheeseTitle">起司回魔估算</h2>
+              <p class="skill-note">遊戲每次會在基礎 10 至 15 SP 間隨機，再依回復倍率結算；顯示值為理論估算，實際單次數字會受隨機值與遊戲整數取整影響。</p>
+            </div>
+            <div class="skill-control">
+              <label for="cheeseMultiplier">回復倍率</label>
+              <input class="number-input" id="cheeseMultiplier" type="text" value="×1.00" readonly aria-readonly="true" />
+            </div>
+          </section>
+
+          <section class="result-panel" aria-live="polite" aria-label="起司回魔結果">
+            <div class="result-primary">
+              <p class="result-label">每顆起司平均回復</p>
+              <div class="chance"><strong id="cheeseAverage">12.5</strong><span>SP</span></div>
+              <p class="cheese-range">約 <span id="cheeseMin">10.0</span> 至 <span id="cheeseMax">15.0</span> SP</p>
+              <p class="result-note">以目前總 INT 與 SP 補品加成估算。</p>
+            </div>
+            <div class="result-details">
+              <div class="metric"><span>總 INT</span><strong id="cheeseIntValue">0</strong></div>
+              <div class="metric"><span>額外補品加成</span><strong id="cheeseBonusValue">0%</strong></div>
+              <div class="metric"><span>本次平均總回復</span><strong id="cheeseTotal">12.5 SP</strong></div>
+            </div>
+          </section>
+
+          <section class="comparison-panel" aria-label="起司回復對照">
+            <div class="comparison-item">
+              <span>每顆最低估算</span>
+              <strong id="cheeseMinSummary">10.0 SP</strong>
+            </div>
+            <div class="comparison-item">
+              <span>每顆最高估算</span>
+              <strong id="cheeseMaxSummary">15.0 SP</strong>
+            </div>
+            <div class="comparison-item">
+              <span>使用數量</span>
+              <strong id="cheeseCountSummary">1 顆</strong>
+            </div>
+          </section>
+        </section>
+
+        <section class="calculator" id="characterCalculator" data-calculator-panel="character" aria-label="角色 HP 與 SP 計算" hidden>
+          <div class="formula-bar">
+            <span>以職業成長、Base 等級與最終 VIT / INT 推算裸值；裝備固定值與百分比可另外加入。</span>
+            <code>base × (100 + VIT / INT) %</code>
+          </div>
+
+          <div class="input-grid">
+            <section class="section-panel" aria-labelledby="classTitle">
+              <div class="panel-heading">
+                <h2 id="classTitle">角色資料</h2>
+                <span>裸角基礎</span>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <div>
+                    <label for="characterClass">職業</label>
+                    <small>目前支援初心者至二轉職業</small>
+                  </div>
+                  <select class="number-input select-input" id="characterClass">
+                    <option value="novice">初心者</option>
+                    <option value="swordsman">劍士</option>
+                    <option value="mage">魔法師</option>
+                    <option value="archer">弓箭手</option>
+                    <option value="acolyte">服事</option>
+                    <option value="merchant">商人</option>
+                    <option value="thief">盜賊</option>
+                    <option value="knight">騎士</option>
+                    <option value="priest">祭司</option>
+                    <option value="wizard">巫師</option>
+                    <option value="blacksmith">鐵匠</option>
+                    <option value="hunter">獵人</option>
+                    <option value="assassin" selected>刺客</option>
+                    <option value="crusader">十字軍</option>
+                    <option value="monk">武僧</option>
+                    <option value="sage">賢者</option>
+                    <option value="rogue">流氓</option>
+                    <option value="alchemist">鍊金術師</option>
+                    <option value="bard">詩人</option>
+                    <option value="dancer">舞孃</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="characterLevel">Base 等級</label>
+                    <small>用於職業 HP / SP 成長</small>
+                  </div>
+                  <input class="number-input" id="characterLevel" type="number" min="1" max="99" value="60" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="characterJob">JOB 等級</label>
+                    <small>角色紀錄用；請將 Job 加成併入最終屬性</small>
+                  </div>
+                  <input class="number-input" id="characterJob" type="number" min="1" max="70" value="50" inputmode="numeric" />
+                </div>
+              </div>
+            </section>
+
+            <section class="section-panel" aria-labelledby="hpspBonusTitle">
+              <div class="panel-heading">
+                <h2 id="hpspBonusTitle">HP / SP 加成</h2>
+                <span>裝備、Buff</span>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <div>
+                    <label for="flatHp">HP 固定加成</label>
+                    <small>例如裝備或卡片的 MHP +N</small>
+                  </div>
+                  <input class="number-input" id="flatHp" type="number" min="0" max="999999" value="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="hpPercent">HP 百分比加成</label>
+                    <small>所有 MHP +% 加總後輸入</small>
+                  </div>
+                  <input class="number-input" id="hpPercent" type="number" min="0" max="999" value="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="flatSp">SP 固定加成</label>
+                    <small>例如裝備或卡片的 MSP +N</small>
+                  </div>
+                  <input class="number-input" id="flatSp" type="number" min="0" max="999999" value="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="spPercent">SP 百分比加成</label>
+                    <small>所有 MSP +% 加總後輸入</small>
+                  </div>
+                  <input class="number-input" id="spPercent" type="number" min="0" max="999" value="0" inputmode="numeric" />
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="section-panel" aria-labelledby="attributesTitle">
+            <div class="panel-heading">
+              <h2 id="attributesTitle">最終屬性</h2>
+              <span>包含 Job、裝備與料理加成</span>
+            </div>
+            <div class="attribute-grid">
+              <div class="attribute-field"><label for="characterStr">STR</label><input class="number-input" id="characterStr" type="number" min="0" max="999" value="40" inputmode="numeric" /></div>
+              <div class="attribute-field"><label for="characterAgi">AGI</label><input class="number-input" id="characterAgi" type="number" min="0" max="999" value="72" inputmode="numeric" /></div>
+              <div class="attribute-field"><label for="characterVit">VIT</label><input class="number-input" id="characterVit" type="number" min="0" max="999" value="4" inputmode="numeric" /></div>
+              <div class="attribute-field"><label for="characterInt">INT</label><input class="number-input" id="characterInt" type="number" min="0" max="999" value="2" inputmode="numeric" /></div>
+              <div class="attribute-field"><label for="characterDex">DEX</label><input class="number-input" id="characterDex" type="number" min="0" max="999" value="8" inputmode="numeric" /></div>
+              <div class="attribute-field"><label for="characterLuk">LUK</label><input class="number-input" id="characterLuk" type="number" min="0" max="999" value="60" inputmode="numeric" /></div>
+            </div>
+          </section>
+
+          <section class="result-panel" aria-live="polite" aria-label="角色 HP 與 SP 結果">
+            <div class="result-primary">
+              <p class="result-label">預估 Max HP</p>
+              <div class="chance"><strong id="characterMaxHp">2,061</strong><span>HP</span></div>
+              <p class="result-note">固定 HP 加成會先計入，再套用 HP 百分比加成。</p>
+            </div>
+            <div class="result-details">
+              <div class="metric"><span>預估 Max SP</span><strong id="characterMaxSp">255</strong></div>
+              <div class="metric"><span>職業裸 HP</span><strong id="characterBaseHp">1,982</strong></div>
+              <div class="metric"><span>職業裸 SP</span><strong id="characterBaseSp">250</strong></div>
+            </div>
+          </section>
+
+          <section class="comparison-panel" aria-label="角色數值對照">
+            <div class="comparison-item"><span>最終 VIT</span><strong id="characterVitValue">4</strong></div>
+            <div class="comparison-item"><span>最終 INT</span><strong id="characterIntValue">2</strong></div>
+            <div class="comparison-item"><span>JOB 等級</span><strong id="characterJobValue">50</strong></div>
+          </section>
+
+          <p class="formula-note">此頁的職業裸值依 ROCalculator Zero 公開的職業成長公式推算。JOB 本身不會直接加 HP / SP；它造成的 VIT、INT Job 補正需填進「最終屬性」。遊戲若有特殊職業機制或限時 Buff，請以面板值優先。</p>
+        </section>
+
+        <section class="calculator" id="spRecoveryCalculator" data-calculator-panel="spRecovery" aria-label="自動 SP 回魔計算" hidden>
+          <div class="formula-bar">
+            <span>依 twroz.wiki 的自然回復公式；會自動帶入角色頁的最終 INT 與預估 Max SP。</span>
+            <code>1 + floor(INT / 6) + floor(Max SP / 100)</code>
+          </div>
+
+          <div class="input-grid">
+            <section class="section-panel" aria-labelledby="recoveryInputTitle">
+              <div class="panel-heading">
+                <h2 id="recoveryInputTitle">回魔基礎</h2>
+                <span>優先使用面板值</span>
+              </div>
+              <div class="field-list">
+                <div class="field">
+                  <div>
+                    <label for="spPanelOverride">遊戲面板最終 Max SP</label>
+                    <small>此值應已包含鬼女與所有 Buff；有填就不會重複套用 Max SP +%</small>
+                  </div>
+                  <input class="number-input" id="spPanelOverride" type="number" min="0" max="999999" value="" placeholder="選填" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="recoveryGearPercent">裝備 SP 回復力</label>
+                    <small>上衣、斗篷等明確標示的 SP 回復率總和</small>
+                  </div>
+                  <input class="number-input" id="recoveryGearPercent" type="number" min="0" max="999" value="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <div>
+                    <label for="spShoeCard">鞋子卡片</label>
+                    <small>同一件鞋只能選一張</small>
+                  </div>
+                  <select class="number-input select-input" id="spShoeCard">
+                    <option value="none">無</option>
+                    <option value="mermaid">人魚士兵卡：SP 回復力 +10%</option>
+                    <option value="eggyra">轉轉蛋卡：SP 回復力 +15%</option>
+                    <option value="ghostLady">鬼女卡：SP 回復力 +3%、Max SP +15%</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <section class="section-panel" aria-labelledby="recoveryBuffTitle">
+              <div class="panel-heading">
+                <h2 id="recoveryBuffTitle">回復狀態</h2>
+                <span>自然回魔</span>
+              </div>
+              <div class="choice-list">
+                <label class="choice-control"><input id="magnificatEnabled" type="checkbox" />聖母之頌歌 <small>自然 SP 回復速度 ×2</small></label>
+                <p class="result-note">INT 120 以上的額外自然回復會自動納入。禪心等額外回復技能因職業與等級公式不同，暫不合併，避免把刺客的結果算歪。</p>
+              </div>
+            </section>
+          </div>
+
+          <section class="result-panel" aria-live="polite" aria-label="自動 SP 回魔結果">
+            <div class="result-primary">
+              <p class="result-label">每分鐘平均自動回魔</p>
+              <div class="chance"><strong id="spRecoveryPerMinute">16</strong><span>SP</span></div>
+              <p class="cheese-range">每 8 秒等效回復 <span id="spRecoveryPerEight">2</span> SP</p>
+              <p class="result-note" id="spSourceNote">使用角色推算的 Max SP。</p>
+            </div>
+            <div class="result-details">
+              <div class="metric"><span>計算用 Max SP</span><strong id="spRecoveryMaxSp">255</strong></div>
+              <div class="metric"><span>基礎 SPR</span><strong id="spRecoveryBase">3</strong></div>
+              <div class="metric"><span>SP 回復力加成</span><strong id="spRecoveryBonus">0%</strong></div>
+            </div>
+          </section>
+
+          <section class="comparison-panel" aria-label="自動 SP 回魔對照">
+            <div class="comparison-item"><span>角色最終 INT</span><strong id="spRecoveryInt">2</strong></div>
+            <div class="comparison-item"><span>每小時平均回魔</span><strong id="spRecoveryPerHour">960 SP</strong></div>
+            <div class="comparison-item"><span>鞋卡回復率</span><strong id="spRecoveryCardBonus">0%</strong></div>
+          </section>
+
+          <p class="formula-note">卡片的「SP 回復力 +%」與裝備回復率相加後，乘在基礎 SPR 上；不是直接加 Max SP。鬼女卡額外的 Max SP +15% 會套入角色頁的預估 SP；若已輸入遊戲面板 Max SP，則以面板值為準。</p>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const defaultValues = {
+        baseHit: 300,
+        bonusHit: 0,
+        targetHit: 340,
+        correction: 90,
+      };
+
+      const cheeseDefaultValues = {
+        totalInt: 0,
+        itemRecoveryBonus: 0,
+        cheeseCount: 1,
+      };
+
+      const characterDefaultValues = {
+        characterClass: "assassin",
+        characterLevel: 60,
+        characterJob: 50,
+        flatHp: 0,
+        hpPercent: 0,
+        flatSp: 0,
+        spPercent: 0,
+        characterStr: 40,
+        characterAgi: 72,
+        characterVit: 4,
+        characterInt: 2,
+        characterDex: 8,
+        characterLuk: 60,
+      };
+
+      const spRecoveryDefaultValues = {
+        spPanelOverride: "",
+        recoveryGearPercent: 0,
+        spShoeCard: "none",
+        magnificatEnabled: false,
+      };
+
+      const classGrowth = {
+        novice: { hpA: 0, hpB: 5, spA: 1 },
+        swordsman: { hpA: 70, hpB: 5, spA: 2 },
+        mage: { hpA: 50, hpB: 5, spA: 2 },
+        archer: { hpA: 40, hpB: 5, spA: 5 },
+        acolyte: { hpA: 50, hpB: 5, spA: 2 },
+        merchant: { hpA: 30, hpB: 5, spA: 6 },
+        thief: { hpA: 40, hpB: 5, spA: 3 },
+        knight: { hpA: 150, hpB: 5, spA: 3 },
+        priest: { hpA: 110, hpB: 5, spA: 4 },
+        wizard: { hpA: 75, hpB: 5, spA: 8 },
+        blacksmith: { hpA: 85, hpB: 5, spA: 4 },
+        hunter: { hpA: 55, hpB: 5, spA: 9 },
+        assassin: { hpA: 90, hpB: 5, spA: 4 },
+        crusader: { hpA: 110, hpB: 7, spA: 4.7 },
+        monk: { hpA: 85, hpB: 5, spA: 5 },
+        sage: { hpA: 90, hpB: 6.5, spA: 4.7 },
+        rogue: { hpA: 75, hpB: 3, spA: 6 },
+        alchemist: { hpA: 75, hpB: 3, spA: 6 },
+        bard: { hpA: 75, hpB: 5, spA: 7 },
+        dancer: { hpA: 90, hpB: 5, spA: 4 },
+      };
+
+      const shoeCardEffects = {
+        none: { recovery: 0, maxSp: 0 },
+        mermaid: { recovery: 10, maxSp: 0 },
+        eggyra: { recovery: 15, maxSp: 0 },
+        ghostLady: { recovery: 3, maxSp: 15 },
+      };
+
+      const elements = {
+        baseHit: document.querySelector("#baseHit"),
+        bonusHit: document.querySelector("#bonusHit"),
+        targetHit: document.querySelector("#targetHit"),
+        correction: document.querySelector("#correction"),
+        multiplier: document.querySelector("#multiplier"),
+        sonicChance: document.querySelector("#sonicChance"),
+        normalChance: document.querySelector("#normalChance"),
+        effectiveHit: document.querySelector("#effectiveHit"),
+        hitMargin: document.querySelector("#hitMargin"),
+        requiredHit: document.querySelector("#requiredHit"),
+        neededHit: document.querySelector("#neededHit"),
+        minimumRate: document.querySelector("#minimumRate"),
+        meterFill: document.querySelector("#meterFill"),
+        verdictText: document.querySelector("#verdictText"),
+        verdictIcon: document.querySelector("#verdictIcon"),
+        resetButton: document.querySelector("#resetButton"),
+      };
+
+      const cheeseElements = {
+        totalInt: document.querySelector("#totalInt"),
+        itemRecoveryBonus: document.querySelector("#itemRecoveryBonus"),
+        cheeseCount: document.querySelector("#cheeseCount"),
+        cheeseMultiplier: document.querySelector("#cheeseMultiplier"),
+        cheeseAverage: document.querySelector("#cheeseAverage"),
+        cheeseMin: document.querySelector("#cheeseMin"),
+        cheeseMax: document.querySelector("#cheeseMax"),
+        cheeseIntValue: document.querySelector("#cheeseIntValue"),
+        cheeseBonusValue: document.querySelector("#cheeseBonusValue"),
+        cheeseTotal: document.querySelector("#cheeseTotal"),
+        cheeseMinSummary: document.querySelector("#cheeseMinSummary"),
+        cheeseMaxSummary: document.querySelector("#cheeseMaxSummary"),
+        cheeseCountSummary: document.querySelector("#cheeseCountSummary"),
+      };
+
+      const characterElements = {
+        characterClass: document.querySelector("#characterClass"),
+        characterLevel: document.querySelector("#characterLevel"),
+        characterJob: document.querySelector("#characterJob"),
+        flatHp: document.querySelector("#flatHp"),
+        hpPercent: document.querySelector("#hpPercent"),
+        flatSp: document.querySelector("#flatSp"),
+        spPercent: document.querySelector("#spPercent"),
+        characterStr: document.querySelector("#characterStr"),
+        characterAgi: document.querySelector("#characterAgi"),
+        characterVit: document.querySelector("#characterVit"),
+        characterInt: document.querySelector("#characterInt"),
+        characterDex: document.querySelector("#characterDex"),
+        characterLuk: document.querySelector("#characterLuk"),
+        characterMaxHp: document.querySelector("#characterMaxHp"),
+        characterMaxSp: document.querySelector("#characterMaxSp"),
+        characterBaseHp: document.querySelector("#characterBaseHp"),
+        characterBaseSp: document.querySelector("#characterBaseSp"),
+        characterVitValue: document.querySelector("#characterVitValue"),
+        characterIntValue: document.querySelector("#characterIntValue"),
+        characterJobValue: document.querySelector("#characterJobValue"),
+      };
+
+      const spRecoveryElements = {
+        spPanelOverride: document.querySelector("#spPanelOverride"),
+        recoveryGearPercent: document.querySelector("#recoveryGearPercent"),
+        spShoeCard: document.querySelector("#spShoeCard"),
+        magnificatEnabled: document.querySelector("#magnificatEnabled"),
+        spRecoveryPerMinute: document.querySelector("#spRecoveryPerMinute"),
+        spRecoveryPerEight: document.querySelector("#spRecoveryPerEight"),
+        spSourceNote: document.querySelector("#spSourceNote"),
+        spRecoveryMaxSp: document.querySelector("#spRecoveryMaxSp"),
+        spRecoveryBase: document.querySelector("#spRecoveryBase"),
+        spRecoveryBonus: document.querySelector("#spRecoveryBonus"),
+        spRecoveryInt: document.querySelector("#spRecoveryInt"),
+        spRecoveryPerHour: document.querySelector("#spRecoveryPerHour"),
+        spRecoveryCardBonus: document.querySelector("#spRecoveryCardBonus"),
+      };
+
+      const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+      const readNumber = (input) => Math.max(0, Number(input.value) || 0);
+
+      function renderCalculator() {
+        const baseHit = readNumber(elements.baseHit);
+        const bonusHit = readNumber(elements.bonusHit);
+        const targetHit = readNumber(elements.targetHit);
+        const correction = readNumber(elements.correction);
+        const multiplier = 1 + correction / 100;
+        const effectiveHit = baseHit + bonusHit;
+        const normalChance = clamp(100 + effectiveHit - targetHit, 5, 100);
+        const sonicChance = clamp(normalChance * multiplier, 0, 100);
+        const minimumRate = 100 / multiplier;
+        const requiredHit = Math.ceil(targetHit - 100 + minimumRate);
+        const margin = effectiveHit - requiredHit;
+        const neededHit = Math.max(0, requiredHit - effectiveHit);
+
+        elements.multiplier.value = `×${multiplier.toFixed(2)}`;
+        elements.sonicChance.textContent = sonicChance.toFixed(1);
+        elements.normalChance.textContent = `${normalChance.toFixed(1)}%`;
+        elements.effectiveHit.textContent = effectiveHit;
+        elements.requiredHit.textContent = requiredHit;
+        elements.neededHit.textContent = neededHit;
+        elements.minimumRate.textContent = `${minimumRate.toFixed(1)}%`;
+        elements.hitMargin.textContent = margin >= 0 ? `+${margin}` : margin;
+        elements.hitMargin.className = margin >= 0 ? "positive" : "negative";
+        elements.neededHit.className = neededHit === 0 ? "positive" : "negative";
+        elements.meterFill.style.width = `${sonicChance}%`;
+
+        if (sonicChance >= 100) {
+          elements.meterFill.style.backgroundColor = "var(--green)";
+          elements.verdictIcon.style.backgroundColor = "var(--green)";
+          elements.verdictText.textContent = "已達成 100% 命中。";
+        } else if (sonicChance >= 90) {
+          elements.meterFill.style.backgroundColor = "var(--gold)";
+          elements.verdictIcon.style.backgroundColor = "var(--gold)";
+          elements.verdictText.textContent = `距離滿命中還差 ${neededHit} Hit。`;
+        } else {
+          elements.meterFill.style.backgroundColor = "var(--rose)";
+          elements.verdictIcon.style.backgroundColor = "var(--rose)";
+          elements.verdictText.textContent = `命中偏低，還需要 ${neededHit} Hit。`;
+        }
+      }
+
+      function renderCheeseCalculator() {
+        const totalInt = readNumber(cheeseElements.totalInt);
+        const itemRecoveryBonus = readNumber(cheeseElements.itemRecoveryBonus);
+        const cheeseCount = Math.max(1, Math.floor(readNumber(cheeseElements.cheeseCount)));
+        const multiplier = 1 + (totalInt * 2 + itemRecoveryBonus) / 100;
+        const minimumRecovery = 10 * multiplier;
+        const maximumRecovery = 15 * multiplier;
+        const averageRecovery = 12.5 * multiplier;
+        const totalRecovery = averageRecovery * cheeseCount;
+
+        cheeseElements.cheeseMultiplier.value = `×${multiplier.toFixed(2)}`;
+        cheeseElements.cheeseAverage.textContent = averageRecovery.toFixed(1);
+        cheeseElements.cheeseMin.textContent = minimumRecovery.toFixed(1);
+        cheeseElements.cheeseMax.textContent = maximumRecovery.toFixed(1);
+        cheeseElements.cheeseIntValue.textContent = totalInt;
+        cheeseElements.cheeseBonusValue.textContent = `${itemRecoveryBonus}%`;
+        cheeseElements.cheeseTotal.textContent = `${totalRecovery.toFixed(1)} SP`;
+        cheeseElements.cheeseMinSummary.textContent = `${minimumRecovery.toFixed(1)} SP`;
+        cheeseElements.cheeseMaxSummary.textContent = `${maximumRecovery.toFixed(1)} SP`;
+        cheeseElements.cheeseCountSummary.textContent = `${cheeseCount} 顆`;
+      }
+
+      const formatWhole = (value) => Math.floor(value).toLocaleString("en-US");
+
+      function getCharacterCalculation() {
+        const classKey = characterElements.characterClass.value;
+        const growth = classGrowth[classKey] || classGrowth.assassin;
+        const level = clamp(Math.floor(readNumber(characterElements.characterLevel)), 1, 99);
+        const vit = readNumber(characterElements.characterVit);
+        const int = readNumber(characterElements.characterInt);
+        const flatHp = readNumber(characterElements.flatHp);
+        const hpPercent = readNumber(characterElements.hpPercent);
+        const flatSp = readNumber(characterElements.flatSp);
+        const spPercent = readNumber(characterElements.spPercent);
+        const shoeCard = shoeCardEffects[spRecoveryElements.spShoeCard.value] || shoeCardEffects.none;
+
+        let rawHpGrowth = 0;
+        for (let baseLevel = 2; baseLevel <= level; baseLevel += 1) {
+          rawHpGrowth += Math.round((growth.hpA * baseLevel) / 100);
+        }
+
+        const baseHp = Math.floor(growth.hpB * level + 35 + rawHpGrowth);
+        const baseSp = Math.floor(10 + level * growth.spA);
+        const vitAdjustedHp = Math.floor((baseHp * (100 + vit)) / 100);
+        const intAdjustedSp = Math.floor((baseSp * (100 + int)) / 100);
+        const maxHp = Math.floor(((vitAdjustedHp + flatHp) * (100 + hpPercent)) / 100);
+        const maxSp = Math.floor(((intAdjustedSp + flatSp) * (100 + spPercent + shoeCard.maxSp)) / 100);
+
+        return { baseHp, baseSp, maxHp, maxSp, vit, int };
+      }
+
+      function renderCharacterCalculator() {
+        const result = getCharacterCalculation();
+        const job = Math.floor(readNumber(characterElements.characterJob));
+
+        characterElements.characterMaxHp.textContent = formatWhole(result.maxHp);
+        characterElements.characterMaxSp.textContent = formatWhole(result.maxSp);
+        characterElements.characterBaseHp.textContent = formatWhole(result.baseHp);
+        characterElements.characterBaseSp.textContent = formatWhole(result.baseSp);
+        characterElements.characterVitValue.textContent = result.vit;
+        characterElements.characterIntValue.textContent = result.int;
+        characterElements.characterJobValue.textContent = job;
+      }
+
+      function renderSpRecoveryCalculator() {
+        const character = getCharacterCalculation();
+        const panelSp = readNumber(spRecoveryElements.spPanelOverride);
+        const effectiveMaxSp = panelSp > 0 ? panelSp : character.maxSp;
+        const card = shoeCardEffects[spRecoveryElements.spShoeCard.value] || shoeCardEffects.none;
+        const gearBonus = readNumber(spRecoveryElements.recoveryGearPercent);
+        const totalBonus = gearBonus + card.recovery;
+        const baseRecovery = 1 + Math.floor(character.int / 6) + Math.floor(effectiveMaxSp / 100);
+        let recoveryPerEight = Math.floor((baseRecovery * (100 + totalBonus)) / 100);
+
+        if (character.int >= 120) {
+          recoveryPerEight += 4 + Math.floor(character.int / 2) - 60;
+        }
+
+        if (spRecoveryElements.magnificatEnabled.checked) {
+          recoveryPerEight *= 2;
+        }
+
+        const recoveryPerMinute = Math.round((recoveryPerEight * 60) / 8);
+        const recoveryPerHour = recoveryPerMinute * 60;
+
+        spRecoveryElements.spRecoveryPerMinute.textContent = formatWhole(recoveryPerMinute);
+        spRecoveryElements.spRecoveryPerEight.textContent = formatWhole(recoveryPerEight);
+        spRecoveryElements.spRecoveryMaxSp.textContent = formatWhole(effectiveMaxSp);
+        spRecoveryElements.spRecoveryBase.textContent = formatWhole(baseRecovery);
+        spRecoveryElements.spRecoveryBonus.textContent = `${totalBonus}%`;
+        spRecoveryElements.spRecoveryInt.textContent = character.int;
+        spRecoveryElements.spRecoveryPerHour.textContent = `${formatWhole(recoveryPerHour)} SP`;
+        spRecoveryElements.spRecoveryCardBonus.textContent = `${card.recovery}%`;
+        spRecoveryElements.spSourceNote.textContent = panelSp > 0 ? "使用遊戲面板 Max SP。" : "使用角色頁推算的 Max SP。";
+      }
+
+      const calculatorTabs = document.querySelectorAll("[data-calculator-tab]");
+      const calculatorPanels = document.querySelectorAll("[data-calculator-panel]");
+
+      function setActiveCalculator(name) {
+        calculatorTabs.forEach((tab) => {
+          const isActive = tab.dataset.calculatorTab === name;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", String(isActive));
+        });
+
+        calculatorPanels.forEach((panel) => {
+          panel.hidden = panel.dataset.calculatorPanel !== name;
+        });
+      }
+
+      [elements.baseHit, elements.bonusHit, elements.targetHit, elements.correction].forEach((input) => {
+        input.addEventListener("input", renderCalculator);
+      });
+
+      [cheeseElements.totalInt, cheeseElements.itemRecoveryBonus, cheeseElements.cheeseCount].forEach((input) => {
+        input.addEventListener("input", renderCheeseCalculator);
+      });
+
+      [
+        characterElements.characterLevel,
+        characterElements.characterJob,
+        characterElements.flatHp,
+        characterElements.hpPercent,
+        characterElements.flatSp,
+        characterElements.spPercent,
+        characterElements.characterStr,
+        characterElements.characterAgi,
+        characterElements.characterVit,
+        characterElements.characterInt,
+        characterElements.characterDex,
+        characterElements.characterLuk,
+      ].forEach((input) => {
+        input.addEventListener("input", () => {
+          renderCharacterCalculator();
+          renderSpRecoveryCalculator();
+        });
+      });
+
+      characterElements.characterClass.addEventListener("change", () => {
+        renderCharacterCalculator();
+        renderSpRecoveryCalculator();
+      });
+
+      [spRecoveryElements.spPanelOverride, spRecoveryElements.recoveryGearPercent].forEach((input) => {
+        input.addEventListener("input", renderSpRecoveryCalculator);
+      });
+
+      spRecoveryElements.spShoeCard.addEventListener("change", () => {
+        renderCharacterCalculator();
+        renderSpRecoveryCalculator();
+      });
+
+      spRecoveryElements.magnificatEnabled.addEventListener("change", renderSpRecoveryCalculator);
+
+      calculatorTabs.forEach((tab) => {
+        tab.addEventListener("click", () => setActiveCalculator(tab.dataset.calculatorTab));
+      });
+
+      elements.resetButton.addEventListener("click", () => {
+        Object.entries(defaultValues).forEach(([key, value]) => {
+          elements[key].value = value;
+        });
+        Object.entries(cheeseDefaultValues).forEach(([key, value]) => {
+          cheeseElements[key].value = value;
+        });
+        Object.entries(characterDefaultValues).forEach(([key, value]) => {
+          characterElements[key].value = value;
+        });
+        Object.entries(spRecoveryDefaultValues).forEach(([key, value]) => {
+          if (spRecoveryElements[key].type === "checkbox") {
+            spRecoveryElements[key].checked = value;
+          } else {
+            spRecoveryElements[key].value = value;
+          }
+        });
+        renderCalculator();
+        renderCheeseCalculator();
+        renderCharacterCalculator();
+        renderSpRecoveryCalculator();
+      });
+
+      renderCalculator();
+      renderCheeseCalculator();
+      renderCharacterCalculator();
+      renderSpRecoveryCalculator();
+    </script>
+  </body>
+</html>
