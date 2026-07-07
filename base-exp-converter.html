@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 Base 經驗百分比轉換器</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ee;
+      --paper: #fffdf9;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --field: #ffffff;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(165, 40, 45, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(35, 108, 95, 0.09), transparent 38%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: var(--radius);
+      background: #fff8ed;
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .nav-link {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255, 253, 249, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(330px, 0.85fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .form-panel,
+    .result-panel {
+      padding: 18px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 28px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .source {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    label {
+      color: #353b45;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--field);
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(165, 40, 45, 0.58);
+      box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.12);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      border-color: var(--line);
+      background: #fffaf1;
+      color: #4e5662;
+    }
+
+    .summary {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 250, 241, 0.72);
+    }
+
+    .metric dt {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .metric dd {
+      margin: 0;
+      font-size: clamp(22px, 4vw, 34px);
+      line-height: 1.1;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .metric.small dd {
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .formula {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px dashed rgba(105, 112, 125, 0.38);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.58);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .error {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(165, 40, 45, 0.28);
+      border-radius: var(--radius);
+      color: var(--accent-strong);
+      background: rgba(165, 40, 45, 0.08);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    .history-panel {
+      margin-top: 16px;
+      padding: 16px;
+      box-shadow: none;
+    }
+
+    .history-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .history-head h2 {
+      font-size: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 9px 8px;
+      border-top: 1px solid var(--line);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 860px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-link {
+        width: 100%;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100% - 22px, 1120px);
+        padding-top: 18px;
+      }
+
+      .form-panel,
+      .result-panel,
+      .history-panel {
+        padding: 14px;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .source {
+        text-align: left;
+      }
+
+      .history-table-wrap {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">%</div>
+        <div>
+          <h1>Base 經驗百分比轉換器</h1>
+          <p class="subtitle">用遊戲畫面百分比與時間換算一小時效率</p>
+        </div>
+      </div>
+      <a class="nav-link" href="index.html">返回首頁</a>
+    </header>
+
+    <section class="layout" aria-label="轉換器">
+      <form class="panel form-panel" id="converterForm">
+        <div class="section-title">
+          <h2>輸入紀錄</h2>
+          <div class="source">BaseLv1~99 表</div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="baseLevel">目前 Base 等級</label>
+            <select id="baseLevel" name="baseLevel"></select>
+          </div>
+          <div class="field">
+            <label for="manualExp">手動升級需求</label>
+            <input id="manualExp" name="manualExp" inputmode="numeric" placeholder="Lv99+ 才需要">
+          </div>
+          <div class="field">
+            <label for="startTime">開始時間</label>
+            <input id="startTime" name="startTime" inputmode="numeric" placeholder="10:21">
+          </div>
+          <div class="field">
+            <label for="startPercent">當下多少 %</label>
+            <input id="startPercent" name="startPercent" inputmode="decimal" placeholder="82.8">
+          </div>
+          <div class="field">
+            <label for="endTime">結束時間</label>
+            <input id="endTime" name="endTime" inputmode="numeric" placeholder="10:37">
+          </div>
+          <div class="field">
+            <label for="endPercent">當下多少 %</label>
+            <input id="endPercent" name="endPercent" inputmode="decimal" placeholder="86.5">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" type="submit">轉換</button>
+          <button class="secondary" type="button" id="fillSample">帶入範例</button>
+          <button class="secondary" type="reset">清空</button>
+        </div>
+        <div class="error" id="errorBox" role="alert"></div>
+      </form>
+
+      <section class="panel result-panel" aria-label="轉換結果">
+        <div class="section-title">
+          <h2>結果</h2>
+        </div>
+        <dl class="summary">
+          <div class="metric">
+            <dt>一小時多少 %</dt>
+            <dd id="percentPerHour">0.00%</dd>
+          </div>
+          <div class="metric">
+            <dt>每小時經驗</dt>
+            <dd id="expPerHour">0</dd>
+          </div>
+          <div class="metric small">
+            <dt>這段等效經驗</dt>
+            <dd id="segmentExp">0</dd>
+          </div>
+          <div class="metric small">
+            <dt>使用升級需求</dt>
+            <dd id="expToNext">0</dd>
+          </div>
+        </dl>
+        <div class="formula" id="formula">輸入資料後按轉換。</div>
+      </section>
+    </section>
+
+    <section class="panel history-panel" aria-label="最近轉換">
+      <div class="history-head">
+        <h2>最近轉換</h2>
+        <button class="secondary" type="button" id="clearHistory">清除</button>
+      </div>
+      <div class="history-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Base</th>
+              <th>時間</th>
+              <th>% 變化</th>
+              <th>%/hr</th>
+              <th>EXP/hr</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="emptyHistory">尚無轉換紀錄。</p>
+    </section>
+  </main>
+
+  <script>
+    const BASE_EXP_TO_NEXT = {
+      1: 2443,
+      2: 2711,
+      3: 3009,
+      4: 3339,
+      5: 3706,
+      6: 4113,
+      7: 4565,
+      8: 5067,
+      9: 5624,
+      10: 6242,
+      11: 6928,
+      12: 7690,
+      13: 8535,
+      14: 9473,
+      15: 10515,
+      16: 11671,
+      17: 12954,
+      18: 14378,
+      19: 15959,
+      20: 17714,
+      21: 19662,
+      22: 21824,
+      23: 24224,
+      24: 26888,
+      25: 29845,
+      26: 33127,
+      27: 36770,
+      28: 40814,
+      29: 45303,
+      30: 50286,
+      31: 55817,
+      32: 61956,
+      33: 68771,
+      34: 76335,
+      35: 84731,
+      36: 94051,
+      37: 104396,
+      38: 115879,
+      39: 128625,
+      40: 142773,
+      41: 158478,
+      42: 175910,
+      43: 195260,
+      44: 216738,
+      45: 240579,
+      46: 267042,
+      47: 296416,
+      48: 329021,
+      49: 365213,
+      50: 434603,
+      51: 1037509,
+      52: 1525139,
+      53: 2241953,
+      54: 3295672,
+      55: 4844639,
+      56: 7121618,
+      57: 10468780,
+      58: 15389107,
+      59: 22621987,
+      60: 25789065,
+      61: 29399534,
+      62: 33515469,
+      63: 38207635,
+      64: 43556704,
+      65: 49654642,
+      66: 56606292,
+      67: 64531173,
+      68: 73565537,
+      69: 83864712,
+      70: 94767124,
+      71: 107086850,
+      72: 121008141,
+      73: 136739199,
+      74: 154515294,
+      75: 174602283,
+      76: 197300579,
+      77: 222949654,
+      78: 251933109,
+      79: 284684413,
+      80: 318846542,
+      81: 357108127,
+      82: 399961102,
+      83: 447956434,
+      84: 501711206,
+      85: 561916551,
+      86: 629346536,
+      87: 704868120,
+      88: 789452294,
+      89: 884186569,
+      90: 1061023882,
+      91: 1273228658,
+      92: 1527874389,
+      93: 1833449266,
+      94: 2200139119,
+      95: 2640166942,
+      96: 3168200330,
+      97: 3801840396,
+      98: 4562208475
+    };
+
+    const form = document.getElementById("converterForm");
+    const baseLevel = document.getElementById("baseLevel");
+    const manualExp = document.getElementById("manualExp");
+    const startTime = document.getElementById("startTime");
+    const startPercent = document.getElementById("startPercent");
+    const endTime = document.getElementById("endTime");
+    const endPercent = document.getElementById("endPercent");
+    const errorBox = document.getElementById("errorBox");
+    const historyBody = document.getElementById("historyBody");
+    const emptyHistory = document.getElementById("emptyHistory");
+    const historyKey = "roBaseExpConverterHistory";
+
+    function populateLevels() {
+      for (let level = 1; level <= 110; level += 1) {
+        const option = document.createElement("option");
+        option.value = String(level);
+        option.textContent = `Base Lv${level}`;
+        if (level === 78) {
+          option.selected = true;
+        }
+        baseLevel.appendChild(option);
+      }
+    }
+
+    function parsePercent(value) {
+      const normalized = String(value || "").trim().replace("%", "");
+      if (!normalized) return null;
+      const parsed = Number(normalized);
+      if (!Number.isFinite(parsed)) return null;
+      return parsed;
+    }
+
+    function parseNumber(value) {
+      const normalized = String(value || "").trim().replaceAll(",", "");
+      if (!normalized) return null;
+      const parsed = Number(normalized);
+      if (!Number.isFinite(parsed) || parsed <= 0) return null;
+      return parsed;
+    }
+
+    function parseClock(value) {
+      const normalized = String(value || "").trim().replace("::", ":");
+      const match = normalized.match(/^(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$/);
+      if (!match) return null;
+      const hour = Number(match[1]);
+      const minute = Number(match[2]);
+      const second = match[3] ? Number(match[3]) : 0;
+      if (hour > 23 || minute > 59 || second > 59) return null;
+      return hour * 3600 + minute * 60 + second;
+    }
+
+    function formatNumber(value) {
+      return Math.round(value).toLocaleString("en-US");
+    }
+
+    function formatPercent(value) {
+      return `${value.toFixed(2)}%`;
+    }
+
+    function formatDuration(seconds) {
+      const safeSeconds = Math.max(0, Math.round(seconds));
+      const h = String(Math.floor(safeSeconds / 3600)).padStart(2, "0");
+      const m = String(Math.floor((safeSeconds % 3600) / 60)).padStart(2, "0");
+      const s = String(safeSeconds % 60).padStart(2, "0");
+      return `${h}:${m}:${s}`;
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+
+    function clearError() {
+      errorBox.textContent = "";
+      errorBox.style.display = "none";
+    }
+
+    function calculate() {
+      clearError();
+      const level = Number(baseLevel.value);
+      const startSeconds = parseClock(startTime.value);
+      const endSecondsRaw = parseClock(endTime.value);
+      const startPct = parsePercent(startPercent.value);
+      const endPct = parsePercent(endPercent.value);
+      const tableExp = BASE_EXP_TO_NEXT[level];
+      const expToNext = tableExp || parseNumber(manualExp.value);
+
+      if (!expToNext) {
+        showError("這個 Base 等級沒有內建升級需求，請輸入手動升級需求。");
+        return null;
+      }
+      if (startSeconds === null || endSecondsRaw === null) {
+        showError("時間格式請輸入像 10:21 或 22:37。");
+        return null;
+      }
+      if (startPct === null || endPct === null) {
+        showError("百分比格式請輸入像 82.8 或 86.5。");
+        return null;
+      }
+      if (startPct < 0 || startPct > 100 || endPct < 0 || endPct > 100) {
+        showError("百分比請輸入 0 到 100 之間。");
+        return null;
+      }
+
+      const endSeconds = endSecondsRaw < startSeconds ? endSecondsRaw + 86400 : endSecondsRaw;
+      const elapsedSeconds = endSeconds - startSeconds;
+      if (elapsedSeconds <= 0) {
+        showError("開始與結束時間不能相同。");
+        return null;
+      }
+
+      let percentDelta = endPct - startPct;
+      if (percentDelta < 0) {
+        percentDelta += 100;
+      }
+
+      const percentPerHour = percentDelta / elapsedSeconds * 3600;
+      const segmentExp = percentDelta / 100 * expToNext;
+      const expPerHour = percentPerHour / 100 * expToNext;
+
+      return {
+        level,
+        expToNext,
+        startPct,
+        endPct,
+        percentDelta,
+        elapsedSeconds,
+        percentPerHour,
+        segmentExp,
+        expPerHour,
+        timeLabel: `${startTime.value.trim().replace("::", ":")} -> ${endTime.value.trim().replace("::", ":")}`
+      };
+    }
+
+    function renderResult(result) {
+      document.getElementById("percentPerHour").textContent = formatPercent(result.percentPerHour);
+      document.getElementById("expPerHour").textContent = formatNumber(result.expPerHour);
+      document.getElementById("segmentExp").textContent = formatNumber(result.segmentExp);
+      document.getElementById("expToNext").textContent = formatNumber(result.expToNext);
+      document.getElementById("formula").textContent =
+        `${result.percentDelta.toFixed(2)}% / ${formatDuration(result.elapsedSeconds)} * 3600 = ${formatPercent(result.percentPerHour)}；` +
+        `${formatPercent(result.percentPerHour)} * ${formatNumber(result.expToNext)} = ${formatNumber(result.expPerHour)} EXP/hr`;
+    }
+
+    function readHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(historyKey) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function writeHistory(rows) {
+      localStorage.setItem(historyKey, JSON.stringify(rows.slice(0, 8)));
+    }
+
+    function addHistory(result) {
+      const rows = readHistory();
+      rows.unshift({
+        level: result.level,
+        timeLabel: result.timeLabel,
+        percentLabel: `${result.startPct.toFixed(2)}% -> ${result.endPct.toFixed(2)}%`,
+        percentPerHour: result.percentPerHour,
+        expPerHour: result.expPerHour
+      });
+      writeHistory(rows);
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const rows = readHistory();
+      historyBody.innerHTML = "";
+      emptyHistory.style.display = rows.length ? "none" : "block";
+      for (const row of rows) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>Lv${row.level}</td>
+          <td>${row.timeLabel}</td>
+          <td>${row.percentLabel}</td>
+          <td>${formatPercent(row.percentPerHour)}</td>
+          <td>${formatNumber(row.expPerHour)}</td>
+        `;
+        historyBody.appendChild(tr);
+      }
+    }
+
+    function runConversion({ save = true } = {}) {
+      const result = calculate();
+      if (!result) return;
+      renderResult(result);
+      if (save) addHistory(result);
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      runConversion();
+    });
+
+    form.addEventListener("reset", () => {
+      window.setTimeout(() => {
+        baseLevel.value = "78";
+        document.getElementById("percentPerHour").textContent = "0.00%";
+        document.getElementById("expPerHour").textContent = "0";
+        document.getElementById("segmentExp").textContent = "0";
+        document.getElementById("expToNext").textContent = "0";
+        document.getElementById("formula").textContent = "輸入資料後按轉換。";
+        clearError();
+      });
+    });
+
+    document.getElementById("fillSample").addEventListener("click", () => {
+      baseLevel.value = "78";
+      manualExp.value = "";
+      startTime.value = "10:21";
+      startPercent.value = "82.8";
+      endTime.value = "10:37";
+      endPercent.value = "86.5";
+      runConversion();
+    });
+
+    document.getElementById("clearHistory").addEventListener("click", () => {
+      localStorage.removeItem(historyKey);
+      renderHistory();
+    });
+
+    [baseLevel, manualExp, startTime, startPercent, endTime, endPercent].forEach((input) => {
+      input.addEventListener("input", () => {
+        const result = calculate();
+        if (result) {
+          renderResult(result);
+        }
+      });
+    });
+
+    populateLevels();
+    renderHistory();
+  </script>
+</body>
+</html>
