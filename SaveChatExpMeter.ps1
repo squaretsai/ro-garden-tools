@@ -392,7 +392,7 @@ if (-not $AccountName) {
 }
 
 if ($BaseLevel -le 0) {
-    $baseLevelText = Read-Host "目前 Base 等級，可直接 Enter 略過 %/hr"
+    $baseLevelText = Read-Host "目前 Base 等級（不是 Job 等級），可直接 Enter 略過 %/hr"
     if (-not [string]::IsNullOrWhiteSpace($baseLevelText)) {
         $parsedBaseLevel = 0
         if (-not [int]::TryParse($baseLevelText, [ref]$parsedBaseLevel)) {
@@ -468,6 +468,7 @@ Write-Host ("Job EXP/hr ：{0}" -f (Format-Number $jobPerHour))
 if ($baseExpToNext) {
     Write-Host ("Base Lv{0} 升級需求：{1}" -f $BaseLevel, (Format-Number $baseExpToNext))
     Write-Host ("Base %/hr：{0}" -f (Format-Percent $basePercentPerHour))
+    Write-Host ("Base %/hr 計算：{0} / {1} * 100" -f (Format-Number $basePerHour), (Format-Number $baseExpToNext))
 }
 
 if ($monsterStats) {
