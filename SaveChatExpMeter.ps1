@@ -24,6 +24,50 @@ function Format-Percent {
     return ("{0:N2}%" -f $Value)
 }
 
+function Convert-PercentInput {
+    param([string]$Text)
+
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return $null
+    }
+
+    $normalized = $Text.Trim() -replace "%", ""
+    $value = 0.0
+    if ([double]::TryParse($normalized, [ref]$value)) {
+        return $value
+    }
+
+    return $null
+}
+
+function Convert-TimeInput {
+    param(
+        [string]$Text,
+        [datetime]$BaseDate
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return $null
+    }
+
+    $normalized = $Text.Trim() -replace "::", ":"
+    if ($normalized -match "^(?<hour>\d{1,2}):(?<minute>\d{1,2})(:(?<second>\d{1,2}))?$") {
+        $hour = [int]$Matches["hour"]
+        $minute = [int]$Matches["minute"]
+        $second = if ($Matches["second"]) { [int]$Matches["second"] } else { 0 }
+        if ($hour -lt 24 -and $minute -lt 60 -and $second -lt 60) {
+            return $BaseDate.Date.AddHours($hour).AddMinutes($minute).AddSeconds($second)
+        }
+    }
+
+    $parsed = [datetime]::MinValue
+    if ([datetime]::TryParse($normalized, [ref]$parsed)) {
+        return $parsed
+    }
+
+    return $null
+}
+
 $script:BaseExpTableSource = "使用者提供的 RO樂園 BaseLv1~99 需求經驗表截圖；目前公開整理至 Lv99。"
 $script:BaseExpToNextByLevel = @{
     1 = 2443
@@ -403,6 +447,45 @@ if ($BaseLevel -le 0) {
     }
 }
 
+$gamePercentStart = $null
+$gamePercentEnd = $null
+$gamePercentStartedAt = $null
+$gamePercentEndedAt = $null
+$gamePercentElapsedSeconds = 0
+$gamePercentPerHour = $null
+$gamePercentBasePerHour = $null
+$gamePercentStartText = Read-Host "遊戲畫面起始 Base %（例 82.8），可直接 Enter 略過手動%/hr"
+if (-not [string]::IsNullOrWhiteSpace($gamePercentStartText)) {
+    $gamePercentStart = Convert-PercentInput $gamePercentStartText
+    if ($null -eq $gamePercentStart) {
+        Write-Host "起始 Base % 格式不正確，略過手動%/hr。" -ForegroundColor Yellow
+    } else {
+        $gamePercentEnd = Convert-PercentInput (Read-Host "遊戲畫面結束 Base %（例 86.5）")
+        $gamePercentStartedAt = Convert-TimeInput (Read-Host "起始時間（例 10:21 或 22:21）") ([datetime]::Today)
+        $gamePercentEndedAt = Convert-TimeInput (Read-Host "結束時間（例 10:37 或 22:37）") ([datetime]::Today)
+
+        if ($null -eq $gamePercentEnd -or $null -eq $gamePercentStartedAt -or $null -eq $gamePercentEndedAt) {
+            Write-Host "遊戲%或時間格式不完整，略過手動%/hr。" -ForegroundColor Yellow
+        } else {
+            if ($gamePercentEndedAt -lt $gamePercentStartedAt) {
+                $gamePercentEndedAt = $gamePercentEndedAt.AddDays(1)
+            }
+
+            $gamePercentElapsedSeconds = [Math]::Max(0, [int][Math]::Round(($gamePercentEndedAt - $gamePercentStartedAt).TotalSeconds))
+            $gamePercentDelta = $gamePercentEnd - $gamePercentStart
+            if ($gamePercentDelta -lt 0) {
+                $gamePercentDelta += 100
+            }
+
+            if ($gamePercentElapsedSeconds -gt 0) {
+                $gamePercentPerHour = $gamePercentDelta / $gamePercentElapsedSeconds * 3600
+            } else {
+                Write-Host "遊戲%時間差為 0，略過手動%/hr。" -ForegroundColor Yellow
+            }
+        }
+    }
+}
+
 $baseExpToNext = $null
 if ($BaseLevel -gt 0) {
     if ($script:BaseExpToNextByLevel.ContainsKey($BaseLevel)) {
@@ -436,6 +519,7 @@ $elapsedSeconds = if ($elapsed) { [Math]::Max(0, [int][Math]::Round($elapsed.Tot
 $basePerHour = if ($elapsedSeconds -gt 0) { $exp.BaseExp / $elapsedSeconds * 3600 } else { 0 }
 $jobPerHour = if ($elapsedSeconds -gt 0) { $exp.JobExp / $elapsedSeconds * 3600 } else { 0 }
 $basePercentPerHour = if ($baseExpToNext -and $baseExpToNext -gt 0) { $basePerHour / $baseExpToNext * 100 } else { $null }
+$gamePercentBasePerHour = if ($baseExpToNext -and $gamePercentPerHour -ne $null) { $gamePercentPerHour / 100 * $baseExpToNext } else { $null }
 $suffix = Get-SaveChatSuffix -FileName $selected.File.Name
 $battleFiles = Get-CompanionFiles -Suffix $suffix -Names @("Chat_戰鬥", "Chat_戰鬥訊息")
 $dropFiles = Get-CompanionFiles -Suffix $suffix -Names @("Chat_一般訊息", "Chat_一般")
@@ -469,6 +553,16 @@ if ($baseExpToNext) {
     Write-Host ("Base Lv{0} 升級需求：{1}" -f $BaseLevel, (Format-Number $baseExpToNext))
     Write-Host ("Base %/hr：{0}" -f (Format-Percent $basePercentPerHour))
     Write-Host ("Base %/hr 計算：{0} / {1} * 100" -f (Format-Number $basePerHour), (Format-Number $baseExpToNext))
+}
+if ($gamePercentPerHour -ne $null) {
+    Write-Host ""
+    Write-Host "遊戲%校正" -ForegroundColor Cyan
+    Write-Host ("Base %：{0:N2}% -> {1:N2}%" -f $gamePercentStart, $gamePercentEnd)
+    Write-Host ("時間：{0} -> {1}，經過 {2:hh\:mm\:ss}" -f $gamePercentStartedAt.ToString("HH:mm:ss"), $gamePercentEndedAt.ToString("HH:mm:ss"), ([timespan]::FromSeconds($gamePercentElapsedSeconds)))
+    Write-Host ("遊戲 Base %/hr：{0}" -f (Format-Percent $gamePercentPerHour))
+    if ($gamePercentBasePerHour -ne $null) {
+        Write-Host ("等效 Base EXP/hr：{0}" -f (Format-Number $gamePercentBasePerHour))
+    }
 }
 
 if ($monsterStats) {
