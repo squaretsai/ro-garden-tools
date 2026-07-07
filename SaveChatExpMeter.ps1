@@ -3,6 +3,7 @@
     [int]$List = 20,
     [string]$MapName = "",
     [string]$AccountName = "",
+    [switch]$AskDeleteChat,
     [switch]$NoHistory
 )
 
@@ -138,6 +139,36 @@ function Get-DropStats {
     }
 
     return $stats.Values | Sort-Object Count -Descending | Select-Object -First 8
+}
+
+function Invoke-ChatCleanupPrompt {
+    param([Parameter(Mandatory)][string]$TargetPath)
+
+    $chatFiles = Get-ChildItem -LiteralPath $TargetPath -Filter "Chat_*.txt" -File -ErrorAction SilentlyContinue
+    if (-not $chatFiles -or $chatFiles.Count -eq 0) {
+        Write-Host ""
+        Write-Host "Chat 資料夾目前沒有 Chat_*.txt 可刪除。"
+        return
+    }
+
+    Write-Host ""
+    Write-Host ("清空 Chat 檔案：找到 {0} 個 Chat_*.txt" -f $chatFiles.Count) -ForegroundColor Yellow
+    Write-Host ("目標資料夾：{0}" -f $TargetPath)
+    Write-Host "這會刪除所有 savechat 文字檔；如果多開帳號共用同一個 Chat 資料夾，也會一起清掉。"
+    $confirmDelete = Read-Host "若確定要刪除，請輸入 DELETE；直接 Enter 取消"
+
+    if ($confirmDelete -ne "DELETE") {
+        Write-Host "已取消刪除 Chat 檔案。"
+        return
+    }
+
+    $deleted = 0
+    foreach ($file in $chatFiles) {
+        Remove-Item -LiteralPath $file.FullName -Force
+        $deleted += 1
+    }
+
+    Write-Host ("已刪除 {0} 個 Chat 檔案。" -f $deleted) -ForegroundColor Green
 }
 
 if (-not (Test-Path -LiteralPath $ChatPath)) {
@@ -322,5 +353,8 @@ if (-not $NoHistory) {
     Write-Host ("已記錄到：{0}" -f $historyPath)
 }
 
+if ($AskDeleteChat) {
+    Invoke-ChatCleanupPrompt -TargetPath $ChatPath
+}
 
 

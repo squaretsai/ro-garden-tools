@@ -53,3 +53,5 @@ RO 在這台電腦上以系統管理員權限執行，因此請雙擊 [以系統
 ```
 
 計算結果會追加到 `SaveChatExpMeter.history.csv`，方便之後回看各段效率。原始交接筆記已整理到 [docs/RO_EXP_METER_交接筆記.md](./docs/RO_EXP_METER_交接筆記.md)。
+
+雙擊啟動檔計算完成後，程式會詢問是否清空 `Chat_*.txt`。只有輸入 `DELETE` 才會刪除；直接 Enter 會取消。刪除範圍限於指定 Chat 資料夾內的 `Chat_*.txt`，但如果多開帳號共用同一個 Chat 資料夾，所有帳號的 savechat 文字檔都會一起清掉。
