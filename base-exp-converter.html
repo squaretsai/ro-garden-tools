@@ -193,6 +193,22 @@
       box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.12);
     }
 
+    .time-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .time-now {
+      min-width: 64px;
+      min-height: 44px;
+      padding-inline: 10px;
+      border-color: var(--line);
+      background: #eef8f3;
+      color: var(--mint);
+    }
+
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -402,7 +418,10 @@
           </div>
           <div class="field">
             <label for="startTime">開始時間</label>
-            <input id="startTime" name="startTime" inputmode="numeric" placeholder="10:21">
+            <div class="time-row">
+              <input id="startTime" name="startTime" inputmode="numeric" placeholder="10:21">
+              <button class="time-now" type="button" data-time-target="startTime" title="填入目前時間">現在</button>
+            </div>
           </div>
           <div class="field">
             <label for="startPercent">當下多少 %</label>
@@ -410,7 +429,10 @@
           </div>
           <div class="field">
             <label for="endTime">結束時間</label>
-            <input id="endTime" name="endTime" inputmode="numeric" placeholder="10:37">
+            <div class="time-row">
+              <input id="endTime" name="endTime" inputmode="numeric" placeholder="10:37">
+              <button class="time-now" type="button" data-time-target="endTime" title="填入目前時間">現在</button>
+            </div>
           </div>
           <div class="field">
             <label for="endPercent">當下多少 %</label>
@@ -644,6 +666,14 @@
       return `${h}:${m}:${s}`;
     }
 
+    function formatCurrentTime() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, "0");
+      const m = String(now.getMinutes()).padStart(2, "0");
+      const s = String(now.getSeconds()).padStart(2, "0");
+      return `${h}:${m}:${s}`;
+    }
+
     function showError(message) {
       errorBox.textContent = message;
       errorBox.style.display = "block";
@@ -800,6 +830,14 @@
     document.getElementById("clearHistory").addEventListener("click", () => {
       localStorage.removeItem(historyKey);
       renderHistory();
+    });
+
+    document.querySelectorAll("[data-time-target]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.timeTarget);
+        input.value = formatCurrentTime();
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      });
     });
 
     [baseLevel, manualExp, startTime, startPercent, endTime, endPercent].forEach((input) => {
