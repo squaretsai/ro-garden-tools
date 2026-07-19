@@ -279,7 +279,8 @@
       gap: 6px;
     }
 
-    .pill {
+    .pill,
+    .material-button {
       display: inline-flex;
       align-items: center;
       min-height: 26px;
@@ -293,14 +294,119 @@
       white-space: nowrap;
     }
 
-    .pill.source {
+    .material-button {
+      cursor: pointer;
+      transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
+    }
+
+    .material-button:hover,
+    .material-button:focus-visible {
+      border-color: rgba(165, 40, 45, 0.45);
+      color: var(--accent-strong);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .pill.source,
+    .material-button.source {
       color: var(--mint);
       background: #f3fbf7;
     }
 
-    .pill.warn {
+    .pill.warn,
+    .material-button.warn {
       color: var(--accent-strong);
       background: #fff3f0;
+    }
+
+    .acquisition-list {
+      display: grid;
+      gap: 8px;
+      min-width: 260px;
+    }
+
+    .acquisition-item {
+      display: grid;
+      gap: 4px;
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .acquisition-item:hover,
+    .acquisition-item:focus-visible {
+      border-color: rgba(165, 40, 45, 0.45);
+      outline: none;
+    }
+
+    .acquisition-item.warn {
+      background: #fff3f0;
+    }
+
+    .acquisition-item strong {
+      display: inline;
+      font-size: 13px;
+    }
+
+    .acquisition-item span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .material-detail {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 16px;
+      scroll-margin-top: 18px;
+    }
+
+    .material-detail h2 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.25;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .detail-cell {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .detail-cell span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .detail-cell strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .detail-steps {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
     }
 
     .notes-grid {
@@ -342,6 +448,7 @@
 
       .summary,
       .controls,
+      .detail-grid,
       .notes-grid {
         grid-template-columns: 1fr;
       }
@@ -443,7 +550,7 @@
               <th>路線</th>
               <th>直接材料</th>
               <th>從征伐起算總材料</th>
-              <th>副本 / 難度備註</th>
+              <th>逐項取得</th>
             </tr>
           </thead>
           <tbody id="upgradeRows"></tbody>
@@ -451,15 +558,43 @@
       </div>
     </section>
 
+    <section class="panel material-detail" id="materialDetail" aria-live="polite">
+      <div class="section-title">
+        <div class="eyebrow">MATERIAL SOURCE</div>
+        <h2 id="detailTitle">點材料查看取得方式</h2>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-cell">
+          <span>取得位置</span>
+          <strong id="detailPlace">點上方材料膠囊後顯示。</strong>
+        </div>
+        <div class="detail-cell">
+          <span>要打什麼</span>
+          <strong id="detailTarget">-</strong>
+        </div>
+        <div class="detail-cell">
+          <span>難度 / 方式</span>
+          <strong id="detailDifficulty">-</strong>
+        </div>
+        <div class="detail-cell">
+          <span>NPC / 加工</span>
+          <strong id="detailNpc">-</strong>
+        </div>
+      </div>
+      <ol class="detail-steps" id="detailSteps">
+        <li>表格裡每個材料都可以點。</li>
+      </ol>
+    </section>
+
     <section class="notes-grid" aria-label="材料備註">
       <article class="panel note-box">
         <h2>材料來源備註</h2>
         <ul>
           <li>征伐隊裝備是基底裝備：普通難度寶箱資料已列在表格中。</li>
-          <li>微微發光的結晶體：螞蟻地獄1樓系列材料，供 Lv70 遠征隊升級使用。</li>
-          <li>藍光結晶體：依斯魯得島迷宮2樓系列材料，供 Lv80 殲滅隊升級使用。</li>
-          <li>果凍石：由對應果凍碎片 5 個加工，製作時間 3 天；不是普通/困難寶箱直接標示的裝備獎勵。</li>
+          <li>微微發光的結晶體與藍光結晶體：目前可靠資料能確認對應副本來源，但普通/困難的精確數量請以遊戲內結算獎勵為準。</li>
+          <li>果凍石：由對應果凍碎片 5 個加工，製作時間 3 天；碎片主要來自波利村系列內容。</li>
           <li>裝備升級者位置：<strong>/navi prt_in 118/34</strong>。</li>
+          <li>表格內的材料膠囊與最後欄的逐項取得都可以點，會更新上方材料取得說明。</li>
         </ul>
       </article>
       <article class="panel note-box">
@@ -475,18 +610,114 @@
 
   <script>
     const materialSources = {
-      "征伐隊盔甲": { note: "獸人的記憶 普通難度獎勵 0~2", type: "base" },
-      "征伐隊肩飾": { note: "獸人的記憶 普通難度獎勵 0~2", type: "base" },
-      "征伐隊戒指": { note: "普隆德拉地下水道 普通難度獎勵 0~2", type: "base" },
-      "征伐隊軍靴": { note: "普隆德拉地下水道 普通難度獎勵 0~2", type: "base" },
-      "征伐隊外袍": { note: "資料站直接材料列此項，但 60 征伐列表未見來源；請以遊戲內 NPC 顯示確認", type: "warning" },
-      "微微發光的結晶體": { note: "螞蟻地獄1樓材料；普通/困難數量請以遊戲內獎勵為準", type: "source" },
-      "藍光結晶體": { note: "依斯魯得島迷宮2樓材料；普通/困難數量請以遊戲內獎勵為準", type: "source" },
-      "紅蓮的果凍石": { note: "紅蓮果凍碎片 5 個加工，約 3 天", type: "stone" },
-      "清風的果凍石": { note: "清風果凍碎片 5 個加工，約 3 天", type: "stone" },
-      "混沌的果凍石": { note: "混沌果凍碎片 5 個加工，約 3 天", type: "stone" },
-      "神聖的果凍石": { note: "神聖果凍碎片 5 個加工，約 3 天", type: "stone" },
-      "黃昏的果凍石": { note: "土波利果凍碎片 5 個加工，約 3 天", type: "stone" }
+      "征伐隊盔甲": {
+        note: "獸人的記憶 普通難度獎勵 0~2",
+        type: "base",
+        place: "獸人的記憶",
+        target: "通關普通難度，開結算寶箱",
+        difficulty: "普通",
+        npc: "副本入口 NPC",
+        steps: ["進入獸人的記憶副本。", "選普通難度並通關。", "結算寶箱有機會取得征伐隊盔甲。"]
+      },
+      "征伐隊肩飾": {
+        note: "獸人的記憶 普通難度獎勵 0~2",
+        type: "base",
+        place: "獸人的記憶",
+        target: "通關普通難度，開結算寶箱",
+        difficulty: "普通",
+        npc: "副本入口 NPC",
+        steps: ["進入獸人的記憶副本。", "選普通難度並通關。", "結算寶箱有機會取得征伐隊肩飾。"]
+      },
+      "征伐隊戒指": {
+        note: "普隆德拉地下水道 普通難度獎勵 0~2",
+        type: "base",
+        place: "普隆德拉地下水道",
+        target: "通關普通難度，開結算寶箱",
+        difficulty: "普通",
+        npc: "地下道管理員 / 時間縫隙",
+        steps: ["到普隆德拉西側地下水道入口。", "組隊後由隊長建立時間縫隙。", "選普通難度通關，結算寶箱有機會取得征伐隊戒指。"]
+      },
+      "征伐隊軍靴": {
+        note: "普隆德拉地下水道 普通難度獎勵 0~2",
+        type: "base",
+        place: "普隆德拉地下水道",
+        target: "通關普通難度，開結算寶箱",
+        difficulty: "普通",
+        npc: "地下道管理員 / 時間縫隙",
+        steps: ["到普隆德拉西側地下水道入口。", "組隊後由隊長建立時間縫隙。", "選普通難度通關，結算寶箱有機會取得征伐隊軍靴。"]
+      },
+      "征伐隊外袍": {
+        note: "資料站直接材料列此項，但 60 征伐列表未見來源；請以遊戲內 NPC 顯示確認",
+        type: "warning",
+        place: "待確認",
+        target: "資料站材料表有列，但基底來源未完整對上",
+        difficulty: "待確認",
+        npc: "裝備升級者 / 遊戲內材料提示",
+        steps: ["先到 /navi prt_in 118/34 查看遠征隊外袍需求。", "若 NPC 顯示為征伐隊外袍，請以遊戲內顯示為準。", "目前頁面用紅色提示保留這個疑點。"]
+      },
+      "微微發光的結晶體": {
+        note: "螞蟻地獄1樓副本材料",
+        type: "source",
+        place: "螞蟻地獄1樓",
+        target: "刷螞蟻地獄1樓副本，擊敗副本目標並領結算獎勵",
+        difficulty: "普通/困難皆請以遊戲內結算數量為準",
+        npc: "副本入口 NPC",
+        steps: ["進入 Lv70 螞蟻地獄1樓副本。", "通關後領取結算獎勵；玩家資料提到副本結束小箱會給材料。", "用於 Lv70 遠征隊升級，每件通常需要 50 個。"]
+      },
+      "藍光結晶體": {
+        note: "依斯魯得島迷宮2樓副本材料",
+        type: "source",
+        place: "依斯魯得島迷宮2樓",
+        target: "刷依斯魯得島迷宮2樓副本，擊敗副本目標並領結算獎勵",
+        difficulty: "普通/困難皆請以遊戲內結算數量為準",
+        npc: "副本入口 NPC",
+        steps: ["進入 Lv80 依斯魯得島迷宮2樓副本。", "通關後領取結算獎勵。", "用於 Lv80 殲滅隊升級，每件通常需要 50 個。"]
+      },
+      "紅蓮的果凍石": {
+        note: "波利果凍碎片 5 個加工，約 3 天",
+        type: "stone",
+        place: "波利村 / 記憶匠人的工房",
+        target: "收集波利果凍碎片",
+        difficulty: "波利村內容；加工 100%",
+        npc: "石頭加工師 / 記憶匠人的工房 prontera 50 227",
+        steps: ["刷波利村取得波利果凍碎片。", "準備波利果凍碎片 5 個。", "到記憶匠人的工房找石頭加工師，加工約 3 天成紅蓮的果凍石。"]
+      },
+      "清風的果凍石": {
+        note: "波波利果凍碎片 5 個加工，約 3 天",
+        type: "stone",
+        place: "波利村 / 記憶匠人的工房",
+        target: "收集波波利果凍碎片",
+        difficulty: "波利村內容；加工 100%",
+        npc: "石頭加工師 / 記憶匠人的工房 prontera 50 227",
+        steps: ["刷波利村取得波波利果凍碎片。", "準備波波利果凍碎片 5 個。", "到記憶匠人的工房找石頭加工師，加工約 3 天成清風的果凍石。"]
+      },
+      "混沌的果凍石": {
+        note: "惡魔波利果凍碎片 5 個加工，約 3 天",
+        type: "stone",
+        place: "波利村 / 記憶匠人的工房",
+        target: "收集惡魔波利果凍碎片",
+        difficulty: "波利村內容；加工 100%",
+        npc: "石頭加工師 / 記憶匠人的工房 prontera 50 227",
+        steps: ["刷波利村取得惡魔波利果凍碎片。", "準備惡魔波利果凍碎片 5 個。", "到記憶匠人的工房找石頭加工師，加工約 3 天成混沌的果凍石。"]
+      },
+      "神聖的果凍石": {
+        note: "天使波利果凍碎片 5 個加工，約 3 天",
+        type: "stone",
+        place: "波利村 / 記憶匠人的工房",
+        target: "收集天使波利果凍碎片",
+        difficulty: "波利村內容；加工 100%",
+        npc: "石頭加工師 / 記憶匠人的工房 prontera 50 227",
+        steps: ["刷波利村取得天使波利果凍碎片。", "準備天使波利果凍碎片 5 個。", "到記憶匠人的工房找石頭加工師，加工約 3 天成神聖的果凍石。"]
+      },
+      "黃昏的果凍石": {
+        note: "土波利果凍碎片 5 個加工，約 3 天",
+        type: "stone",
+        place: "波利村 / 記憶匠人的工房",
+        target: "收集土波利果凍碎片",
+        difficulty: "波利村內容；加工 100%",
+        npc: "石頭加工師 / 記憶匠人的工房 prontera 50 227",
+        steps: ["刷波利村取得土波利果凍碎片。", "準備土波利果凍碎片 5 個。", "到記憶匠人的工房找石頭加工師，加工約 3 天成黃昏的果凍石。"]
+      }
     };
 
     const equipment = [
@@ -534,6 +765,15 @@
       map.set(name, (map.get(name) || 0) + count);
     }
 
+    function escapeHTML(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     function expandMaterials(item, multiplier = 1, seen = new Set()) {
       const total = new Map();
       if (!item.direct.length) {
@@ -561,20 +801,49 @@
       return `<div class="pill-list">${materials.map(([name, count]) => {
         const source = materialSources[name];
         const klass = source ? sourceTypes[source.type] || "" : "";
-        return `<span class="pill ${klass}">${name} × ${count}</span>`;
+        return `<button class="material-button ${klass}" type="button" data-material="${escapeHTML(name)}">${escapeHTML(name)} × ${count}</button>`;
       }).join("")}</div>`;
     }
 
-    function formatSources(item) {
-      const directSources = item.direct
-        .map(([name]) => materialSources[name])
-        .filter(Boolean)
-        .map((source) => source.note);
-      const unique = [...new Set([`${item.source}：${item.difficulty}`, ...directSources])];
-      return `<div class="pill-list">${unique.map((note) => {
-        const warn = note.includes("待確認") || note.includes("未見來源");
-        return `<span class="pill ${warn ? "warn" : "source"}">${note}</span>`;
+    function materialListForSource(item) {
+      const total = [...expandMaterials(item).entries()];
+      return total.length ? total : [[item.name, 1]];
+    }
+
+    function formatAcquisition(materials) {
+      return `<div class="acquisition-list">${materials.map(([name, count]) => {
+        const source = materialSources[name] || {
+          note: "未建立來源資料，請以遊戲內提示為準",
+          type: "warning",
+          place: "待確認",
+          target: "待確認"
+        };
+        const warn = source.type === "warning";
+        return `<button class="acquisition-item ${warn ? "warn" : ""}" type="button" data-material="${escapeHTML(name)}">
+          <strong>${escapeHTML(name)} × ${count}</strong>
+          <span>${escapeHTML(source.place || "待確認")}｜${escapeHTML(source.target || source.note)}</span>
+        </button>`;
       }).join("")}</div>`;
+    }
+
+    function showMaterialDetail(name, shouldScroll = true) {
+      const source = materialSources[name];
+      if (!source) {
+        return;
+      }
+
+      document.querySelector("#detailTitle").textContent = name;
+      document.querySelector("#detailPlace").textContent = source.place || "待確認";
+      document.querySelector("#detailTarget").textContent = source.target || "待確認";
+      document.querySelector("#detailDifficulty").textContent = source.difficulty || source.note || "待確認";
+      document.querySelector("#detailNpc").textContent = source.npc || "-";
+      document.querySelector("#detailSteps").innerHTML = (source.steps || [source.note || "請以遊戲內提示為準"])
+        .map((step) => `<li>${escapeHTML(step)}</li>`)
+        .join("");
+
+      if (shouldScroll) {
+        document.querySelector("#materialDetail").scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
     }
 
     function render() {
@@ -609,10 +878,18 @@
           <td>${item.path}</td>
           <td>${formatMaterials(item.direct)}</td>
           <td>${formatMaterials(total)}</td>
-          <td>${formatSources(item)}</td>
+          <td>${formatAcquisition(materialListForSource(item))}</td>
         </tr>`;
       }).join("");
     }
+
+    document.querySelector("#upgradeRows").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-material]");
+      if (!button) {
+        return;
+      }
+      showMaterialDetail(button.dataset.material);
+    });
 
     document.querySelectorAll("input, select").forEach((control) => {
       control.addEventListener("input", render);
@@ -620,6 +897,7 @@
     });
 
     render();
+    showMaterialDetail("藍光結晶體", false);
   </script>
 </body>
 </html>
