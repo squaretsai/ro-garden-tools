@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 征伐隊・遠征隊・殲滅隊裝備升級表</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ee;
+      --paper: #fffdf9;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --field: #ffffff;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(165, 40, 45, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(35, 108, 95, 0.09), transparent 38%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1280px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: var(--radius);
+      background: #fff8ed;
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .nav-link {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255, 253, 249, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .step {
+      padding: 16px;
+      min-height: 132px;
+    }
+
+    .step .eyebrow,
+    .section-title .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .step h2 {
+      margin: 8px 0 6px;
+      font-size: 21px;
+      line-height: 1.25;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, minmax(130px, 0.45fr));
+      gap: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+      align-items: end;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: #4e5662;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 44px;
+      padding: 8px 11px;
+      border: 1px solid #cfc6ba;
+      border-radius: var(--radius);
+      background: var(--field);
+      color: var(--ink);
+      outline: none;
+      font-size: 15px;
+      font-weight: 800;
+      min-width: 0;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.14);
+    }
+
+    .table-panel {
+      overflow: hidden;
+    }
+
+    .table-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(165, 40, 45, 0.07), rgba(200, 146, 45, 0.08));
+    }
+
+    .section-title h2 {
+      margin: 4px 0 0;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .count {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--mint);
+      background: #f3fbf7;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 68vh;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1080px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th,
+    td {
+      padding: 10px 11px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      color: #373b43;
+      background: #efe6d8;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    td strong {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fffaf1;
+      color: #4e5662;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .pill.source {
+      color: var(--mint);
+      background: #f3fbf7;
+    }
+
+    .pill.warn {
+      color: var(--accent-strong);
+      background: #fff3f0;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .note-box {
+      padding: 16px;
+    }
+
+    .note-box h2 {
+      margin: 0 0 10px;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+
+    .note-box ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .source-link {
+      color: var(--accent-strong);
+      font-weight: 900;
+    }
+
+    @media (max-width: 840px) {
+      .topbar,
+      .table-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .summary,
+      .controls,
+      .notes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .shell {
+        width: min(100% - 20px, 1280px);
+        padding-top: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">UP</div>
+        <div>
+          <h1>RO樂園 副本裝備升級表</h1>
+          <p class="subtitle">征伐隊取得、遠征隊升級、殲滅隊升級材料與副本來源。</p>
+        </div>
+      </div>
+      <a class="nav-link" href="index.html">回首頁</a>
+    </header>
+
+    <section class="summary" aria-label="升級階段">
+      <article class="panel step">
+        <div class="eyebrow">Lv60 基底</div>
+        <h2>征伐隊</h2>
+        <p>盔甲與肩飾來自獸人的記憶普通；戒指與軍靴來自普隆德拉地下水道普通。</p>
+      </article>
+      <article class="panel step">
+        <div class="eyebrow">Lv70 升級</div>
+        <h2>遠征隊</h2>
+        <p>使用征伐隊裝備、微微發光的結晶體與果凍石，在裝備升級者處製作。</p>
+      </article>
+      <article class="panel step">
+        <div class="eyebrow">Lv80 升級</div>
+        <h2>殲滅隊</h2>
+        <p>使用遠征隊裝備、藍光結晶體與果凍石，材料來源指向依斯魯得島迷宮2樓。</p>
+      </article>
+    </section>
+
+    <section class="panel controls" aria-label="篩選">
+      <label>
+        搜尋
+        <input id="searchInput" type="search" placeholder="裝備、材料、副本、部位...">
+      </label>
+      <label>
+        系列
+        <select id="seriesFilter">
+          <option value="">全部</option>
+          <option value="征伐隊">征伐隊</option>
+          <option value="遠征隊">遠征隊</option>
+          <option value="殲滅隊">殲滅隊</option>
+        </select>
+      </label>
+      <label>
+        部位
+        <select id="partFilter">
+          <option value="">全部</option>
+          <option value="鎧甲">鎧甲</option>
+          <option value="披肩">披肩</option>
+          <option value="鞋子">鞋子</option>
+          <option value="飾品">飾品</option>
+        </select>
+      </label>
+      <label>
+        路線
+        <select id="pathFilter">
+          <option value="">全部</option>
+          <option value="物理近戰">物理近戰</option>
+          <option value="遠距離">遠距離</option>
+          <option value="魔法">魔法</option>
+          <option value="治癒">治癒</option>
+          <option value="通用">通用</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="panel table-panel" aria-labelledby="upgrade-title">
+      <div class="table-head">
+        <div class="section-title">
+          <div class="eyebrow">MATERIAL TABLE</div>
+          <h2 id="upgrade-title">裝備升級材料</h2>
+        </div>
+        <div class="count" id="rowCount">0 筆</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>等級</th>
+              <th>系列 / 部位</th>
+              <th>裝備</th>
+              <th>路線</th>
+              <th>直接材料</th>
+              <th>從征伐起算總材料</th>
+              <th>副本 / 難度備註</th>
+            </tr>
+          </thead>
+          <tbody id="upgradeRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="notes-grid" aria-label="材料備註">
+      <article class="panel note-box">
+        <h2>材料來源備註</h2>
+        <ul>
+          <li>征伐隊裝備是基底裝備：普通難度寶箱資料已列在表格中。</li>
+          <li>微微發光的結晶體：螞蟻地獄1樓系列材料，供 Lv70 遠征隊升級使用。</li>
+          <li>藍光結晶體：依斯魯得島迷宮2樓系列材料，供 Lv80 殲滅隊升級使用。</li>
+          <li>果凍石：由對應果凍碎片 5 個加工，製作時間 3 天；不是普通/困難寶箱直接標示的裝備獎勵。</li>
+          <li>裝備升級者位置：<strong>/navi prt_in 118/34</strong>。</li>
+        </ul>
+      </article>
+      <article class="panel note-box">
+        <h2>資料來源</h2>
+        <ul>
+          <li><a class="source-link" href="https://ro-zero-site.pages.dev/instances" target="_blank" rel="noreferrer">RO補給站副本裝備資料庫</a>：材料表與裝備能力。</li>
+          <li><a class="source-link" href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=217972" target="_blank" rel="noreferrer">RO樂園官方公告</a>：副本裝備升級系統、果凍石加工與升級 NPC 資訊。</li>
+          <li>資料站部分項目標示待確認；特別是「征伐隊外袍」基底來源，頁面已用紅色提示保留。</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const materialSources = {
+      "征伐隊盔甲": { note: "獸人的記憶 普通難度獎勵 0~2", type: "base" },
+      "征伐隊肩飾": { note: "獸人的記憶 普通難度獎勵 0~2", type: "base" },
+      "征伐隊戒指": { note: "普隆德拉地下水道 普通難度獎勵 0~2", type: "base" },
+      "征伐隊軍靴": { note: "普隆德拉地下水道 普通難度獎勵 0~2", type: "base" },
+      "征伐隊外袍": { note: "資料站直接材料列此項，但 60 征伐列表未見來源；請以遊戲內 NPC 顯示確認", type: "warning" },
+      "微微發光的結晶體": { note: "螞蟻地獄1樓材料；普通/困難數量請以遊戲內獎勵為準", type: "source" },
+      "藍光結晶體": { note: "依斯魯得島迷宮2樓材料；普通/困難數量請以遊戲內獎勵為準", type: "source" },
+      "紅蓮的果凍石": { note: "紅蓮果凍碎片 5 個加工，約 3 天", type: "stone" },
+      "清風的果凍石": { note: "清風果凍碎片 5 個加工，約 3 天", type: "stone" },
+      "混沌的果凍石": { note: "混沌果凍碎片 5 個加工，約 3 天", type: "stone" },
+      "神聖的果凍石": { note: "神聖果凍碎片 5 個加工，約 3 天", type: "stone" },
+      "黃昏的果凍石": { note: "土波利果凍碎片 5 個加工，約 3 天", type: "stone" }
+    };
+
+    const equipment = [
+      { level: 60, series: "征伐隊", name: "征伐隊盔甲", part: "鎧甲", path: "通用", direct: [], source: "獸人的記憶", difficulty: "普通難度獎勵 0~2" },
+      { level: 60, series: "征伐隊", name: "征伐隊肩飾", part: "披肩", path: "通用", direct: [], source: "獸人的記憶", difficulty: "普通難度獎勵 0~2" },
+      { level: 60, series: "征伐隊", name: "征伐隊戒指", part: "飾品", path: "通用", direct: [], source: "普隆德拉地下水道", difficulty: "普通難度獎勵 0~2" },
+      { level: 60, series: "征伐隊", name: "征伐隊軍靴", part: "鞋子", path: "通用", direct: [], source: "普隆德拉地下水道", difficulty: "普通難度獎勵 0~2" },
+
+      { level: 70, series: "遠征隊", name: "遠征隊鎧甲", part: "鎧甲", path: "物理近戰", direct: [["征伐隊盔甲", 1], ["微微發光的結晶體", 50], ["紅蓮的果凍石", 2]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 70, series: "遠征隊", name: "遠征隊外袍", part: "鎧甲", path: "魔法", direct: [["征伐隊外袍", 1], ["微微發光的結晶體", 50], ["清風的果凍石", 2]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；征伐隊外袍來源待確認" },
+      { level: 70, series: "遠征隊", name: "遠征隊斗篷", part: "披肩", path: "物理近戰", direct: [["征伐隊肩飾", 1], ["微微發光的結晶體", 50], ["混沌的果凍石", 1]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 70, series: "遠征隊", name: "遠征隊圍巾", part: "披肩", path: "魔法", direct: [["征伐隊肩飾", 1], ["微微發光的結晶體", 50], ["神聖的果凍石", 1]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 70, series: "遠征隊", name: "遠征隊長靴", part: "鞋子", path: "物理近戰", direct: [["征伐隊軍靴", 1], ["微微發光的結晶體", 50], ["紅蓮的果凍石", 1], ["混沌的果凍石", 1]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 70, series: "遠征隊", name: "遠征隊鞋子", part: "鞋子", path: "魔法", direct: [["征伐隊軍靴", 1], ["微微發光的結晶體", 50], ["清風的果凍石", 1], ["神聖的果凍石", 1]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 70, series: "遠征隊", name: "遠征隊戒指", part: "飾品", path: "物理近戰", direct: [["征伐隊戒指", 1], ["微微發光的結晶體", 50], ["黃昏的果凍石", 3]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 70, series: "遠征隊", name: "遠征隊魔法戒指", part: "飾品", path: "魔法", direct: [["征伐隊戒指", 1], ["微微發光的結晶體", 50], ["神聖的果凍石", 3]], source: "螞蟻地獄1樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+
+      { level: 80, series: "殲滅隊", name: "殲滅隊鎧甲", part: "鎧甲", path: "物理近戰", direct: [["遠征隊鎧甲", 1], ["藍光結晶體", 50], ["紅蓮的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊風衣", part: "鎧甲", path: "遠距離", direct: [["遠征隊鎧甲", 1], ["藍光結晶體", 50], ["紅蓮的果凍石", 2], ["混沌的果凍石", 2]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊外袍", part: "鎧甲", path: "魔法", direct: [["遠征隊外袍", 1], ["藍光結晶體", 50], ["清風的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊制服", part: "鎧甲", path: "治癒", direct: [["遠征隊外袍", 1], ["藍光結晶體", 50], ["清風的果凍石", 2], ["神聖的果凍石", 2]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊斗篷", part: "披肩", path: "物理近戰", direct: [["遠征隊斗篷", 1], ["藍光結晶體", 50], ["混沌的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊偵查斗篷", part: "披肩", path: "遠距離", direct: [["遠征隊斗篷", 1], ["藍光結晶體", 50], ["紅蓮的果凍石", 2], ["混沌的果凍石", 2]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊圍巾", part: "披肩", path: "魔法", direct: [["遠征隊圍巾", 1], ["藍光結晶體", 50], ["神聖的果凍石", 2], ["清風的果凍石", 2]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊披肩", part: "披肩", path: "治癒", direct: [["遠征隊圍巾", 1], ["藍光結晶體", 50], ["神聖的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊重靴", part: "鞋子", path: "物理近戰", direct: [["遠征隊長靴", 1], ["藍光結晶體", 50], ["紅蓮的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊長靴", part: "鞋子", path: "遠距離", direct: [["遠征隊長靴", 1], ["藍光結晶體", 50], ["混沌的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊鞋子", part: "鞋子", path: "魔法", direct: [["遠征隊鞋子", 1], ["藍光結晶體", 50], ["清風的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊靴子", part: "鞋子", path: "治癒", direct: [["遠征隊鞋子", 1], ["藍光結晶體", 50], ["神聖的果凍石", 4]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊戒指", part: "飾品", path: "物理近戰", direct: [["遠征隊戒指", 1], ["藍光結晶體", 50], ["神聖的果凍石", 6]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊手套", part: "飾品", path: "遠距離", direct: [["遠征隊戒指", 1], ["藍光結晶體", 50], ["神聖的果凍石", 6]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊魔法戒指", part: "飾品", path: "魔法", direct: [["遠征隊魔法戒指", 1], ["藍光結晶體", 50], ["神聖的果凍石", 6]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" },
+      { level: 80, series: "殲滅隊", name: "殲滅隊項鍊", part: "飾品", path: "治癒", direct: [["遠征隊魔法戒指", 1], ["藍光結晶體", 50], ["神聖的果凍石", 6]], source: "依斯魯得島迷宮2樓", difficulty: "升級材料來源副本；難度數量請以遊戲內為準" }
+    ];
+
+    const equipmentByName = new Map(equipment.map((item) => [item.name, item]));
+    const sourceTypes = {
+      base: "source",
+      source: "source",
+      stone: "",
+      warning: "warn"
+    };
+
+    function addMaterial(map, name, count) {
+      map.set(name, (map.get(name) || 0) + count);
+    }
+
+    function expandMaterials(item, multiplier = 1, seen = new Set()) {
+      const total = new Map();
+      if (!item.direct.length) {
+        addMaterial(total, item.name, multiplier);
+        return total;
+      }
+
+      item.direct.forEach(([name, count]) => {
+        const nested = equipmentByName.get(name);
+        if (nested && !seen.has(name)) {
+          const nextSeen = new Set(seen);
+          nextSeen.add(name);
+          expandMaterials(nested, count * multiplier, nextSeen).forEach((value, key) => addMaterial(total, key, value));
+        } else {
+          addMaterial(total, name, count * multiplier);
+        }
+      });
+      return total;
+    }
+
+    function formatMaterials(materials) {
+      if (!materials.length) {
+        return '<span class="muted">副本寶箱取得，非製作。</span>';
+      }
+      return `<div class="pill-list">${materials.map(([name, count]) => {
+        const source = materialSources[name];
+        const klass = source ? sourceTypes[source.type] || "" : "";
+        return `<span class="pill ${klass}">${name} × ${count}</span>`;
+      }).join("")}</div>`;
+    }
+
+    function formatSources(item) {
+      const directSources = item.direct
+        .map(([name]) => materialSources[name])
+        .filter(Boolean)
+        .map((source) => source.note);
+      const unique = [...new Set([`${item.source}：${item.difficulty}`, ...directSources])];
+      return `<div class="pill-list">${unique.map((note) => {
+        const warn = note.includes("待確認") || note.includes("未見來源");
+        return `<span class="pill ${warn ? "warn" : "source"}">${note}</span>`;
+      }).join("")}</div>`;
+    }
+
+    function render() {
+      const query = document.querySelector("#searchInput").value.trim().toLowerCase();
+      const series = document.querySelector("#seriesFilter").value;
+      const part = document.querySelector("#partFilter").value;
+      const path = document.querySelector("#pathFilter").value;
+      const rows = equipment.filter((item) => {
+        const haystack = [
+          item.level,
+          item.series,
+          item.name,
+          item.part,
+          item.path,
+          item.source,
+          item.difficulty,
+          JSON.stringify(item.direct)
+        ].join(" ").toLowerCase();
+        return (!query || haystack.includes(query))
+          && (!series || item.series === series)
+          && (!part || item.part === part)
+          && (!path || item.path === path);
+      });
+
+      document.querySelector("#rowCount").textContent = `${rows.length} 筆`;
+      document.querySelector("#upgradeRows").innerHTML = rows.map((item) => {
+        const total = [...expandMaterials(item).entries()];
+        return `<tr>
+          <td>${item.level}</td>
+          <td><strong>${item.series}</strong><span class="muted">${item.part}</span></td>
+          <td><strong>${item.name}</strong></td>
+          <td>${item.path}</td>
+          <td>${formatMaterials(item.direct)}</td>
+          <td>${formatMaterials(total)}</td>
+          <td>${formatSources(item)}</td>
+        </tr>`;
+      }).join("");
+    }
+
+    document.querySelectorAll("input, select").forEach((control) => {
+      control.addEventListener("input", render);
+      control.addEventListener("change", render);
+    });
+
+    render();
+  </script>
+</body>
+</html>
