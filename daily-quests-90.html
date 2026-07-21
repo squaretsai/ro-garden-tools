@@ -67,6 +67,10 @@
       min-width: 0;
     }
 
+    .brand > div {
+      min-width: 0;
+    }
+
     .mark {
       display: grid;
       place-items: center;
@@ -122,6 +126,7 @@
     }
 
     .panel {
+      max-width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: rgba(255, 253, 249, 0.9);
@@ -131,6 +136,7 @@
     .hero {
       display: grid;
       gap: 16px;
+      min-width: 0;
       padding: 22px;
       margin-bottom: 16px;
     }
@@ -220,6 +226,113 @@
       overflow: hidden;
     }
 
+    .prereq-panel {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .prereq-panel h2 {
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.2;
+    }
+
+    .prereq-panel > p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .prereq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    details.prereq-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      overflow: hidden;
+    }
+
+    .prereq-card summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 0;
+      min-height: 52px;
+      padding: 12px 14px;
+      color: var(--accent-strong);
+      cursor: pointer;
+      font-weight: 900;
+      list-style: none;
+    }
+
+    .prereq-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .prereq-card summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(165, 40, 45, 0.24);
+      border-radius: var(--radius);
+      background: #fff2ee;
+    }
+
+    .prereq-card[open] summary::after {
+      content: "-";
+    }
+
+    .prereq-content {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+      padding: 0 14px 14px;
+      color: #353b45;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .prereq-content ol,
+    .prereq-content ul {
+      margin: 0;
+      padding-left: 21px;
+    }
+
+    .prereq-content li + li {
+      margin-top: 5px;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 26px;
+      padding: 4px 8px;
+      border: 1px solid rgba(35, 108, 95, 0.24);
+      border-radius: var(--radius);
+      background: #eef8f3;
+      color: var(--mint);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .source-chip.caution {
+      border-color: rgba(200, 146, 45, 0.32);
+      background: #fff6e3;
+      color: #76520d;
+    }
+
     .region-head {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -233,6 +346,7 @@
     .region-title {
       display: grid;
       gap: 7px;
+      min-width: 0;
     }
 
     .region-title h2 {
@@ -416,6 +530,10 @@
         grid-template-columns: 1fr;
       }
 
+      .prereq-grid {
+        grid-template-columns: 1fr;
+      }
+
       .region-badges {
         justify-content: flex-start;
       }
@@ -440,7 +558,7 @@
       .quick-nav {
         position: static;
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr;
       }
 
       .quick-nav a {
@@ -482,6 +600,90 @@
       <a href="#louyang">洛陽</a>
       <a href="#niflheim">死都</a>
     </nav>
+
+    <section class="panel prereq-panel" aria-label="前置任務解法">
+      <h2>前置任務解法</h2>
+      <p>這裡只放已查到 RO樂園官方公告、RO樂園板攻略或 RO樂園玩家影片可對上的內容。沒有查到樂園專用流程的地區，會標成「待遊戲內確認」。</p>
+      <div class="prereq-grid">
+        <details class="prereq-card">
+          <summary>龜島：前進龜島</summary>
+          <div class="prereq-content">
+            <span class="source-chip caution">樂園玩家影片確認有龜島前置；細節需進遊戲核對</span>
+            <ol>
+              <li>等級門檻：樂園玩家影片標記為 Lv70 以上；90 等每日角色一定符合。</li>
+              <li>到艾爾貝塔上方旅館，進入右側房間，找「烏龜老伯」對話，選擇關於前往龜島的方法。</li>
+              <li>到艾爾貝塔右下碼頭找船夫「高丹富羅」約 `244,118`，選擇前往烏龜島。</li>
+              <li>支付船費後抵達龜島；之後即可處理龜島相關每日與龜良村任務。</li>
+            </ol>
+            <p>備註：官方 2026/01/13 公告確認樂園開放「亡者國都尼芙菲姆」與「龜島」，但完整前進龜島步驟主要來自樂園玩家影片與既有 NPC 流程，建議第一次跑時按 NPC 對話確認。</p>
+          </div>
+        </details>
+
+        <details class="prereq-card">
+          <summary>崑崙：主線開每日</summary>
+          <div class="prereq-content">
+            <span class="source-chip">樂園官方 + 樂園板攻略</span>
+            <ol>
+              <li>Base Lv90 以上，到艾爾貝塔 `246,62` 找「崑崙廣宣大使」，支付 10,000 Zeny 前往崑崙。</li>
+              <li>抵達後找「張青龍」`gon_fild01 262,87`，依指示去拜訪「崑崙堂主史艷文」。</li>
+              <li>進室內找「崑崙堂主史艷文」`gon_in 17,93`，再依劇情上二樓對話。</li>
+              <li>依序跑「散落的道力」與「鐵匠溫伽樂」相關任務。</li>
+              <li>回報堂主史艷文。官方公告寫明：完成居民初次的請求後，便能開啟每日任務。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="prereq-card">
+          <summary>泰國：哎喲泰雅主線 / 神殿入場</summary>
+          <div class="prereq-content">
+            <span class="source-chip">樂園官方確認前往方式；神殿流程需遊戲內核對</span>
+            <ol>
+              <li>先與哎喲泰雅的「福蘭奇斯闊」`ayothaya 157,79` 對話，觸發拜訪哎喲泰雅領袖莫拉4世的劇情。</li>
+              <li>找到願意贊助航海費用的贊助者後，再回艾爾貝塔找「航海士安東尼奧」`alberta 246,94` 前往哎喲泰雅。</li>
+              <li>若每日要進古代神殿或內部地圖，需跑哎喲泰雅神殿入場線，取得神聖線紗 / 高級神聖線紗類通行道具。</li>
+              <li>通用流程會要求準備透明之布、狐狸尾巴、昆蟲硬殼、聖水等材料，並在神殿內尋找 6 個痕跡；樂園版本若 NPC 名稱或材料數量不同，以遊戲內對話為準。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="prereq-card">
+          <summary>天津：領主的通行證</summary>
+          <div class="prereq-content">
+            <span class="source-chip">樂園官方確認 Base90 與前往方式；通行證流程需遊戲內核對</span>
+            <ol>
+              <li>Base Lv90 以上，到艾爾貝塔 `246,34` 找「天津町宣傳使臣」，支付 10,000 Zeny 前往天津町。</li>
+              <li>到天津町中間民宅門口，與兩側守門士兵對話，得知城主母親相關事件。</li>
+              <li>到天水閣內部四樓找城主「宜希答 佑西那戈」，接下處理城主母親事件的委託。</li>
+              <li>回天津町中間找「克武基」對話，再到北方神社找「狐狸面具 / 塔慨虎威」學習解決方式。</li>
+              <li>回城主母親住處與老太太互動，成功後取得狐狸尾巴，再回天水閣找城主回報。</li>
+              <li>完成後取得「領主的通行證」，即可進天津町密穴 / 天水閣相關地下區域；遺失時可花費 10,000 Zeny 補發。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="prereq-card">
+          <summary>洛陽 / 龍之城：待確認</summary>
+          <div class="prereq-content">
+            <span class="source-chip caution">目前只確認樂園前往方式</span>
+            <ol>
+              <li>Base Lv90 以上，可在艾爾貝塔 `245,40` 找「龍之城廣宣大使」，支付 10,000 Zeny 前往龍之城洛陽。</li>
+              <li>目前未查到可靠的樂園專用「每日必解前置流程」。如果 NPC 不能互動，再依遊戲內提示補跑龍之城本地任務。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="prereq-card">
+          <summary>死都 / 尼芙菲姆：待確認</summary>
+          <div class="prereq-content">
+            <span class="source-chip caution">官方確認地圖限制，未查到每日前置</span>
+            <ol>
+              <li>官方公告確認樂園開放「亡者國都尼芙菲姆」，且因地域特殊，無法用傑斯塔、世界移動券前往，也無法 `/memo`。</li>
+              <li>目前未查到這組 90 每日需要額外主線前置；重點是先能抵達尼芙菲姆。</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+    </section>
 
     <section class="panel region" id="turtle">
       <header class="region-head">
@@ -751,7 +953,7 @@
     </section>
 
     <section class="panel source" aria-label="來源">
-      <p>主要來源：<a href="https://ro-zero-site.pages.dev/" target="_blank" rel="noreferrer">RO補給站每日任務整理</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3514" target="_blank" rel="noreferrer">巴哈 RO樂園每日任務整理</a>。前置任務另參考龜島、天津、哎喲泰雅等任務流程資料；版本可能調整，最後仍以遊戲內 NPC 對話為準。</p>
+      <p>主要來源：<a href="https://ro-zero-site.pages.dev/" target="_blank" rel="noreferrer">RO補給站每日任務整理</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3514" target="_blank" rel="noreferrer">巴哈 RO樂園每日任務整理</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218239" target="_blank" rel="noreferrer">樂園官方崑崙公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218357" target="_blank" rel="noreferrer">樂園官方哎喲泰雅公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218425" target="_blank" rel="noreferrer">樂園官方天津公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218117" target="_blank" rel="noreferrer">樂園官方死都 / 龜島開放公告</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3339" target="_blank" rel="noreferrer">巴哈 RO樂園崑崙主線攻略</a>。前置任務若標示「需遊戲內核對」，代表已查到樂園入口或地圖開放資訊，但完整步驟仍可能因樂園版本調整，最後以遊戲內 NPC 對話為準。</p>
     </section>
   </main>
 </body>
