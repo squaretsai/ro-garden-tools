@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 Base Lv.90 每日任務整理</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ee;
+      --paper: #fffdf9;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --field: #ffffff;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(165, 40, 45, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(35, 108, 95, 0.09), transparent 38%),
+        var(--bg);
+      overflow-x: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: var(--radius);
+      background: #fff8ed;
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .nav-link {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255, 253, 249, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+
+    .hero h2 {
+      font-size: clamp(22px, 3.5vw, 32px);
+      line-height: 1.2;
+    }
+
+    .hero p {
+      max-width: 860px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+      overflow-wrap: anywhere;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .quick-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      color: #4e5662;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .region {
+      scroll-margin-top: 78px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .region-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(165, 40, 45, 0.07), rgba(35, 108, 95, 0.06));
+    }
+
+    .region-title {
+      display: grid;
+      gap: 7px;
+    }
+
+    .region-title h2 {
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.2;
+    }
+
+    .region-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(35, 108, 95, 0.24);
+      border-radius: var(--radius);
+      background: #eef8f3;
+      color: var(--mint);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .region-body {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .prep {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .prep strong,
+    .note strong {
+      color: var(--accent-strong);
+    }
+
+    .prep p,
+    .note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--field);
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      color: #353b45;
+      background: #fbf4e8;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .map {
+      color: var(--mint);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .coord {
+      display: inline-block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .npc {
+      font-weight: 900;
+    }
+
+    .quest-list {
+      margin: 0;
+      padding-left: 19px;
+    }
+
+    .quest-list li + li {
+      margin-top: 4px;
+    }
+
+    .note {
+      padding: 13px 14px;
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius);
+      background: rgba(255, 250, 241, 0.78);
+    }
+
+    .source {
+      margin-top: 16px;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .source a {
+      color: var(--accent-strong);
+      font-weight: 900;
+    }
+
+    @media (max-width: 820px) {
+      .topbar,
+      .region-head {
+        align-items: flex-start;
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-link {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .shell {
+        width: min(1180px, calc(100% - 22px));
+        padding-top: 18px;
+      }
+
+      .hero,
+      .region-head,
+      .region-body {
+        padding: 16px;
+      }
+
+      .quick-nav {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">90</div>
+        <div>
+          <h1>RO樂園 Base Lv.90 每日任務</h1>
+          <p class="subtitle">依地區整理前置任務、NPC 位置與每日內容</p>
+        </div>
+      </div>
+      <a class="nav-link" href="index.html">回首頁</a>
+    </header>
+
+    <section class="panel hero" aria-label="任務總覽">
+      <div>
+        <h2>90 等每日跑圖清單</h2>
+        <p>這頁把洛陽、天津、泰國、龜島、崑崙、死都的 Base Lv.90 每日任務整理成一張可查表。前置任務以能進入地圖或地下城為主；若遊戲內 NPC 已可直接接任務，就以實際互動為準。</p>
+      </div>
+      <div class="stats" aria-label="資料摘要">
+        <div class="stat"><span>地區</span><strong>6 區</strong></div>
+        <div class="stat"><span>每日任務</span><strong>34 個</strong></div>
+        <div class="stat"><span>資料日期</span><strong>2026-07-18</strong></div>
+      </div>
+    </section>
+
+    <nav class="quick-nav" aria-label="地區快速跳轉">
+      <a href="#turtle">龜島</a>
+      <a href="#kunlun">崑崙</a>
+      <a href="#ayothaya">泰國</a>
+      <a href="#amatsu">天津</a>
+      <a href="#louyang">洛陽</a>
+      <a href="#niflheim">死都</a>
+    </nav>
+
+    <section class="panel region" id="turtle">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>龜島</h2>
+          <p>任務入口集中在艾爾貝塔與龜良村，總量少，適合順路解。</p>
+        </div>
+        <span class="count-badge">3 個任務</span>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務</strong>
+          <p>建議先解「前進龜島」。一般流程是到艾爾貝塔旅館找烏龜老伯，再找碼頭船夫前往龜島。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>地圖 / 座標</th><th>NPC</th><th>任務內容</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">艾爾貝塔</span><br><span class="coord">208, 119</span></td>
+                <td class="npc">騎士提伯特</td>
+                <td><ul class="quest-list"><li>刺尾蜻蜓 10 隻、彈簧兔 10 隻</li><li>果樹龜、岩石龜、水靈龜、火靈龜各 10 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">龜良村</span><br><span class="coord">110, 83</span></td>
+                <td class="npc">騎士團長</td>
+                <td><ul class="quest-list"><li>風靈龜 10 隻</li></ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>風靈龜會音投，跑任務時不要完全放空站樁。</p></div>
+      </div>
+    </section>
+
+    <section class="panel region" id="kunlun">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>崑崙</h2>
+          <p>任務分成原野收集與城內討伐，怪物控場與魔解較煩。</p>
+        </div>
+        <span class="count-badge">6 個任務</span>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務</strong>
+          <p>前往崑崙需要 Base Lv.90。可到艾爾貝塔 246, 62 找「崑崙廣宣大使」，費用 10,000 Zeny。建議先跑崑崙主線到拜訪崑崙堂主「史艷文」的階段，方便與居民互動。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>地圖 / 座標</th><th>NPC</th><th>任務內容</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">崑輪原野</span><br><span class="coord">258, 95</span></td>
+                <td class="npc">凱真</td>
+                <td><ul class="quest-list"><li>老舊的太極盤 10 個</li><li>修好的太極盤 10 個</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">神仙之島崑崙</span><br><span class="coord">163, 195</span></td>
+                <td class="npc">燕元津</td>
+                <td><ul class="quest-list"><li>元宵童子 15 隻</li><li>妖仙女 15 隻</li><li>猴桃木 15 隻</li><li>人蔘精 15 隻</li></ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>妖仙女會魔解與吸 SP；人蔘精會暈眩與魔解。</p></div>
+      </div>
+    </section>
+
+    <section class="panel region" id="ayothaya">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>泰國 / 哎喲泰雅</h2>
+          <p>這區混合討伐、收集、跑腿與料理，建議先備材料再接任務。</p>
+        </div>
+        <span class="count-badge">8 個任務</span>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務</strong>
+          <p>若要進神殿或地下城打怪，需解 Ayothaya Dungeon Entrance Quest。完整解完可取得 Holy Threads / Holier Threads，開啟 Ayothaya Field 2、Dungeon 1F、Dungeon 2F。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>地圖 / 座標</th><th>NPC</th><th>任務內容</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">哎喲泰雅 原野</span><br><span class="coord">123, 200</span></td>
+                <td class="npc">哎喲泰雅僧侶</td>
+                <td><ul class="quest-list"><li>群葉貓 15 隻</li><li>克萊本 15 隻</li><li>塔嚕安 10 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">哎喲泰雅 原野</span><br><span class="coord">123, 200</span></td>
+                <td class="npc">古董收藏家</td>
+                <td><ul class="quest-list"><li>紅色流蘇 10 個</li><li>竹籃 10 個</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">哎喲泰雅</span><br><span class="coord">204, 265</span></td>
+                <td class="npc">佐克瓏</td>
+                <td><ul class="quest-list"><li>灑水地圖上 3 個 NPC</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">哎喲泰雅</span><br><span class="coord">251, 99</span></td>
+                <td class="npc">老奶奶</td>
+                <td><ul class="quest-list"><li>放長線釣大魚</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">哎喲泰雅</span><br><span class="coord">231, 70</span></td>
+                <td class="npc">瑪莉德辣辣</td>
+                <td><ul class="quest-list"><li>檸檬 10、蝦子 20、紅辣椒 30，製作料理</li></ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>群葉貓會音投；塔嚕安會怒爆與魔解。</p></div>
+      </div>
+    </section>
+
+    <section class="panel region" id="amatsu">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>天津</h2>
+          <p>天津任務量多，且有天水閣內部頂樓的高風險討伐。</p>
+        </div>
+        <span class="count-badge">8 個任務</span>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務</strong>
+          <p>天水閣與密穴相關任務建議先解「領主的通行證」。完成後可進天津町密穴與榻榻米迷宮，遺失通行證可補發。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>地圖 / 座標</th><th>NPC</th><th>任務內容</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">天水之國-天津町</span><br><span class="coord">225, 235</span></td>
+                <td class="npc">桃夢也</td>
+                <td><ul class="quest-list"><li>桃太郎體驗館，不吃經驗加倍</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">天津町原野</span><br><span class="coord">173, 328</span></td>
+                <td class="npc">塔慨虎威</td>
+                <td><ul class="quest-list"><li>釣魚河童 30 隻</li><li>傘妖 30 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">天水之國-天津町</span><br><span class="coord">167, 179</span></td>
+                <td class="npc">千代夫人</td>
+                <td><ul class="quest-list"><li>光澤的頭髮 10、米雅畢 30 隻</li><li>巨大傑勒比結晶 1、武士火槍兵 20 隻</li><li>牛蛙之皮 10、牛蛙 30 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">天水閣內部 頂樓</span><br><span class="coord">88, 236</span></td>
+                <td class="npc">進出管理兵</td>
+                <td><ul class="quest-list"><li>天狗 20 隻</li><li>火忍西怒畢 20 隻</li></ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>火忍西怒畢會反射盾；天狗會魔解與大地之擊。</p></div>
+      </div>
+    </section>
+
+    <section class="panel region" id="louyang">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>洛陽 / 龍之城</h2>
+          <p>任務分散在龍之城、王陵、王陵內部與審良宮，建議照地圖順路清。</p>
+        </div>
+        <span class="count-badge">7 個任務</span>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務</strong>
+          <p>目前整理資料未明確標出必解前置。進城通常可從艾爾貝塔付費前往；若王陵或審良宮 NPC 無法互動，再補跑洛陽本地相關任務。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>地圖 / 座標</th><th>NPC</th><th>任務內容</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">古都龍之城</span><br><span class="coord">308, 76</span></td>
+                <td class="npc">討伐隊負責職員-朱偉業</td>
+                <td><ul class="quest-list"><li>豹皮怪 30 隻</li><li>狐仙 30 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">古都龍之城</span><br><span class="coord">259, 93</span></td>
+                <td class="npc">醫院-領智</td>
+                <td><ul class="quest-list"><li>噬人樹花 5、泥團 5、米糕 10</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">古都龍之城</span><br><span class="coord">280, 164</span></td>
+                <td class="npc">王仕隆</td>
+                <td><ul class="quest-list"><li>舞獅之角 20、舞獅 10 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">龍之城王陵</span><br><span class="coord">37, 211</span></td>
+                <td class="npc">小賢</td>
+                <td><ul class="quest-list"><li>舞獅 30 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">龍之城王陵內部</span><br><span class="coord">149, 106</span></td>
+                <td class="npc">小賢</td>
+                <td><ul class="quest-list"><li>妖君 30 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">龍之城審良宮</span><br><span class="coord">47, 204</span></td>
+                <td class="npc">小賢</td>
+                <td><ul class="quest-list"><li>小青 30 隻</li></ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>妖君會音投；狐仙會魔解與反射盾；小青會魔解。</p></div>
+      </div>
+    </section>
+
+    <section class="panel region" id="niflheim">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>死都 / 尼芙菲姆</h2>
+          <p>任務數最少，但入口與出口附近容易被怪物壓住，跑圖時要小心。</p>
+        </div>
+        <span class="count-badge">2 個任務</span>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務</strong>
+          <p>目前沒有查到這組 90 每日需要額外主線前置；重點是先能抵達尼芙菲姆。可走汶巴拉路線，或使用伺服器內可用的傳送服務。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>地圖 / 座標</th><th>NPC</th><th>任務內容</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">尼芙菲姆</span><br><span class="coord">225, 244</span></td>
+                <td class="npc">無名氏</td>
+                <td><ul class="quest-list"><li>銀月魔女 20 隻、嗜血怪人 20 隻</li></ul></td>
+              </tr>
+              <tr>
+                <td><span class="map">偏落村落斯凱鈴領頓</span><br><span class="coord">208, 52</span></td>
+                <td class="npc">巴米契</td>
+                <td><ul class="quest-list"><li>假面鬼 20 隻、無顱武士 20 隻</li></ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>偏落村落入口與往峽谷出口附近容易爆走。</p></div>
+      </div>
+    </section>
+
+    <section class="panel source" aria-label="來源">
+      <p>主要來源：<a href="https://ro-zero-site.pages.dev/" target="_blank" rel="noreferrer">RO補給站每日任務整理</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3514" target="_blank" rel="noreferrer">巴哈 RO樂園每日任務整理</a>。前置任務另參考龜島、天津、哎喲泰雅等任務流程資料；版本可能調整，最後仍以遊戲內 NPC 對話為準。</p>
+    </section>
+  </main>
+</body>
+</html>
