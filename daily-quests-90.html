@@ -194,6 +194,8 @@
     .quick-nav a {
       display: inline-flex;
       align-items: center;
+      gap: 6px;
+      min-width: 0;
       min-height: 34px;
       padding: 7px 10px;
       border: 1px solid var(--line);
@@ -202,6 +204,13 @@
       color: #4e5662;
       text-decoration: none;
       font-size: 13px;
+      font-weight: 900;
+      white-space: normal;
+    }
+
+    .quick-nav small {
+      color: var(--accent-strong);
+      font-size: 11px;
       font-weight: 900;
     }
 
@@ -251,6 +260,34 @@
       font-size: 13px;
       font-weight: 900;
       white-space: nowrap;
+    }
+
+    .region-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .requirement-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(165, 40, 45, 0.24);
+      border-radius: var(--radius);
+      background: #fff2ee;
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .requirement-badge.optional {
+      border-color: var(--line);
+      background: #f7f2ea;
+      color: var(--muted);
     }
 
     .region-body {
@@ -379,6 +416,10 @@
         grid-template-columns: 1fr;
       }
 
+      .region-badges {
+        justify-content: flex-start;
+      }
+
       .nav-link {
         width: 100%;
       }
@@ -398,6 +439,12 @@
 
       .quick-nav {
         position: static;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .quick-nav a {
+        justify-content: center;
       }
     }
   </style>
@@ -418,7 +465,7 @@
     <section class="panel hero" aria-label="任務總覽">
       <div>
         <h2>90 等每日跑圖清單</h2>
-        <p>這頁把洛陽、天津、泰國、龜島、崑崙、死都的 Base Lv.90 每日任務整理成一張可查表。前置任務以能進入地圖或地下城為主；若遊戲內 NPC 已可直接接任務，就以實際互動為準。</p>
+        <p>這頁把洛陽、天津、泰國、龜島、崑崙、死都的 Base Lv.90 每日任務整理成一張可查表。有前置任務的地區已標上「有前置」；若遊戲內 NPC 已可直接接任務，就以實際互動為準。</p>
       </div>
       <div class="stats" aria-label="資料摘要">
         <div class="stat"><span>地區</span><strong>6 區</strong></div>
@@ -428,10 +475,10 @@
     </section>
 
     <nav class="quick-nav" aria-label="地區快速跳轉">
-      <a href="#turtle">龜島</a>
-      <a href="#kunlun">崑崙</a>
-      <a href="#ayothaya">泰國</a>
-      <a href="#amatsu">天津</a>
+      <a href="#turtle">龜島 <small>有前置</small></a>
+      <a href="#kunlun">崑崙 <small>有前置</small></a>
+      <a href="#ayothaya">泰國 <small>有前置</small></a>
+      <a href="#amatsu">天津 <small>有前置</small></a>
       <a href="#louyang">洛陽</a>
       <a href="#niflheim">死都</a>
     </nav>
@@ -442,11 +489,14 @@
           <h2>龜島</h2>
           <p>任務入口集中在艾爾貝塔與龜良村，總量少，適合順路解。</p>
         </div>
-        <span class="count-badge">3 個任務</span>
+        <div class="region-badges">
+          <span class="requirement-badge">有前置</span>
+          <span class="count-badge">3 個任務</span>
+        </div>
       </header>
       <div class="region-body">
         <div class="prep">
-          <strong>前置任務</strong>
+          <strong>前置任務（建議先完成）</strong>
           <p>建議先解「前進龜島」。一般流程是到艾爾貝塔旅館找烏龜老伯，再找碼頭船夫前往龜島。</p>
         </div>
         <div class="table-wrap">
@@ -476,11 +526,14 @@
           <h2>崑崙</h2>
           <p>任務分成原野收集與城內討伐，怪物控場與魔解較煩。</p>
         </div>
-        <span class="count-badge">6 個任務</span>
+        <div class="region-badges">
+          <span class="requirement-badge">有前置</span>
+          <span class="count-badge">6 個任務</span>
+        </div>
       </header>
       <div class="region-body">
         <div class="prep">
-          <strong>前置任務</strong>
+          <strong>前置任務（建議先完成）</strong>
           <p>前往崑崙需要 Base Lv.90。可到艾爾貝塔 246, 62 找「崑崙廣宣大使」，費用 10,000 Zeny。建議先跑崑崙主線到拜訪崑崙堂主「史艷文」的階段，方便與居民互動。</p>
         </div>
         <div class="table-wrap">
@@ -510,11 +563,14 @@
           <h2>泰國 / 哎喲泰雅</h2>
           <p>這區混合討伐、收集、跑腿與料理，建議先備材料再接任務。</p>
         </div>
-        <span class="count-badge">8 個任務</span>
+        <div class="region-badges">
+          <span class="requirement-badge">有前置</span>
+          <span class="count-badge">8 個任務</span>
+        </div>
       </header>
       <div class="region-body">
         <div class="prep">
-          <strong>前置任務</strong>
+          <strong>前置任務（進地下城需要）</strong>
           <p>若要進神殿或地下城打怪，需解 Ayothaya Dungeon Entrance Quest。完整解完可取得 Holy Threads / Holier Threads，開啟 Ayothaya Field 2、Dungeon 1F、Dungeon 2F。</p>
         </div>
         <div class="table-wrap">
@@ -559,11 +615,14 @@
           <h2>天津</h2>
           <p>天津任務量多，且有天水閣內部頂樓的高風險討伐。</p>
         </div>
-        <span class="count-badge">8 個任務</span>
+        <div class="region-badges">
+          <span class="requirement-badge">有前置</span>
+          <span class="count-badge">8 個任務</span>
+        </div>
       </header>
       <div class="region-body">
         <div class="prep">
-          <strong>前置任務</strong>
+          <strong>前置任務（建議先完成）</strong>
           <p>天水閣與密穴相關任務建議先解「領主的通行證」。完成後可進天津町密穴與榻榻米迷宮，遺失通行證可補發。</p>
         </div>
         <div class="table-wrap">
@@ -603,11 +662,14 @@
           <h2>洛陽 / 龍之城</h2>
           <p>任務分散在龍之城、王陵、王陵內部與審良宮，建議照地圖順路清。</p>
         </div>
-        <span class="count-badge">7 個任務</span>
+        <div class="region-badges">
+          <span class="requirement-badge optional">未確認必解前置</span>
+          <span class="count-badge">7 個任務</span>
+        </div>
       </header>
       <div class="region-body">
         <div class="prep">
-          <strong>前置任務</strong>
+          <strong>前置任務（未確認必解）</strong>
           <p>目前整理資料未明確標出必解前置。進城通常可從艾爾貝塔付費前往；若王陵或審良宮 NPC 無法互動，再補跑洛陽本地相關任務。</p>
         </div>
         <div class="table-wrap">
@@ -657,11 +719,14 @@
           <h2>死都 / 尼芙菲姆</h2>
           <p>任務數最少，但入口與出口附近容易被怪物壓住，跑圖時要小心。</p>
         </div>
-        <span class="count-badge">2 個任務</span>
+        <div class="region-badges">
+          <span class="requirement-badge optional">未確認必解前置</span>
+          <span class="count-badge">2 個任務</span>
+        </div>
       </header>
       <div class="region-body">
         <div class="prep">
-          <strong>前置任務</strong>
+          <strong>前置任務（未確認必解）</strong>
           <p>目前沒有查到這組 90 每日需要額外主線前置；重點是先能抵達尼芙菲姆。可走汶巴拉路線，或使用伺服器內可用的傳送服務。</p>
         </div>
         <div class="table-wrap">
