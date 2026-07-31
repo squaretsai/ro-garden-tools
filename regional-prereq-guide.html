@@ -502,6 +502,86 @@
       gap: 10px;
     }
 
+    .monster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .monster-card {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      min-height: 112px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, rgba(31, 107, 85, 0.08), transparent 55%),
+        #ffffff;
+      text-decoration: none;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .monster-card:hover,
+    .monster-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(31, 107, 85, 0.38);
+      box-shadow: 0 16px 36px rgba(31, 45, 35, 0.13);
+      outline: none;
+    }
+
+    .monster-art {
+      display: grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      border: 1px solid #dce6d6;
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 58%, rgba(188, 129, 42, 0.15), transparent 52%),
+        #f8fbf5;
+    }
+
+    .monster-art img {
+      display: block;
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      image-rendering: auto;
+    }
+
+    .monster-name {
+      display: block;
+      margin-bottom: 6px;
+      color: #26322d;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .monster-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .monster-meta span {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #edf5ea;
+      color: #245343;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
     figure {
       margin: 0;
       overflow: hidden;
@@ -845,6 +925,12 @@
           ["地龍術士", "louyang 207 112", "地龍武器書卷，官方提示地龍石 10。"],
           ["慕青孃 徐先", "louyang 202 92", "洛陽奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
         ],
+        monsters: [
+          [1512, "妖君", "Lv113", "王陵內部"],
+          [1513, "狐仙", "Lv115", "審良宮"],
+          [1631, "小青", "Lv106", "審良宮"],
+          [1632, "白素貞", "MVP", "洛陽頭飾主題"]
+        ],
         notes: [
           "官方文字表示洛陽城中可進行地龍武器、地龍書兌換；王陵線則牽到專屬頭盔。",
           "每日任務與奇物內容可能隨版本調整，跑之前先確認背包有足夠空位。"
@@ -892,6 +978,12 @@
           ["掃墨人 猛牛", "gonryun 137 110", "墨蛇君裝備製作相關。"],
           ["靈幻咒文牌 妍鎮車", "gonryun 141 113", "咒文牌/靈幻武器能力相關。"],
           ["藏墨人 摩莎", "gonryun 186 113", "崑崙奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
+        ],
+        monsters: [
+          [1409, "元宵童子", "Lv90", "崑崙原野"],
+          [1415, "小花豹", "Lv102", "神仙的圍棋臺"],
+          [1416, "妖仙女", "Lv126", "武陵道院"],
+          [1412, "惡雲仙人", "Lv124", "神仙的圍棋臺"]
         ],
         notes: [
           "如果你到崑崙後 NPC 沒反應，多半是張青龍或堂主拜訪少點了一段。",
@@ -942,6 +1034,12 @@
           ["賦魂巫師 棉蓋依", "ayothaya 213 197", "死靈武器賦魂，官方提示死靈石 10。"],
           ["伴蕉侍 硐門", "ayothaya 251 181", "泰雅奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
         ],
+        monsters: [
+          [1586, "群葉貓", "Lv96", "古代神殿"],
+          [1587, "克萊本", "Lv105", "古代神殿"],
+          [1584, "塔嚕安", "Lv109", "古代神殿內部"],
+          [2781, "菁英群葉貓", "Lv96", "哎喲泰雅原野"]
+        ],
         notes: [
           "貓眼由群葉貓掉落；貓嘴材料常見說法為群葉貓的毛 500、鬍鬚 500，官方奇物表確認硐門會給毛與鬍鬚。",
           "若你只是要貓嘴，先確認硐門每日奇物與大丸/附近頭飾製作選單；成品 NPC 官方公告沒有把貓嘴寫死。"
@@ -989,6 +1087,12 @@
           ["異國吟遊詩人 涂畢河", "ama_in01 171 17", "無名將軍戰盔故事/製作相關。"],
           ["陰陽術師", "ama_fild01 165 331", "陰陽武器能力相關。"],
           ["初心者 鼬", "amatsu 99 100", "天津奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
+        ],
+        monsters: [
+          [1404, "米雅畢", "Lv119", "地下森林戰場"],
+          [1405, "天狗", "Lv127", "地下神舍"],
+          [1406, "釣魚河童", "Lv116", "天津町原野"],
+          [1492, "元靈武士", "MVP", "地下神舍"]
         ],
         notes: [
           "如果只是進天津城鎮，搭船即可；若要開當地裝備/書卷/頭飾功能，要跑守門士兵後續。",
@@ -1086,6 +1190,12 @@
           ["地靈礦石兌換", "umbala", "硬角 15。"],
           ["風靈礦石兌換", "umbala", "彩色昆蟲外殼 25。"]
         ],
+        monsters: [
+          [1498, "伍坦彈弓手", "Lv87", "汶巴拉森林"],
+          [1499, "伍坦戰士", "Lv87", "汶巴拉森林"],
+          [1497, "機木人", "Lv93", "滬家叢林"],
+          [1493, "森林妖姬", "Lv88", "嚕嚕卡森林"]
+        ],
         notes: [
           "語言任務材料各版本資料略有差異；樂園若已調整，請以遊戲內任務要求為準。",
           "常見舊攻略材料包含微笑面具、光滑的紙、油紙、墨汁、羽毛；你手上如果只缺火靈礦石，先把蠍子尾巴屯好。"
@@ -1132,6 +1242,12 @@
           ["偏遠村落斯凱領頓", "nif_fild01", "尼芙菲姆前一段野外路線。"],
           ["鬼峽谷", "nif_fild02", "往尼芙菲姆城鎮前的危險地圖。"],
           ["尼芙菲姆", "niflheim", "死都城鎮，官方註明不能 /memo。"]
+        ],
+        monsters: [
+          [1505, "銀月魔女", "Lv109", "鬼峽谷"],
+          [1504, "無顱武士", "Lv108", "偏僻村落"],
+          [1507, "嗜血怪人", "Lv110", "鬼峽谷"],
+          [1508, "萬聖魔", "Lv100", "偏僻村落"]
         ],
         notes: [
           "死都不是一般方便傳送地圖，官方明確限制傑斯塔、世界移動券與 /memo。",
@@ -1180,6 +1296,12 @@
           ["龜島石碑二", "tur_dun02 約118 233", "舊攻略中第二道門相關。"],
           ["龜島石碑三", "tur_dun03 約113 178", "舊攻略中第三道門相關。"]
         ],
+        monsters: [
+          [1314, "果樹龜", "Lv90", "龜島"],
+          [1315, "風靈龜", "Lv100", "良龜村"],
+          [1318, "火焰龜", "Lv98", "良龜村"],
+          [1319, "水靈龜", "Lv94", "龜島密穴"]
+        ],
         notes: [
           "這頁的龜島是玩家攻略整理，因為目前搜尋到的官方樂園公告沒有完整龜島入場步驟。",
           "若你要的是樂園每日任務路線，不一定需要把深層石碑任務全部做完，先看你要進哪張圖。"
@@ -1201,6 +1323,10 @@
       const parts = raw.trim().split(/\s+/);
       if (parts.length < 3) return "";
       return `/navi ${parts[0]}/${parts[1]}/${parts[2]}`;
+    }
+
+    function monsterImage(id) {
+      return `https://static.divine-pride.net/images/mobs/png/${id}.png`;
     }
 
     function renderTabs(activeId = "overview", filter = "") {
@@ -1262,6 +1388,20 @@
           </div>
         `;
       }).join("");
+      const monsters = (item.monsters || []).map(([id, name, level, place]) => `
+        <a class="monster-card" href="https://twroz.wiki/mob?search_query=${id}" target="_blank" rel="noreferrer">
+          <span class="monster-art">
+            <img src="${monsterImage(id)}" alt="${name}" loading="lazy">
+          </span>
+          <span>
+            <span class="monster-name">${name}</span>
+            <span class="monster-meta">
+              <span>${level}</span>
+              <span>${place}</span>
+            </span>
+          </span>
+        </a>
+      `).join("");
       const notes = (item.notes || []).map((note, index) => `
         <div class="note ${index === 0 ? "important" : ""}">${note}</div>
       `).join("");
@@ -1338,6 +1478,12 @@
             <h2 class="section-title">NPC 與座標</h2>
             <div class="npc-grid">${npcs}</div>
           </section>
+          ${monsters ? `
+            <section class="section">
+              <h2 class="section-title">代表魔物</h2>
+              <div class="monster-grid">${monsters}</div>
+            </section>
+          ` : ""}
           <section class="section">
             <h2 class="section-title">注意事項</h2>
             <div class="note-grid">${notes}</div>
