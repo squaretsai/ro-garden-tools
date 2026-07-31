@@ -1,0 +1,1266 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園 +7 至 +10 裝備精煉期望成本、鐵匠的祝福與成品市價比較工具。">
+  <title>RO樂園｜精煉成本與鐵祝計算器</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f1ea;
+      --paper: #fffdf9;
+      --paper-strong: #fff8ed;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --mint-soft: #edf7f3;
+      --danger-soft: #fff0ef;
+      --field: #fff;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(165, 40, 45, 0.10), transparent 30rem),
+        radial-gradient(circle at 100% 28%, rgba(35, 108, 95, 0.10), transparent 32rem),
+        var(--bg);
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+
+    .shell {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 46px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: var(--radius);
+      background: var(--paper-strong);
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 40px);
+      line-height: 1.12;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .nav-link,
+    .ghost-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #555e69;
+      background: rgba(255, 253, 249, 0.82);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: 18px;
+      padding: 24px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      background:
+        linear-gradient(120deg, rgba(165, 40, 45, 0.08), transparent 46%),
+        rgba(255, 253, 249, 0.94);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      max-width: 780px;
+      margin: 8px 0 9px;
+      font-size: clamp(25px, 4.2vw, 46px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .hero-note {
+      align-self: stretch;
+      display: grid;
+      align-content: center;
+      gap: 7px;
+      padding: 18px;
+      border: 1px solid rgba(200, 146, 45, 0.34);
+      border-radius: var(--radius);
+      background: rgba(255, 248, 237, 0.82);
+    }
+
+    .hero-note strong {
+      color: var(--accent-strong);
+      font-size: 18px;
+    }
+
+    .hero-note span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(330px, 0.82fr) minmax(0, 1.18fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .inputs {
+      display: grid;
+      gap: 14px;
+    }
+
+    .section {
+      padding: 17px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+
+    .section-heading h2,
+    .section-heading h3 {
+      margin: 4px 0 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .section-heading p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: #4e5662;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    label.wide { grid-column: 1 / -1; }
+
+    .field-note {
+      color: #838a93;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 43px;
+      min-width: 0;
+      padding: 8px 10px;
+      border: 1px solid #cfc6ba;
+      border-radius: 8px;
+      color: var(--ink);
+      background: var(--field);
+      outline: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input:focus,
+    select:focus,
+    button:focus-visible,
+    a:focus-visible {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(165, 40, 45, 0.14);
+      outline: none;
+    }
+
+    .input-with-suffix { position: relative; }
+    .input-with-suffix input { padding-right: 48px; }
+    .suffix {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      color: #8a8074;
+      font-size: 11px;
+      font-weight: 900;
+      pointer-events: none;
+    }
+
+    details { border-top: 1px solid var(--line); }
+
+    details summary {
+      padding: 13px 0 0;
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      list-style-position: inside;
+    }
+
+    .rates-grid {
+      display: grid;
+      grid-template-columns: 1.05fr repeat(2, minmax(74px, 0.55fr));
+      gap: 8px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .rates-grid .head {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .rates-grid .stage-label {
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .rates-grid input { text-align: center; }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .primary-button {
+      min-height: 48px;
+      padding: 10px 18px;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      box-shadow: 0 12px 26px rgba(127, 23, 28, 0.24);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .results {
+      display: grid;
+      gap: 14px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .verdict {
+      padding: 20px;
+      border-color: rgba(35, 108, 95, 0.32);
+      background:
+        linear-gradient(125deg, rgba(35, 108, 95, 0.10), transparent 58%),
+        rgba(255, 253, 249, 0.96);
+    }
+
+    .verdict[data-mode="buy"] {
+      border-color: rgba(165, 40, 45, 0.32);
+      background:
+        linear-gradient(125deg, rgba(165, 40, 45, 0.10), transparent 58%),
+        rgba(255, 253, 249, 0.96);
+    }
+
+    .verdict-label {
+      color: var(--mint);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+
+    .verdict[data-mode="buy"] .verdict-label { color: var(--accent); }
+
+    .verdict h2 {
+      margin: 7px 0 4px;
+      font-size: clamp(25px, 4vw, 40px);
+      line-height: 1.15;
+    }
+
+    .verdict p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 17px;
+    }
+
+    .metric {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .metric span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: clamp(17px, 2.4vw, 23px);
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .strategy-panel { overflow: hidden; }
+
+    .strategy-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 17px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(165, 40, 45, 0.06), rgba(200, 146, 45, 0.07));
+    }
+
+    .strategy-head h2 {
+      margin: 4px 0 0;
+      font-size: 20px;
+    }
+
+    .strategy-list { display: grid; }
+
+    .stage-card {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr) auto;
+      gap: 13px;
+      align-items: center;
+      padding: 15px 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stage-card:last-child { border-bottom: 0; }
+
+    .stage-badge {
+      display: grid;
+      place-items: center;
+      min-height: 52px;
+      border: 1px solid rgba(165, 40, 45, 0.23);
+      border-radius: 8px;
+      color: var(--accent-strong);
+      background: var(--paper-strong);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .stage-main strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .stage-main p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .stage-cost {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .stage-cost span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .stage-cost strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 17px;
+    }
+
+    .comparison {
+      padding: 17px;
+    }
+
+    .foundation-panel {
+      padding: 17px;
+      border-color: rgba(200, 146, 45, 0.38);
+      background:
+        linear-gradient(120deg, rgba(200, 146, 45, 0.10), transparent 62%),
+        rgba(255, 253, 249, 0.96);
+    }
+
+    .foundation-callout {
+      margin-top: 13px;
+      padding: 13px;
+      border: 1px solid rgba(200, 146, 45, 0.32);
+      border-radius: 8px;
+      background: rgba(255, 248, 237, 0.82);
+    }
+
+    .foundation-callout span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .foundation-callout strong {
+      display: block;
+      margin-top: 5px;
+      color: var(--accent-strong);
+      font-size: 20px;
+    }
+
+    .foundation-callout p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .comparison-item {
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 250, 241, 0.6);
+    }
+
+    .comparison-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .comparison-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .method-note {
+      margin: 11px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .empty-state {
+      padding: 28px 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .footnote {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
+    .footnote a {
+      color: var(--accent-strong);
+      font-weight: 900;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .layout { grid-template-columns: 1fr; }
+      .results { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .shell { width: min(100% - 22px, 1240px); padding-top: 17px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .nav-link { width: 100%; }
+      .hero, .section, .verdict, .comparison { padding: 15px; }
+      .field-grid, .metric-grid { grid-template-columns: 1fr; }
+      .stage-card { grid-template-columns: 68px minmax(0, 1fr); padding: 14px; }
+      .stage-cost { grid-column: 2; text-align: left; }
+      .comparison-grid { grid-template-columns: 1fr; }
+      .button-row { grid-template-columns: 1fr; }
+      .ghost-button { min-height: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">+10</div>
+        <div>
+          <h1>精煉成本與鐵祝計算器</h1>
+          <p class="subtitle">RO仙境傳說Online：樂園｜SquareTsai</p>
+        </div>
+      </div>
+      <a class="nav-link" href="index.html">← 回工具首頁</a>
+    </header>
+
+    <section class="panel hero">
+      <div>
+        <div class="eyebrow">Refine planner</div>
+        <h2>每一階，算出鐵祝到底值不值得用。</h2>
+        <p>從 +0 裝備開始，先算入爆裝重買、普通礦石與手續費，得到 +7 自製期望成本；接著再比較 +7 至 +10 的四種精煉方式與成品市價。</p>
+      </div>
+      <aside class="hero-note">
+        <strong>期望值不是保證值</strong>
+        <span>低機率精煉可能連續失敗。除了平均成本，也請一起看「90% 預算」，再決定自己衝或直接買成品。</span>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <form class="inputs" id="calculatorForm" novalidate>
+        <section class="panel section">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">01 裝備目標</div>
+              <h2>要精煉哪一種裝備？</h2>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="wide">裝備種類
+              <select id="equipmentType">
+                <option value="armor">防具</option>
+                <option value="weapon1">一級武器</option>
+                <option value="weapon2">二級武器</option>
+                <option value="weapon3">三級武器</option>
+                <option value="weapon4">四級武器</option>
+              </select>
+            </label>
+            <label class="wide">目標精煉值
+              <select id="targetLevel">
+                <option value="7">+7</option>
+                <option value="8">+8</option>
+                <option value="9">+9</option>
+                <option value="10" selected>+10</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel section">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">02 材料價格</div>
+              <h2>每次點裝要花多少？</h2>
+              <p>高濃縮礦石會依 P 點幣值自動換算成 R幣。</p>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label>鐵祝單價
+              <span class="input-with-suffix"><input id="blessingPrice" type="number" min="0" step="any" value="2000000"><span class="suffix">R幣</span></span>
+            </label>
+            <label>普通礦石單價
+              <span class="input-with-suffix"><input id="normalOrePrice" type="number" min="0" step="any" value="50000"><span class="suffix">R幣</span></span>
+            </label>
+            <label>高濃縮礦石商城價
+              <span class="input-with-suffix"><input id="highOreCashPrice" type="number" min="0" step="any" value="10"><span class="suffix">P</span></span>
+            </label>
+            <label>1 P 換算
+              <span class="input-with-suffix"><input id="cashRate" type="number" min="0" step="any" value="100000"><span class="suffix">R幣</span></span>
+            </label>
+            <label class="wide">每次精煉手續費
+              <span class="input-with-suffix"><input id="refineFee" type="number" min="0" step="any" value="10000"><span class="suffix">R幣</span></span>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel section">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">03 裝備與成品市價</div>
+              <h2>從 +0 做一件要多少？</h2>
+              <p>只要輸入 +0 裝備價格即可自製；看到玩家出售 +7、+8、+9 或 +10 時再填市價，系統會把該階加入候選路線。</p>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="wide">+0 裝備市價
+              <span class="input-with-suffix"><input id="value0" type="number" min="0" step="any" value="1000000"><span class="suffix">R幣</span></span>
+              <span class="field-note">卡片、附魔或不可回收成本也應算進來。</span>
+            </label>
+            <label>+7 市場售價（選填）
+              <span class="input-with-suffix"><input id="value7" type="number" min="0" step="any" placeholder="沒看到人賣就留白"><span class="suffix">R幣</span></span>
+            </label>
+            <label>+8 市場售價（選填）
+              <span class="input-with-suffix"><input id="value8" type="number" min="0" step="any" placeholder="沒看到人賣就留白"><span class="suffix">R幣</span></span>
+            </label>
+            <label>+9 市場售價（選填）
+              <span class="input-with-suffix"><input id="value9" type="number" min="0" step="any" placeholder="目標 +9 時可直接比較"><span class="suffix">R幣</span></span>
+            </label>
+            <label>+10 市場售價（選填）
+              <span class="input-with-suffix"><input id="value10" type="number" min="0" step="any" placeholder="目標 +10 時可直接比較"><span class="suffix">R幣</span></span>
+            </label>
+          </div>
+
+          <div class="foundation-callout">
+            <span>依目前輸入自動推算</span>
+            <strong id="foundationPreview">+7 自製期望成本：計算中…</strong>
+            <p>這是長期平均成本，不是玩家市場售價；後續退階與爆裝損失會以此成本基礎繼續計算。</p>
+          </div>
+
+          <details>
+            <summary>進階：手動調整官方成功率</summary>
+            <div class="rates-grid" aria-label="各階成功率">
+              <span></span><span class="head">普通礦</span><span class="head">高濃縮</span>
+              <span class="stage-label">+0 → +1</span>
+              <label><span class="sr-only">+0 到 +1 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate0" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label><span class="head">—</span>
+              <span class="stage-label">+1 → +2</span>
+              <label><span class="sr-only">+1 到 +2 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate1" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label><span class="head">—</span>
+              <span class="stage-label">+2 → +3</span>
+              <label><span class="sr-only">+2 到 +3 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate2" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label><span class="head">—</span>
+              <span class="stage-label">+3 → +4</span>
+              <label><span class="sr-only">+3 到 +4 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate3" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label><span class="head">—</span>
+              <span class="stage-label">+4 → +5</span>
+              <label><span class="sr-only">+4 到 +5 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate4" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label><span class="head">—</span>
+              <span class="stage-label">+5 → +6</span>
+              <label><span class="sr-only">+5 到 +6 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate5" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label><span class="head">—</span>
+              <span class="stage-label">+6 → +7</span>
+              <label><span class="sr-only">+6 到 +7 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate6" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label><span class="head">—</span>
+              <span class="stage-label">+7 → +8</span>
+              <label><span class="sr-only">+7 到 +8 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate7" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label>
+              <label><span class="sr-only">+7 到 +8 高濃縮成功率</span><span class="input-with-suffix"><input id="highRate7" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label>
+              <span class="stage-label">+8 → +9</span>
+              <label><span class="sr-only">+8 到 +9 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate8" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label>
+              <label><span class="sr-only">+8 到 +9 高濃縮成功率</span><span class="input-with-suffix"><input id="highRate8" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label>
+              <span class="stage-label">+9 → +10</span>
+              <label><span class="sr-only">+9 到 +10 普通礦成功率</span><span class="input-with-suffix"><input id="normalRate9" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label>
+              <label><span class="sr-only">+9 到 +10 高濃縮成功率</span><span class="input-with-suffix"><input id="highRate9" type="number" min="0.1" max="100" step="any"><span class="suffix">%</span></span></label>
+            </div>
+          </details>
+        </section>
+
+        <div class="button-row">
+          <button class="primary-button" type="submit">重新計算最佳策略</button>
+          <button class="ghost-button" id="resetButton" type="button">還原示範值</button>
+        </div>
+      </form>
+
+      <section class="results" aria-live="polite">
+        <article class="panel foundation-panel">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">+0 → +7 成本基準</div>
+              <h3>先算出一件 +7 的真正期望成本</h3>
+            </div>
+          </div>
+          <div class="comparison-grid">
+            <div class="comparison-item"><span>+7 自製期望成本</span><strong id="foundationCost">—</strong></div>
+            <div class="comparison-item"><span>一次連過 +7 機率</span><strong id="foundationChance">—</strong></div>
+            <div class="comparison-item"><span>平均需要 +0 裝備</span><strong id="foundationItems">—</strong></div>
+          </div>
+        </article>
+
+        <article class="panel verdict" id="verdictCard" data-mode="refine">
+          <div class="verdict-label" id="verdictLabel">最低期望成本策略</div>
+          <h2 id="verdictTitle">正在計算…</h2>
+          <p id="verdictText">依目前材料與裝備市價比較自己精煉和直接購買成品。</p>
+          <div class="metric-grid">
+            <div class="metric"><span id="expectedCostLabel">最低方案｜平均總成本</span><strong id="expectedCost">—</strong></div>
+            <div class="metric"><span>最低方案｜90% 預算</span><strong id="p90Cost">—</strong></div>
+            <div class="metric"><span id="buyDifferenceLabel">第二便宜方案</span><strong id="buyDifference">—</strong></div>
+            <div class="metric"><span>最低方案省下</span><strong id="savings">—</strong></div>
+          </div>
+        </article>
+
+        <article class="panel strategy-panel">
+          <div class="strategy-head">
+            <div>
+              <div class="eyebrow">所有候選路線</div>
+              <h2>從哪一階開始最划算？</h2>
+            </div>
+          </div>
+          <div class="strategy-list" id="routeList"></div>
+        </article>
+
+        <article class="panel strategy-panel">
+          <div class="strategy-head">
+            <div>
+              <div class="eyebrow">逐階建議</div>
+              <h2>最省方案要怎麼點？</h2>
+            </div>
+          </div>
+          <div class="strategy-list" id="strategyList"></div>
+        </article>
+
+        <article class="panel comparison">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">資源與風險</div>
+              <h3>平均會消耗多少材料？</h3>
+            </div>
+          </div>
+          <div class="comparison-grid">
+            <div class="comparison-item"><span>平均礦石</span><strong id="expectedOre">—</strong></div>
+            <div class="comparison-item"><span>平均鐵祝</span><strong id="expectedBlessing">—</strong></div>
+            <div class="comparison-item"><span>平均失敗次數</span><strong id="expectedFailures">—</strong></div>
+          </div>
+          <p class="method-note" id="methodNote">90% 預算以固定亂數模擬多次完整精煉流程，包含失敗後的退階恢復或裝備重買成本。</p>
+        </article>
+      </section>
+    </div>
+
+    <p class="footnote">成功率預設依樂園官方精煉表；版本更新後仍請以遊戲內顯示為準。+0 至 +7 的普通礦失敗會以裝備消失並從 +0 重買重點估算；+7 之後則以系統算出的自製成本作為爆裝與退階恢復基礎。資料來源：<a href="https://roz.gnjoy.com.tw/Guide?news_catalog_id=2" target="_blank" rel="noreferrer">RO樂園官方精煉系統</a>。</p>
+  </main>
+
+  <script>
+    const RATE_PRESETS = {
+      armor:  { label: "防具",     low: [90, 90, 90, 80, 60, 40, 40], normal: [20, 20, 9],  high: [40, 40, 20] },
+      weapon1:{ label: "一級武器", low: [90, 90, 90, 90, 90, 80, 80], normal: [60, 40, 19], high: [90, 70, 30] },
+      weapon2:{ label: "二級武器", low: [90, 90, 90, 90, 90, 80, 60], normal: [40, 20, 19], high: [70, 40, 30] },
+      weapon3:{ label: "三級武器", low: [90, 90, 90, 90, 80, 60, 50], normal: [20, 20, 19], high: [40, 40, 30] },
+      weapon4:{ label: "四級武器", low: [90, 90, 90, 80, 60, 40, 40], normal: [20, 20, 9],  high: [40, 40, 20] }
+    };
+
+    const BLESSING_COUNT = { 7: 1, 8: 2, 9: 4 };
+    const STORAGE_KEY = "ro-refine-calculator-v3";
+    const form = document.getElementById("calculatorForm");
+    const equipmentType = document.getElementById("equipmentType");
+    const targetLevel = document.getElementById("targetLevel");
+    const lowRateIds = Array.from({ length: 7 }, (_, level) => `normalRate${level}`);
+    const rateIds = [...lowRateIds, "normalRate7", "normalRate8", "normalRate9", "highRate7", "highRate8", "highRate9"];
+    const savedInputIds = [
+      "equipmentType", "targetLevel", "blessingPrice", "normalOrePrice",
+      "highOreCashPrice", "cashRate", "refineFee", "value0", "value7", "value8", "value9", "value10",
+      ...rateIds
+    ];
+
+    function numberValue(id) {
+      const value = Number(document.getElementById(id).value);
+      return Number.isFinite(value) ? Math.max(0, value) : 0;
+    }
+
+    function rateValue(id) {
+      return Math.min(1, Math.max(0.001, numberValue(id) / 100));
+    }
+
+    function formatMoney(value) {
+      if (!Number.isFinite(value)) return "—";
+      const sign = value < 0 ? "−" : "";
+      const absolute = Math.abs(value);
+      if (absolute >= 100000000) return `${sign}${(absolute / 100000000).toFixed(2).replace(/\.00$/, "")} 億 R`;
+      if (absolute >= 10000) return `${sign}${(absolute / 10000).toFixed(1).replace(/\.0$/, "")} 萬 R`;
+      return `${sign}${Math.round(absolute).toLocaleString("zh-TW")} R`;
+    }
+
+    function formatCount(value, unit) {
+      if (!Number.isFinite(value)) return "—";
+      return `${value.toFixed(value >= 10 ? 1 : 2).replace(/\.00$/, "").replace(/\.0$/, "")} ${unit}`;
+    }
+
+    function applyPreset() {
+      const preset = RATE_PRESETS[equipmentType.value];
+      preset.low.forEach((rate, level) => {
+        document.getElementById(`normalRate${level}`).value = rate;
+      });
+      [7, 8, 9].forEach((level, index) => {
+        document.getElementById(`normalRate${level}`).value = preset.normal[index];
+        document.getElementById(`highRate${level}`).value = preset.high[index];
+      });
+    }
+
+    function readConfig() {
+      const marketValues = { 7: numberValue("value7"), 8: numberValue("value8"), 9: numberValue("value9"), 10: numberValue("value10") };
+      const lowRates = Array.from({ length: 7 }, (_, level) => rateValue(`normalRate${level}`));
+      const rates = {};
+      [7, 8, 9].forEach(level => {
+        rates[level] = { normal: rateValue(`normalRate${level}`), high: rateValue(`highRate${level}`) };
+      });
+      return {
+        type: equipmentType.value,
+        target: Number(targetLevel.value),
+        blessingPrice: numberValue("blessingPrice"),
+        normalOrePrice: numberValue("normalOrePrice"),
+        highOrePrice: numberValue("highOreCashPrice") * numberValue("cashRate"),
+        fee: numberValue("refineFee"),
+        value0: numberValue("value0"),
+        marketValues,
+        lowRates,
+        rates
+      };
+    }
+
+    function buildFoundation(config) {
+      const normalBase = config.normalOrePrice + config.fee;
+      const costByLevel = { 0: config.value0 };
+      const oreByLevel = { 0: 0 };
+      const itemsByLevel = { 0: 1 };
+      let streakChance = 1;
+
+      for (let level = 0; level < 7; level += 1) {
+        const p = config.lowRates[level];
+        costByLevel[level + 1] = (costByLevel[level] + normalBase) / p;
+        oreByLevel[level + 1] = (oreByLevel[level] + 1) / p;
+        itemsByLevel[level + 1] = itemsByLevel[level] / p;
+        streakChance *= p;
+      }
+
+      return {
+        costByLevel,
+        oreByLevel,
+        itemsByLevel,
+        streakChance,
+        expectedCost: costByLevel[7],
+        expectedOre: oreByLevel[7],
+        expectedItems: itemsByLevel[7],
+        expectedFailures: itemsByLevel[7] - 1
+      };
+    }
+
+    function stageOptions(config, level, currentBasis, recoveryBasis) {
+      const normalP = config.rates[level].normal;
+      const highP = config.rates[level].high;
+      const blessingCount = BLESSING_COUNT[level];
+      const currentValue = currentBasis.cost;
+      const recoveryCost = recoveryBasis.cost;
+      const normalBase = config.normalOrePrice + config.fee;
+      const highBase = config.highOrePrice + config.fee;
+
+      return [
+        {
+          key: "highIron",
+          name: "高濃縮礦石＋鐵祝",
+          short: "高濃縮＋鐵祝",
+          p: highP,
+          ore: "高濃縮",
+          usesIron: true,
+          ironPerTry: blessingCount,
+          attemptCost: highBase + blessingCount * config.blessingPrice,
+          failureCost: 0,
+          expected: (highBase + blessingCount * config.blessingPrice) / highP,
+          expectedOre: 1 / highP,
+          expectedIron: blessingCount / highP,
+          expectedFailures: (1 - highP) / highP
+        },
+        {
+          key: "highNoIron",
+          name: "高濃縮礦石，不用鐵祝",
+          short: "高濃縮、不用鐵祝",
+          p: highP,
+          ore: "高濃縮",
+          usesIron: false,
+          ironPerTry: 0,
+          attemptCost: highBase,
+          failureCost: recoveryCost,
+          expected: (highBase + (1 - highP) * recoveryCost) / highP,
+          expectedOre: (1 + (1 - highP) * recoveryBasis.ore) / highP,
+          expectedIron: ((1 - highP) * recoveryBasis.iron) / highP,
+          expectedFailures: ((1 - highP) * (1 + recoveryBasis.failures)) / highP
+        },
+        {
+          key: "normalIron",
+          name: "普通礦石＋鐵祝",
+          short: "普通礦＋鐵祝",
+          p: normalP,
+          ore: "普通",
+          usesIron: true,
+          ironPerTry: blessingCount,
+          attemptCost: normalBase + blessingCount * config.blessingPrice,
+          failureCost: 0,
+          expected: (normalBase + blessingCount * config.blessingPrice) / normalP,
+          expectedOre: 1 / normalP,
+          expectedIron: blessingCount / normalP,
+          expectedFailures: (1 - normalP) / normalP
+        },
+        {
+          key: "normalNoIron",
+          name: "普通礦石，不用鐵祝",
+          short: "普通礦、不用鐵祝",
+          p: normalP,
+          ore: "普通",
+          usesIron: false,
+          ironPerTry: 0,
+          attemptCost: normalBase,
+          failureCost: currentValue,
+          expected: (normalBase + (1 - normalP) * currentValue) / normalP,
+          expectedOre: (1 + (1 - normalP) * currentBasis.ore) / normalP,
+          expectedIron: ((1 - normalP) * currentBasis.iron) / normalP,
+          expectedFailures: ((1 - normalP) * (1 + currentBasis.failures)) / normalP
+        }
+      ].sort((a, b) => a.expected - b.expected);
+    }
+
+    function buildSelfRoute(config, foundation) {
+      const stages = [];
+      const costBasis = { ...foundation.costByLevel };
+      const oreBasis = { ...foundation.oreByLevel };
+      const ironBasis = {};
+      const failureBasis = {};
+      for (let level = 0; level <= 7; level += 1) {
+        ironBasis[level] = 0;
+        failureBasis[level] = foundation.itemsByLevel[level] - 1;
+      }
+      for (let level = 7; level < config.target; level += 1) {
+        const currentBasis = { cost: costBasis[level], ore: oreBasis[level], iron: ironBasis[level], failures: failureBasis[level] };
+        const recoveryBasis = {
+          cost: Math.max(0, costBasis[level] - costBasis[level - 1]),
+          ore: Math.max(0, oreBasis[level] - oreBasis[level - 1]),
+          iron: Math.max(0, ironBasis[level] - ironBasis[level - 1]),
+          failures: Math.max(0, failureBasis[level] - failureBasis[level - 1])
+        };
+        const options = stageOptions(config, level, currentBasis, recoveryBasis);
+        const best = options[0];
+        const highP = config.rates[level].high;
+        const ironBreakEven = ((1 - highP) * recoveryBasis.cost) / BLESSING_COUNT[level];
+        costBasis[level + 1] = costBasis[level] + best.expected;
+        oreBasis[level + 1] = oreBasis[level] + best.expectedOre;
+        ironBasis[level + 1] = ironBasis[level] + best.expectedIron;
+        failureBasis[level + 1] = failureBasis[level] + best.expectedFailures;
+        stages.push({ level, options, best, ironBreakEven });
+      }
+      return {
+        key: "self0",
+        start: 0,
+        title: `從 +0 自己精煉到 +${config.target}`,
+        detail: "包含爆裝重買 +0 與後續逐階最低成本策略",
+        purchasePrice: 0,
+        includesFoundation: true,
+        stages,
+        expected: costBasis[config.target],
+        expectedOre: oreBasis[config.target],
+        expectedIron: ironBasis[config.target],
+        expectedFailures: failureBasis[config.target],
+        costBasis,
+        oreBasis,
+        ironBasis,
+        failureBasis
+      };
+    }
+
+    function basisDifference(route, level) {
+      return {
+        cost: Math.max(0, route.costBasis[level] - route.costBasis[level - 1]),
+        ore: Math.max(0, route.oreBasis[level] - route.oreBasis[level - 1]),
+        iron: Math.max(0, route.ironBasis[level] - route.ironBasis[level - 1]),
+        failures: Math.max(0, route.failureBasis[level] - route.failureBasis[level - 1])
+      };
+    }
+
+    function buildMarketRoute(config, referenceRoute, start, price) {
+      const stages = [];
+      let currentBasis = { cost: price, ore: 0, iron: 0, failures: 0 };
+      let recoveryBasis = basisDifference(referenceRoute, start);
+
+      for (let level = start; level < config.target; level += 1) {
+        const options = stageOptions(config, level, currentBasis, recoveryBasis);
+        const best = options[0];
+        const highP = config.rates[level].high;
+        const ironBreakEven = ((1 - highP) * recoveryBasis.cost) / BLESSING_COUNT[level];
+        stages.push({ level, options, best, ironBreakEven });
+        currentBasis = {
+          cost: currentBasis.cost + best.expected,
+          ore: currentBasis.ore + best.expectedOre,
+          iron: currentBasis.iron + best.expectedIron,
+          failures: currentBasis.failures + best.expectedFailures
+        };
+        recoveryBasis = {
+          cost: best.expected,
+          ore: best.expectedOre,
+          iron: best.expectedIron,
+          failures: best.expectedFailures
+        };
+      }
+
+      const direct = start === config.target;
+      return {
+        key: `market${start}`,
+        start,
+        title: direct ? `直接購買 +${start} 成品` : `購買 +${start}，再精煉到 +${config.target}`,
+        detail: direct ? "不承擔精煉失敗風險" : `先支付 +${start} 市價，再逐階採用最低期望成本策略`,
+        purchasePrice: price,
+        includesFoundation: false,
+        stages,
+        expected: currentBasis.cost,
+        expectedOre: currentBasis.ore,
+        expectedIron: currentBasis.iron,
+        expectedFailures: currentBasis.failures
+      };
+    }
+
+    function seededRandom(seed = 20260731) {
+      let state = seed >>> 0;
+      return () => {
+        state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+        return state / 4294967296;
+      };
+    }
+
+    function simulateRoute(config, route, runs = 30000) {
+      const random = seededRandom();
+      const costs = new Float64Array(runs);
+      const normalBase = config.normalOrePrice + config.fee;
+      for (let run = 0; run < runs; run += 1) {
+        let total = route.purchasePrice;
+        if (route.includesFoundation) {
+          let reachedSeven = false;
+          while (!reachedSeven) {
+            total += config.value0;
+            reachedSeven = true;
+            for (let level = 0; level < 7; level += 1) {
+              total += normalBase;
+              if (random() >= config.lowRates[level]) {
+                reachedSeven = false;
+                break;
+              }
+            }
+          }
+        }
+        for (const stage of route.stages) {
+          const option = stage.best;
+          let attempts = 0;
+          while (attempts < 500) {
+            attempts += 1;
+            total += option.attemptCost;
+            if (random() < option.p) break;
+            total += option.failureCost;
+          }
+        }
+        costs[run] = total;
+      }
+      const sorted = Array.from(costs).sort((a, b) => a - b);
+      const percentile = p => sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * p) - 1)];
+      return { median: percentile(0.5), p90: percentile(0.9), p95: percentile(0.95) };
+    }
+
+    function saveState() {
+      const state = {};
+      savedInputIds.forEach(id => { state[id] = document.getElementById(id).value; });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try {
+        const state = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!state) return false;
+        savedInputIds.forEach(id => {
+          if (state[id] !== undefined) document.getElementById(id).value = state[id];
+        });
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function render() {
+      const config = readConfig();
+      const foundation = buildFoundation(config);
+      const selfRoute = buildSelfRoute(config, foundation);
+      const routes = [selfRoute];
+
+      for (let level = 7; level <= config.target; level += 1) {
+        const price = config.marketValues[level];
+        if (price > 0) routes.push(buildMarketRoute(config, selfRoute, level, price));
+      }
+      routes.sort((a, b) => a.expected - b.expected);
+
+      const bestRoute = routes[0];
+      const secondRoute = routes[1] || null;
+      const savings = secondRoute ? secondRoute.expected - bestRoute.expected : 0;
+      const simulation = simulateRoute(config, bestRoute);
+      const typeLabel = RATE_PRESETS[config.type].label;
+
+      document.getElementById("foundationPreview").textContent = `+7 自製期望成本：${formatMoney(foundation.expectedCost)}`;
+      document.getElementById("foundationCost").textContent = formatMoney(foundation.expectedCost);
+      document.getElementById("foundationChance").textContent = `${(foundation.streakChance * 100).toFixed(2)}%`;
+      document.getElementById("foundationItems").textContent = formatCount(foundation.expectedItems, "件");
+
+      const verdictCard = document.getElementById("verdictCard");
+      verdictCard.dataset.mode = bestRoute.start === config.target ? "buy" : "refine";
+      document.getElementById("verdictLabel").textContent = "最終結論｜最低期望成本";
+      document.getElementById("verdictTitle").textContent = bestRoute.title;
+      document.getElementById("verdictText").textContent = secondRoute
+        ? `${typeLabel}目標 +${config.target}，這條路線的期望總成本最低，預估比「${secondRoute.title}」少花 ${formatMoney(savings)}。`
+        : `${typeLabel}目標 +${config.target}，目前只有從 +0 自製這條有效路線；填入市場售價後會自動加入比較。`;
+      document.getElementById("expectedCostLabel").textContent = "最低方案｜平均總成本";
+      document.getElementById("buyDifferenceLabel").textContent = "第二便宜方案";
+      document.getElementById("expectedCost").textContent = formatMoney(bestRoute.expected);
+      document.getElementById("p90Cost").textContent = formatMoney(simulation.p90);
+      document.getElementById("buyDifference").textContent = secondRoute ? formatMoney(secondRoute.expected) : "尚無其他路線";
+      document.getElementById("savings").textContent = secondRoute ? formatMoney(savings) : "—";
+      document.getElementById("expectedOre").textContent = formatCount(bestRoute.expectedOre, "顆");
+      document.getElementById("expectedBlessing").textContent = formatCount(bestRoute.expectedIron, "顆");
+      document.getElementById("expectedFailures").textContent = formatCount(bestRoute.expectedFailures, "次");
+
+      document.getElementById("routeList").innerHTML = routes.map((route, index) => `
+        <div class="stage-card">
+          <div class="stage-badge">${route.start === 0 ? "+0" : `+${route.start}`}</div>
+          <div class="stage-main">
+            <strong>${index === 0 ? "最低｜" : ""}${route.title}</strong>
+            <p>${route.detail}${index > 0 ? `・比最低方案多 ${formatMoney(route.expected - bestRoute.expected)}` : ""}</p>
+          </div>
+          <div class="stage-cost"><span>期望總成本</span><strong>${formatMoney(route.expected)}</strong></div>
+        </div>`).join("");
+
+      const acquisitionStrategy = bestRoute.includesFoundation ? `
+        <div class="stage-card">
+          <div class="stage-badge">+0 → +7</div>
+          <div class="stage-main">
+            <strong>普通礦石逐階精煉，爆裝後重買 +0</strong>
+            <p>一次連過機率 ${(foundation.streakChance * 100).toFixed(2)}%・平均 ${formatCount(foundation.expectedItems, "件 +0 裝備")}・平均 ${formatCount(foundation.expectedOre, "顆礦石")}</p>
+          </div>
+          <div class="stage-cost"><span>取得 +7 期望成本</span><strong>${formatMoney(foundation.expectedCost)}</strong></div>
+        </div>` : `
+        <div class="stage-card">
+          <div class="stage-badge">購買 +${bestRoute.start}</div>
+          <div class="stage-main">
+            <strong>先從市場購入 +${bestRoute.start} 裝備</strong>
+            <p>${bestRoute.start === config.target ? "買到即完成，不再承擔精煉風險" : "以填入的市場售價作為這條路線起始成本"}</p>
+          </div>
+          <div class="stage-cost"><span>購入價格</span><strong>${formatMoney(bestRoute.purchasePrice)}</strong></div>
+        </div>`;
+
+      const upperStrategies = bestRoute.stages.map(stage => {
+        const option = stage.best;
+        const success = `${(option.p * 100).toFixed(1).replace(/\.0$/, "")}%`;
+        const failureResult = option.usesIron ? "失敗維持精煉值" : option.ore === "高濃縮" ? "失敗退一階" : "失敗裝備消失";
+        const thresholdText = stage.ironBreakEven > 0 ? `・鐵祝臨界價約 ${formatMoney(stage.ironBreakEven)}／顆` : "";
+        const ironText = option.usesIron ? `每次 ${option.ironPerTry} 顆鐵祝` : "不消耗鐵祝";
+        return `
+          <div class="stage-card">
+            <div class="stage-badge">+${stage.level} → +${stage.level + 1}</div>
+            <div class="stage-main">
+              <strong>${option.name}</strong>
+              <p>成功率 ${success}・${failureResult}・${ironText}${thresholdText}</p>
+            </div>
+            <div class="stage-cost"><span>本階期望成本</span><strong>${formatMoney(option.expected)}</strong></div>
+          </div>`;
+      }).join("");
+      document.getElementById("strategyList").innerHTML = acquisitionStrategy + upperStrategies;
+
+      document.getElementById("methodNote").textContent = `最終結論已比較 ${routes.length} 條有效路線。最低方案的 90% 預算來自 30,000 次固定樣本模擬；中位數 ${formatMoney(simulation.median)}、95% 預算 ${formatMoney(simulation.p95)}。`;
+      saveState();
+    }
+
+    equipmentType.addEventListener("change", () => { applyPreset(); render(); });
+    targetLevel.addEventListener("change", render);
+    form.addEventListener("submit", event => { event.preventDefault(); render(); });
+    form.addEventListener("input", event => {
+      if (event.target.matches("input")) window.clearTimeout(form.renderTimer);
+      form.renderTimer = window.setTimeout(render, 180);
+    });
+    document.getElementById("resetButton").addEventListener("click", () => {
+      localStorage.removeItem(STORAGE_KEY);
+      form.reset();
+      applyPreset();
+      render();
+    });
+
+    if (!loadState()) applyPreset();
+    render();
+  </script>
+</body>
+</html>

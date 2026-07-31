@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園波利村副本攻略、今日果凍碎片、每週掉落與副本裝備升級用途。">
+  <title>RO樂園 波利村完整攻略</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #262334;
+      --muted: #696677;
+      --paper: #fffefb;
+      --soft: #f5f7f1;
+      --line: #dfe2d8;
+      --pink: #d94678;
+      --pink-dark: #a92356;
+      --green: #3f7b4d;
+      --blue: #31769a;
+      --gold: #b87a18;
+      --purple: #7250a8;
+      --danger: #a5282d;
+      --radius: 8px;
+      --shadow: 0 14px 36px rgba(48, 38, 58, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .sitebar {
+      position: absolute;
+      inset: 0 0 auto;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0;
+      color: #fff;
+    }
+
+    .site-name {
+      font-size: 14px;
+      font-weight: 900;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: var(--radius);
+      background: rgba(38, 35, 52, 0.6);
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      align-items: end;
+      min-height: clamp(350px, 54vw, 560px);
+      isolation: isolate;
+      background: url("assets/poring-village/hero.jpg") center / cover no-repeat;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(29, 25, 41, 0.48);
+    }
+
+    .hero-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 108px 0 46px;
+      color: #fff;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pink-dark);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .hero .eyebrow {
+      color: #fff4a3;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(42px, 8vw, 82px);
+      line-height: 1;
+      letter-spacing: 0;
+      text-shadow: 0 3px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 16px 0 0;
+      font-size: clamp(15px, 2vw, 19px);
+      line-height: 1.7;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+    }
+
+    .facts-band {
+      border-bottom: 1px solid var(--line);
+      background: #f3f6ed;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .fact {
+      min-width: 0;
+      padding: 18px 20px;
+      border-left: 1px solid var(--line);
+    }
+
+    .fact:last-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .fact span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .fact strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 254, 251, 0.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .quick-nav-inner {
+      display: flex;
+      gap: 8px;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 10px 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .quick-nav a {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #4d4959;
+      background: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .content {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .section {
+      scroll-margin-top: 74px;
+      padding: 58px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section:last-child {
+      border-bottom: 0;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      max-width: 540px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .today-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: 16px;
+    }
+
+    .today-card {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 22px;
+      min-height: 220px;
+      padding: 26px;
+      border: 1px solid rgba(217, 70, 120, 0.28);
+      border-radius: var(--radius);
+      background: #fff5f8;
+      box-shadow: var(--shadow);
+    }
+
+    .gem {
+      position: relative;
+      width: 92px;
+      height: 112px;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 12px 16px rgba(70, 44, 79, 0.18));
+    }
+
+    .gem::before,
+    .gem::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .gem::before {
+      top: 10px;
+      width: 70px;
+      height: 82px;
+      border: 4px solid rgba(255, 255, 255, 0.66);
+      border-radius: 44% 56% 50% 50% / 40% 42% 58% 60%;
+      background: var(--gem, var(--pink));
+      transform: translateX(-50%) rotate(12deg);
+    }
+
+    .gem::after {
+      top: 28px;
+      width: 20px;
+      height: 34px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.58);
+      transform: translateX(-50%) rotate(30deg);
+    }
+
+    .gem.red { --gem: #e83c78; }
+    .gem.green { --gem: #69a934; }
+    .gem.orange { --gem: #ec8d20; }
+    .gem.purple { --gem: #7a4ab5; }
+    .gem.gold { --gem: #b88923; }
+    .gem.box::before {
+      border-radius: var(--radius);
+      background: #7bbbd5;
+      transform: translateX(-50%) rotate(-6deg);
+    }
+
+    .today-date {
+      color: var(--pink-dark);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .today-card h3 {
+      margin: 6px 0 8px;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .today-card p {
+      margin: 0;
+      color: #5f5968;
+      line-height: 1.7;
+    }
+
+    .process-card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f4f8ef;
+    }
+
+    .process-card h3 {
+      margin: 0;
+      font-size: 21px;
+      letter-spacing: 0;
+    }
+
+    .process-card ol {
+      margin: 16px 0 0;
+      padding-left: 22px;
+      color: #555264;
+      line-height: 1.85;
+    }
+
+    .process-card strong {
+      color: var(--green);
+    }
+
+    .week-wrap {
+      margin-top: 18px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .week-table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .week-table th {
+      padding: 11px 8px;
+      border-right: 1px solid var(--line);
+      background: #eaf1df;
+      color: #4f5d43;
+      font-size: 13px;
+    }
+
+    .week-table th:last-child,
+    .week-table td:last-child {
+      border-right: 0;
+    }
+
+    .week-table td {
+      padding: 0;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      vertical-align: stretch;
+    }
+
+    .day-button {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px 8px;
+      border: 0;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .day-button:hover,
+    .day-button:focus-visible {
+      background: #fff6e8;
+      outline: 2px solid var(--gold);
+      outline-offset: -2px;
+    }
+
+    .day-button[aria-pressed="true"] {
+      background: #fff0f5;
+      box-shadow: inset 0 -4px var(--pink);
+    }
+
+    .day-button strong,
+    .day-button span {
+      display: block;
+    }
+
+    .day-button strong {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .day-button span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .dot {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      background: var(--dot, #7bbbd5);
+      box-shadow: 0 0 0 1px rgba(43, 39, 51, 0.14), 0 7px 12px rgba(43, 39, 51, 0.12);
+    }
+
+    .dot.red { --dot: #e83c78; }
+    .dot.green { --dot: #69a934; }
+    .dot.orange { --dot: #ec8d20; }
+    .dot.purple { --dot: #7a4ab5; }
+    .dot.gold { --dot: #b88923; }
+    .dot.box {
+      border-radius: 4px;
+      --dot: #7bbbd5;
+    }
+
+    .official-table {
+      margin: 14px 0 0;
+    }
+
+    .acquisition-flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 22px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #f8faf6;
+    }
+
+    .acquisition-step {
+      position: relative;
+      min-width: 0;
+      padding: 18px 26px 18px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .acquisition-step:last-child {
+      border-right: 0;
+    }
+
+    .acquisition-step:not(:last-child)::after {
+      content: "›";
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      color: var(--pink-dark);
+      font-size: 24px;
+      font-weight: 900;
+      transform: translateY(-50%);
+    }
+
+    .acquisition-step span,
+    .acquisition-step strong {
+      display: block;
+    }
+
+    .acquisition-step span {
+      color: var(--pink-dark);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .acquisition-step strong {
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .acquisition-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    summary {
+      padding: 13px 15px;
+      color: #4f4b5a;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    details img {
+      width: 100%;
+      padding: 0 14px 14px;
+      object-fit: contain;
+    }
+
+    .stone-browser {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .stone-tabs {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .stone-tab {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .stone-tab:hover,
+    .stone-tab:focus-visible {
+      border-color: var(--pink);
+      outline: none;
+    }
+
+    .stone-tab[aria-pressed="true"] {
+      border-color: var(--pink);
+      background: #fff1f5;
+      box-shadow: inset 4px 0 var(--pink);
+    }
+
+    .stone-swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--swatch, #888);
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.52);
+    }
+
+    .stone-detail {
+      min-width: 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8faf6;
+    }
+
+    .stone-detail-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .stone-detail h3 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      letter-spacing: 0;
+    }
+
+    .recipe {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .count-badge {
+      flex: 0 0 auto;
+      padding: 7px 9px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .equipment-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .equipment-item {
+      min-width: 0;
+      padding: 13px;
+      border-left: 4px solid var(--blue);
+      background: #fff;
+    }
+
+    .equipment-item strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .equipment-item span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .upgrade-note {
+      margin: 16px 0 0;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .route-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .map-frame {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #111;
+      box-shadow: var(--shadow);
+    }
+
+    .map-frame img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      image-rendering: auto;
+    }
+
+    .caption {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .route-steps {
+      display: grid;
+      gap: 0;
+      counter-reset: route;
+    }
+
+    .route-step {
+      position: relative;
+      padding: 0 0 26px 58px;
+      counter-increment: route;
+    }
+
+    .route-step:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 19px;
+      top: 40px;
+      bottom: 0;
+      width: 2px;
+      background: #cfd8c7;
+    }
+
+    .route-step::after {
+      content: counter(route);
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--pink-dark);
+      font-weight: 900;
+    }
+
+    .route-step h3 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+
+    .route-step p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .warning {
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-left: 5px solid var(--danger);
+      background: #fff2f1;
+      color: #65272a;
+      line-height: 1.7;
+    }
+
+    .carry-box {
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid rgba(63, 123, 77, 0.35);
+      border-radius: var(--radius);
+      background: #f0f8ef;
+    }
+
+    .carry-box h3 {
+      margin: 0;
+      color: #285f36;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .carry-box p {
+      margin: 9px 0 0;
+      color: #4c6352;
+      line-height: 1.75;
+    }
+
+    .carry-rules {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .carry-rule {
+      min-width: 0;
+      padding: 11px;
+      border-left: 3px solid var(--green);
+      background: #fff;
+    }
+
+    .carry-rule span,
+    .carry-rule strong {
+      display: block;
+    }
+
+    .carry-rule span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .carry-rule strong {
+      margin-top: 4px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .reward-card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .reward-card:nth-child(1) { border-top: 5px solid var(--blue); }
+    .reward-card:nth-child(2) { border-top: 5px solid var(--green); }
+    .reward-card:nth-child(3) { border-top: 5px solid var(--purple); }
+    .reward-card:nth-child(4) { border-top: 5px solid var(--gold); }
+
+    .reward-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .reward-card ul {
+      margin: 0;
+      padding-left: 19px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .enchant-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .info-block {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f7f5fb;
+    }
+
+    .info-block h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .info-block p,
+    .info-block li {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .info-block p {
+      margin: 0;
+    }
+
+    .info-block ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .source-link {
+      display: block;
+      min-width: 0;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      text-decoration: none;
+    }
+
+    .source-link:hover,
+    .source-link:focus-visible {
+      border-color: var(--pink);
+      outline: none;
+    }
+
+    .source-link span,
+    .source-link strong {
+      display: block;
+    }
+
+    .source-link span {
+      color: var(--pink-dark);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .source-link strong {
+      margin-top: 5px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .footer {
+      padding: 26px 16px 36px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: #f3f6ed;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 920px) {
+      .facts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .fact:nth-child(2) {
+        border-right: 1px solid var(--line);
+      }
+
+      .fact:nth-child(n + 3) {
+        border-top: 1px solid var(--line);
+      }
+
+      .today-layout,
+      .route-layout,
+      .enchant-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .stone-browser {
+        grid-template-columns: 1fr;
+      }
+
+      .stone-tabs {
+        grid-template-columns: repeat(5, minmax(150px, 1fr));
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+
+      .reward-grid,
+      .source-grid,
+      .carry-rules {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .acquisition-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .acquisition-step {
+        padding-right: 16px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .acquisition-step:last-child {
+        border-bottom: 0;
+      }
+
+      .acquisition-step:not(:last-child)::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .sitebar,
+      .hero-inner,
+      .content,
+      .quick-nav-inner,
+      .facts {
+        width: min(100% - 22px, 1180px);
+      }
+
+      .hero {
+        min-height: 430px;
+        background-position: 51% center;
+      }
+
+      .hero-inner {
+        padding-bottom: 28px;
+      }
+
+      .hero-copy {
+        max-width: 90%;
+        font-size: 15px;
+      }
+
+      .facts {
+        grid-template-columns: 1fr;
+        padding: 10px 0;
+      }
+
+      .fact,
+      .fact:last-child,
+      .fact:nth-child(2) {
+        padding: 12px 4px;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .fact:last-child {
+        border-bottom: 0;
+      }
+
+      .section {
+        padding: 42px 0;
+      }
+
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .today-card {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+
+      .gem {
+        width: 72px;
+        height: 88px;
+      }
+
+      .gem::before {
+        width: 56px;
+        height: 66px;
+      }
+
+      .gem::after {
+        top: 23px;
+        width: 16px;
+        height: 26px;
+      }
+
+      .equipment-list,
+      .reward-grid,
+      .source-grid,
+      .carry-rules {
+        grid-template-columns: 1fr;
+      }
+
+      .stone-detail,
+      .process-card,
+      .info-block {
+        padding: 18px;
+      }
+
+      .stone-detail-head {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="sitebar">
+    <div class="site-name">RO樂園 SquareTsai 攻略</div>
+    <a class="home-link" href="index.html">回首頁</a>
+  </header>
+
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-inner">
+      <p class="eyebrow">MEMORIAL DUNGEON GUIDE</p>
+      <h1 id="page-title">波利村</h1>
+      <p class="hero-copy">今天該刷哪種果凍碎片、做成什麼果凍石，以及能升級哪些副本裝備，全部放在同一頁查清楚。</p>
+    </div>
+  </section>
+
+  <section class="facts-band" aria-label="波利村快速資訊">
+    <div class="facts">
+      <div class="fact"><span>樂園官方入場限制</span><strong>Base Lv.30 以上</strong></div>
+      <div class="fact"><span>入口 NPC</span><strong>艾蜜莉</strong></div>
+      <div class="fact"><span>入口座標</span><strong>prt_fild05 145, 235</strong></div>
+      <div class="fact"><span>主要用途</span><strong>果凍石與副本裝備升級</strong></div>
+    </div>
+  </section>
+
+  <nav class="quick-nav" aria-label="頁面目錄">
+    <div class="quick-nav-inner">
+      <a href="#today">今日掉落</a>
+      <a href="#upgrade">升級用途</a>
+      <a href="#route">通關流程</a>
+      <a href="#rewards">寶箱獎勵</a>
+      <a href="#enchant">加工與附魔</a>
+      <a href="#sources">資料來源</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <section class="section" id="today">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">TODAY'S DROP</p>
+          <h2>今天會拿到什麼？</h2>
+        </div>
+        <p>依瀏覽器目前日期自動選取；也可以直接點下方一週表格，預先安排要刷的碎片。</p>
+      </div>
+
+      <div class="today-layout">
+        <article class="today-card" aria-live="polite">
+          <div class="gem red" id="todayGem" aria-hidden="true"></div>
+          <div>
+            <div class="today-date" id="todayDate">讀取日期中</div>
+            <h3 id="todayDrop">讀取今日掉落中</h3>
+            <p id="todayResult">完成波利村後可必定取得 1 個對應果凍碎片。</p>
+          </div>
+        </article>
+
+        <aside class="process-card">
+          <h3>碎片加工</h3>
+          <ol>
+            <li>收集同名果凍碎片 <strong>5 個</strong>。</li>
+            <li>前往記憶匠人的工房找石頭加工師。</li>
+            <li>等待約 <strong>3 天</strong>完成果凍石。</li>
+            <li>可用 <strong>5 個傑斯塔</strong>立即完成。</li>
+          </ol>
+        </aside>
+      </div>
+
+      <div class="week-wrap" aria-label="每週掉落查詢表">
+        <table class="week-table">
+          <thead>
+            <tr>
+              <th scope="col">週一</th>
+              <th scope="col">週二</th>
+              <th scope="col">週三</th>
+              <th scope="col">週四</th>
+              <th scope="col">週五</th>
+              <th scope="col">週六</th>
+              <th scope="col">週日</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="weekButtons"></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <details class="official-table">
+        <summary>查看樂園官方星期掉落原表</summary>
+        <img src="assets/poring-village/official-weekly-table.png" alt="樂園官方波利村星期掉落表：週一波利、週二波波利、週三土波利、週四惡魔波利、週五天使波利，週末為果凍碎片箱子">
+      </details>
+
+      <div class="acquisition-flow" aria-label="果凍碎片取得流程">
+        <div class="acquisition-step"><span>STEP 1</span><strong>擊敗最後的大波利</strong></div>
+        <div class="acquisition-step"><span>STEP 2</span><strong>全部隊員離開副本</strong></div>
+        <div class="acquisition-step"><span>STEP 3</span><strong>隊長關閉副本</strong></div>
+        <div class="acquisition-step"><span>STEP 4</span><strong>每個角色點外面的寶箱 NPC</strong></div>
+        <div class="acquisition-step"><span>STEP 5</span><strong>領取當日碎片與寶箱獎勵</strong></div>
+      </div>
+      <p class="acquisition-note"><strong>不是直接拿果凍石：</strong>週一至週五每個角色取得當日指定果凍碎片 1 個；週六、週日取得的是「果凍碎片箱子」，開啟後為隨機種類碎片。碎片湊滿同名 5 個後，才交給石頭加工師製作成果凍石。玩家實測為每角色每天可領一次寶箱。</p>
+    </section>
+
+    <section class="section" id="upgrade">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">STONE TO EQUIPMENT</p>
+          <h2>果凍石能升級什麼？</h2>
+        </div>
+        <p>點選果凍石即可反查裝備與需求數量。此處列出目前網站已有的 Lv.70 遠征隊及 Lv.80 殲滅隊直接材料。</p>
+      </div>
+
+      <div class="stone-browser">
+        <div class="stone-tabs" id="stoneTabs" aria-label="選擇果凍石"></div>
+        <section class="stone-detail" aria-live="polite">
+          <div class="stone-detail-head">
+            <div>
+              <h3 id="stoneTitle">紅蓮的果凍石</h3>
+              <p class="recipe" id="stoneRecipe">波利果凍碎片 5 個，加工約 3 天。</p>
+            </div>
+            <span class="count-badge" id="equipmentCount">0 件裝備</span>
+          </div>
+          <div class="equipment-list" id="equipmentList"></div>
+          <p class="upgrade-note">裝備還需要原本的征伐隊／遠征隊基底，以及對應副本結晶體。點裝備材料總表可以查看完整組合。</p>
+        </section>
+      </div>
+
+      <details class="official-table">
+        <summary>查看官方 Lv.70 遠征隊升級清單原圖</summary>
+        <img src="assets/poring-village/official-upgrade-list.png" alt="樂園官方遠征隊裝備升級材料清單">
+      </details>
+    </section>
+
+    <section class="section" id="route">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">RUN GUIDE</p>
+          <h2>入場與通關順序</h2>
+        </div>
+        <p>官方確認入口；副本內流程依樂園玩家實測整理，實際怪物與對話仍以遊戲內版本為準。</p>
+      </div>
+
+      <div class="route-layout">
+        <div>
+          <figure class="map-frame">
+            <img src="assets/poring-village/entrance-map.png" alt="波利村入口位於普隆德拉西方原野 prt_fild05 的地圖位置">
+          </figure>
+          <p class="caption">入口：艾蜜莉，prt_fild05 145, 235。圖片來源為樂園官方波利村公告。</p>
+        </div>
+
+        <div>
+          <div class="route-steps">
+            <article class="route-step">
+              <h3>組隊後找艾蜜莉建立副本</h3>
+              <p>隊伍中的每個角色都至少需要 Base Lv.30。樂園官方公告未標示上限；不要套用其他伺服器的 Lv.40～99 設定。</p>
+            </article>
+            <article class="route-step">
+              <h3>前兩區清掉兩波小怪與小王</h3>
+              <p>場地不大，核心是依序清怪並等待下一波。低等角色建議攜帶補品，有範圍技能會更快。</p>
+            </article>
+            <article class="route-step">
+              <h3>最後區擊敗大波利</h3>
+              <p>最後首領血量明顯較高，多人隊伍能縮短時間；通關後依正常出口離開。</p>
+            </article>
+            <article class="route-step">
+              <h3>全員離場，再由隊長關閉副本</h3>
+              <p>玩家實測指出，外面的寶箱要等所有人離開且隊長關閉副本後才能正常領取。</p>
+            </article>
+          </div>
+          <div class="warning"><strong>容易卡住的地方：</strong>隊員離場後不要再次進入副本。若有人重返，其他人可能需要等待該角色再次離開，才能完成關閉與領箱。</div>
+        </div>
+      </div>
+
+      <aside class="carry-box">
+        <h3>可以高等角色帶兩個低等帳號嗎？可以。</h3>
+        <p>2026 年樂園玩家整理明確記載，波利村可由一個大號帶其他小號完成，而且材料是每個角色各自取得，不是全隊只分到一份。三個不同帳號同時登入、組在同一隊即可照這個方式刷。</p>
+        <div class="carry-rules">
+          <div class="carry-rule"><span>低等角色門檻</span><strong>每隻 Base Lv.30+</strong></div>
+          <div class="carry-rule"><span>帳號配置</span><strong>1 高等＋2 低等帳號可行</strong></div>
+          <div class="carry-rule"><span>領獎方式</span><strong>三隻角色各自點寶箱</strong></div>
+          <div class="carry-rule"><span>每日限制</span><strong>玩家實測每角色一天一次</strong></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="rewards">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">REWARD POOL</p>
+          <h2>波利村寶箱獎勵</h2>
+        </div>
+        <p>官方表將寶箱拆成四組：前三組各隨機取得一項，第四組固定取得蘋果 3 個。</p>
+      </div>
+
+      <div class="reward-grid">
+        <article class="reward-card">
+          <h3>獎勵一：結晶</h3>
+          <ul>
+            <li>巨大傑勒比結晶 ×1</li>
+            <li>光澤傑勒比結晶 ×2</li>
+            <li>傑勒比結晶 ×10</li>
+          </ul>
+        </article>
+        <article class="reward-card">
+          <h3>獎勵二：裝備</h3>
+          <ul>
+            <li>波利村紅蘿蔔 ×1</li>
+            <li>波利村大蔥 ×1</li>
+            <li>加勒結晶 ×6</li>
+          </ul>
+        </article>
+        <article class="reward-card">
+          <h3>獎勵三：消耗品</h3>
+          <ul>
+            <li>糖果 ×3</li>
+            <li>紅色藥草 ×3</li>
+            <li>黃色藥草 ×2</li>
+            <li>綠色藥草 ×2</li>
+            <li>藍色藥草 ×1</li>
+          </ul>
+        </article>
+        <article class="reward-card">
+          <h3>獎勵四：固定</h3>
+          <ul>
+            <li>蘋果 ×3</li>
+            <li>必定取得</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="enchant">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CRAFT & ENCHANT</p>
+          <h2>加工、轉換與附魔</h2>
+        </div>
+        <p>果凍碎片不只是收藏品；先加工成果凍石，才能投入後續副本裝備升級。</p>
+      </div>
+
+      <div class="enchant-layout">
+        <div class="info-block">
+          <h3>記憶匠人的工房</h3>
+          <p>入口位於普隆德拉 <strong>prontera 50, 227</strong>。找石頭加工師，以同名果凍碎片 5 個加工成對應果凍石，通常需等待 3 天，也可支付 5 個傑斯塔立即完成。</p>
+          <ul>
+            <li>石頭變質術士：<strong>prt_in 118, 28</strong></li>
+            <li>指定果凍石 1 個＋傑斯塔 1 個，可轉成自選果凍石 1 個。</li>
+            <li>裝備升級者：<strong>prt_in 118, 34</strong></li>
+          </ul>
+        </div>
+        <div>
+          <figure class="map-frame">
+            <img src="assets/poring-village/workshop-map.png" alt="普隆德拉記憶匠人的工房入口位置">
+          </figure>
+          <p class="caption">普隆德拉西側，prontera 50, 227。</p>
+        </div>
+      </div>
+
+      <div class="enchant-layout">
+        <div class="info-block">
+          <h3>紅蘿蔔／大蔥附魔</h3>
+          <p>蔬果附魔師位於 <strong>prt_fild05 174, 238</strong>，附魔對象為波利村紅蘿蔔與波利村大蔥。</p>
+          <ul>
+            <li>第四洞附魔：傑勒比結晶 ×50＋Zeny 20,000。</li>
+            <li>成功機率 70%，能力包含六大素質、HP 與 SP。</li>
+            <li>重置附魔同樣需要傑勒比結晶 ×50＋Zeny 20,000。</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3>裝備能力摘要</h3>
+          <ul>
+            <li>紅蘿蔔：物理攻擊時有機率增加移動速度，使用緊急治療時可變身瘋兔。</li>
+            <li>大蔥：物理攻擊時有機率增加移動速度，使用緊急治療時可變身波利。</li>
+            <li>兩者皆為頭下裝備、全職業、需求等級 30。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sources">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SOURCE & STATUS</p>
+          <h2>資料來源與版本標示</h2>
+        </div>
+        <p>本頁只採用樂園官方資料與明確標示的樂園玩家實測；不確定內容不會冒充官方設定。</p>
+      </div>
+
+      <div class="source-grid">
+        <a class="source-link" href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=217651" target="_blank" rel="noreferrer">
+          <span>樂園官方</span>
+          <strong>波利村入場、星期獎勵、寶箱與附魔</strong>
+        </a>
+        <a class="source-link" href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=217972" target="_blank" rel="noreferrer">
+          <span>樂園官方</span>
+          <strong>記憶匠人工房、裝備升級與果凍石轉換</strong>
+        </a>
+        <a class="source-link" href="https://forum.gamer.com.tw/Co.php?bsn=83142&sn=1994" target="_blank" rel="noreferrer">
+          <span>樂園玩家實測</span>
+          <strong>副本流程、難度與寶箱領取注意事項</strong>
+        </a>
+        <a class="source-link" href="instance-equipment-upgrade.html">
+          <span>本站工具</span>
+          <strong>征伐隊、遠征隊、殲滅隊完整材料表</strong>
+        </a>
+        <a class="source-link" href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3485" target="_blank" rel="noreferrer">
+          <span>樂園玩家整理</span>
+          <strong>果凍碎片加工、傑斯塔加速與副本材料說明</strong>
+        </a>
+        <a class="source-link" href="https://ro-zero-site.pages.dev/instances" target="_blank" rel="noreferrer">
+          <span>樂園資料站</span>
+          <strong>副本裝備及材料交叉核對</strong>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    資料核對日期：2026-07-31。遊戲內容可能隨版本調整，數量與限制以 RO樂園最新公告及遊戲內顯示為準。<br>
+    本頁為玩家整理攻略；遊戲圖像著作權屬原權利人所有。
+  </footer>
+
+  <script>
+    const weekDrops = [
+      { day: "週日", fragment: "果凍碎片箱子", result: "開箱後取得隨機種類的果凍碎片。", stone: "隨機果凍石路線", color: "box", stoneKey: "box" },
+      { day: "週一", fragment: "波利果凍碎片", result: "5 個可加工成紅蓮的果凍石。", stone: "紅蓮的果凍石", color: "red", stoneKey: "red" },
+      { day: "週二", fragment: "波波利果凍碎片", result: "5 個可加工成清風的果凍石。", stone: "清風的果凍石", color: "green", stoneKey: "green" },
+      { day: "週三", fragment: "土波利果凍碎片", result: "5 個可加工成黃昏的果凍石。", stone: "黃昏的果凍石", color: "orange", stoneKey: "orange" },
+      { day: "週四", fragment: "惡魔波利果凍碎片", result: "5 個可加工成混沌的果凍石。", stone: "混沌的果凍石", color: "purple", stoneKey: "purple" },
+      { day: "週五", fragment: "天使波利果凍碎片", result: "5 個可加工成神聖的果凍石。", stone: "神聖的果凍石", color: "gold", stoneKey: "gold" },
+      { day: "週六", fragment: "果凍碎片箱子", result: "開箱後取得隨機種類的果凍碎片。", stone: "隨機果凍石路線", color: "box", stoneKey: "box" }
+    ];
+
+    const stones = {
+      red: {
+        name: "紅蓮的果凍石",
+        fragment: "波利果凍碎片",
+        color: "#e83c78",
+        equipment: [
+          [70, "遠征隊鎧甲", "物理近戰／鎧甲", 2],
+          [70, "遠征隊長靴", "物理近戰／鞋子", 1],
+          [80, "殲滅隊鎧甲", "物理近戰／鎧甲", 4],
+          [80, "殲滅隊風衣", "遠距離／鎧甲", 2],
+          [80, "殲滅隊偵查斗篷", "遠距離／披肩", 2],
+          [80, "殲滅隊重靴", "物理近戰／鞋子", 4]
+        ]
+      },
+      green: {
+        name: "清風的果凍石",
+        fragment: "波波利果凍碎片",
+        color: "#69a934",
+        equipment: [
+          [70, "遠征隊外袍", "魔法／鎧甲", 2],
+          [70, "遠征隊鞋子", "魔法／鞋子", 1],
+          [80, "殲滅隊外袍", "魔法／鎧甲", 4],
+          [80, "殲滅隊制服", "治癒／鎧甲", 2],
+          [80, "殲滅隊圍巾", "魔法／披肩", 2],
+          [80, "殲滅隊鞋子", "魔法／鞋子", 4]
+        ]
+      },
+      orange: {
+        name: "黃昏的果凍石",
+        fragment: "土波利果凍碎片",
+        color: "#ec8d20",
+        equipment: [
+          [70, "遠征隊戒指", "物理近戰／飾品", 3]
+        ]
+      },
+      purple: {
+        name: "混沌的果凍石",
+        fragment: "惡魔波利果凍碎片",
+        color: "#7a4ab5",
+        equipment: [
+          [70, "遠征隊斗篷", "物理近戰／披肩", 1],
+          [70, "遠征隊長靴", "物理近戰／鞋子", 1],
+          [80, "殲滅隊風衣", "遠距離／鎧甲", 2],
+          [80, "殲滅隊斗篷", "物理近戰／披肩", 4],
+          [80, "殲滅隊偵查斗篷", "遠距離／披肩", 2],
+          [80, "殲滅隊長靴", "遠距離／鞋子", 4]
+        ]
+      },
+      gold: {
+        name: "神聖的果凍石",
+        fragment: "天使波利果凍碎片",
+        color: "#b88923",
+        equipment: [
+          [70, "遠征隊圍巾", "魔法／披肩", 1],
+          [70, "遠征隊鞋子", "魔法／鞋子", 1],
+          [70, "遠征隊魔法戒指", "魔法／飾品", 3],
+          [80, "殲滅隊制服", "治癒／鎧甲", 2],
+          [80, "殲滅隊圍巾", "魔法／披肩", 2],
+          [80, "殲滅隊披肩", "治癒／披肩", 4],
+          [80, "殲滅隊靴子", "治癒／鞋子", 4],
+          [80, "殲滅隊戒指", "物理近戰／飾品", 6],
+          [80, "殲滅隊手套", "遠距離／飾品", 6],
+          [80, "殲滅隊魔法戒指", "魔法／飾品", 6],
+          [80, "殲滅隊項鍊", "治癒／飾品", 6]
+        ]
+      }
+    };
+
+    const todayGem = document.getElementById("todayGem");
+    const todayDate = document.getElementById("todayDate");
+    const todayDrop = document.getElementById("todayDrop");
+    const todayResult = document.getElementById("todayResult");
+    const weekButtons = document.getElementById("weekButtons");
+    const stoneTabs = document.getElementById("stoneTabs");
+    const stoneTitle = document.getElementById("stoneTitle");
+    const stoneRecipe = document.getElementById("stoneRecipe");
+    const equipmentCount = document.getElementById("equipmentCount");
+    const equipmentList = document.getElementById("equipmentList");
+    const currentDay = new Date().getDay();
+
+    function selectDay(dayIndex, moveStone = true) {
+      const drop = weekDrops[dayIndex];
+      const dateText = new Intl.DateTimeFormat("zh-TW", {
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+      }).format(new Date());
+
+      todayDate.textContent = dayIndex === currentDay ? `${dateText}・今日掉落` : `${drop.day}・查詢結果`;
+      todayDrop.textContent = drop.fragment;
+      todayResult.textContent = drop.result;
+      todayGem.className = `gem ${drop.color}`;
+
+      document.querySelectorAll(".day-button").forEach((button) => {
+        button.setAttribute("aria-pressed", String(Number(button.dataset.day) === dayIndex));
+      });
+
+      if (moveStone && drop.stoneKey !== "box") {
+        selectStone(drop.stoneKey);
+      }
+    }
+
+    function renderWeek() {
+      const mondayOrder = [1, 2, 3, 4, 5, 6, 0];
+      weekButtons.innerHTML = mondayOrder.map((dayIndex) => {
+        const drop = weekDrops[dayIndex];
+        return `
+          <td>
+            <button class="day-button" type="button" data-day="${dayIndex}" aria-pressed="false">
+              <span class="dot ${drop.color}" aria-hidden="true"></span>
+              <strong>${drop.fragment}</strong>
+              <span>${drop.stone}</span>
+            </button>
+          </td>`;
+      }).join("");
+
+      document.querySelectorAll(".day-button").forEach((button) => {
+        button.addEventListener("click", () => selectDay(Number(button.dataset.day)));
+      });
+    }
+
+    function renderStoneTabs() {
+      stoneTabs.innerHTML = Object.entries(stones).map(([key, stone]) => `
+        <button class="stone-tab" type="button" data-stone="${key}" aria-pressed="false">
+          <span class="stone-swatch" style="--swatch: ${stone.color}" aria-hidden="true"></span>
+          <span>${stone.name}</span>
+        </button>`).join("");
+
+      document.querySelectorAll(".stone-tab").forEach((button) => {
+        button.addEventListener("click", () => selectStone(button.dataset.stone));
+      });
+    }
+
+    function selectStone(key) {
+      const stone = stones[key];
+      if (!stone) return;
+
+      stoneTitle.textContent = stone.name;
+      stoneRecipe.textContent = `${stone.fragment} 5 個，加工約 3 天。`;
+      equipmentCount.textContent = `${stone.equipment.length} 件裝備`;
+      equipmentList.innerHTML = stone.equipment.map(([level, name, path, count]) => `
+        <article class="equipment-item" style="border-left-color: ${stone.color}">
+          <strong>Lv.${level} ${name}</strong>
+          <span>${path}・需要 ${stone.name} ×${count}</span>
+        </article>`).join("");
+
+      document.querySelectorAll(".stone-tab").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.stone === key));
+      });
+    }
+
+    renderWeek();
+    renderStoneTabs();
+    selectDay(currentDay, false);
+    const todayStone = weekDrops[currentDay].stoneKey;
+    selectStone(todayStone === "box" ? "red" : todayStone);
+  </script>
+</body>
+</html>
