@@ -301,6 +301,78 @@
       margin-bottom: 16px;
     }
 
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 230px;
+      padding: 18px;
+      border: 1px solid rgba(47, 39, 29, 0.18);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(20, 23, 27, 0.04), rgba(20, 23, 27, 0.28) 40%, rgba(20, 23, 27, 0.78)),
+        var(--feature-image) center / cover no-repeat;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .feature-card:hover,
+    .feature-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 22px 58px rgba(47, 39, 29, 0.2);
+      outline: none;
+    }
+
+    .feature-card h3 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: clamp(24px, 3.4vw, 38px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    .feature-card p {
+      position: relative;
+      z-index: 1;
+      margin: 10px 0 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 14px;
+      line-height: 1.55;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+    }
+
+    .feature-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 1;
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      padding: 5px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: var(--radius);
+      background: rgba(32, 35, 41, 0.58);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
     .tool-link {
       display: grid;
       gap: 14px;
@@ -427,6 +499,7 @@
       }
 
       .tool-grid,
+      .feature-grid,
       .meta {
         grid-template-columns: 1fr;
       }
@@ -499,9 +572,9 @@
         <h2>RO樂園查詢工具</h2>
         <p>把練功、裝備、任務前置與材料查詢集中在同一個入口。今天新增地區前置任務速查，總覽可直接切洛陽、崑崙、哎喲泰雅、天津、朱諾、汶巴拉、死都與龜島。</p>
         <div class="hero-actions" aria-label="快速入口">
+          <a class="hero-button" href="quest_drop_rates.html">副本攻略</a>
           <a class="hero-button" href="regional-prereq-guide.html">地區前置任務</a>
           <a class="hero-button" href="daily-quests-90.html">90 等每日</a>
-          <a class="hero-button" href="refine-calculator.html">精煉計算</a>
         </div>
       </div>
       <div class="hero-media" aria-hidden="true">
@@ -517,6 +590,24 @@
           <div class="scene-card side-b"></div>
         </div>
       </div>
+    </section>
+
+    <section class="feature-grid" aria-label="重點入口">
+      <a class="feature-card" href="quest_drop_rates.html" style="--feature-image: url('assets/poring-village/hero.jpg')">
+        <span class="feature-badge">副本攻略</span>
+        <h3>副本攻略</h3>
+        <p>所有副本先整合到這裡，波利村完整攻略也從這裡進入，後續再補地下水道、獸人的記憶、螞蟻地獄與沉沒之船。</p>
+      </a>
+      <a class="feature-card" href="regional-prereq-guide.html" style="--feature-image: url('https://news.gnjoy.com.tw/Uploads2/2026/04/20/702c52ff188e4087a923b29653b146ee.gif')">
+        <span class="feature-badge">地區任務</span>
+        <h3>地區前置</h3>
+        <p>洛陽、崑崙、哎喲泰雅、天津、朱諾、汶巴拉、死都與龜島的前置與座標速查。</p>
+      </a>
+      <a class="feature-card" href="monster-stat-table.html" style="--feature-image: url('https://news.gnjoy.com.tw/Uploads2/2026/06/23/337bdcc0161248dc94ffbdd210323ea5.jpg')">
+        <span class="feature-badge">魔物資料</span>
+        <h3>命中迴避表</h3>
+        <p>查等級、血量、屬性、命中迴避與地圖，練功前先看哪張圖比較順。</p>
+      </a>
     </section>
 
     <section class="tool-grid" aria-label="工具列表">
@@ -632,22 +723,6 @@
         </div>
       </a>
 
-      <a class="panel tool-link" href="poring-village.html">
-        <div class="tool-top">
-          <span>專屬副本攻略</span>
-          <span class="arrow" aria-hidden="true">›</span>
-        </div>
-        <div>
-          <h3>波利村完整攻略</h3>
-          <p>依星期自動顯示今日果凍碎片，也能查整週掉落、果凍石加工及對應可升級的副本裝備。</p>
-        </div>
-        <div class="tags">
-          <span class="tag">今日掉落</span>
-          <span class="tag">果凍石</span>
-          <span class="tag">裝備升級</span>
-        </div>
-      </a>
-
       <a class="panel tool-link" href="instance-equipment-upgrade.html">
         <div class="tool-top">
           <span>裝備升級</span>
@@ -666,12 +741,12 @@
 
       <a class="panel tool-link" href="quest_drop_rates.html">
         <div class="tool-top">
-          <span>副本規劃</span>
+          <span>副本攻略</span>
           <span class="arrow" aria-hidden="true">›</span>
         </div>
         <div>
-          <h3>副本攻略整合規劃</h3>
-          <p>舊掉落率頁已清空，先規劃波利村、地下水道、獸人的記憶、螞蟻地獄、依斯魯得島迷宮2樓與沉沒之船攻略架構。</p>
+          <h3>副本攻略</h3>
+          <p>整合波利村與後續副本攻略，先列出地下水道、獸人的記憶、螞蟻地獄、依斯魯得島迷宮2樓與沉沒之船的製作架構。</p>
         </div>
         <div class="tags">
           <span class="tag">副本清單</span>
