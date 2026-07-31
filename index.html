@@ -114,23 +114,184 @@
     }
 
     .intro {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      align-items: center;
       padding: 22px;
       margin-bottom: 16px;
+      min-height: 292px;
+      background:
+        linear-gradient(115deg, rgba(255, 253, 249, 0.96), rgba(255, 253, 249, 0.78)),
+        linear-gradient(135deg, rgba(165, 40, 45, 0.12), rgba(35, 108, 95, 0.11));
     }
 
     .intro h2 {
       margin: 0;
-      font-size: clamp(22px, 3.5vw, 32px);
-      line-height: 1.2;
+      font-size: clamp(28px, 5vw, 52px);
+      line-height: 1.06;
       letter-spacing: 0;
     }
 
     .intro p {
       max-width: 760px;
-      margin: 10px 0 0;
+      margin: 12px 0 0;
       color: var(--muted);
       font-size: 15px;
       line-height: 1.75;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 12px;
+      border: 1px solid rgba(165, 40, 45, 0.22);
+      border-radius: var(--radius);
+      background: #fff6ea;
+      color: var(--accent-strong);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .hero-button:hover,
+    .hero-button:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(165, 40, 45, 0.42);
+      box-shadow: 0 14px 34px rgba(47, 39, 29, 0.13);
+      outline: none;
+    }
+
+    .hero-media {
+      position: relative;
+      min-height: 236px;
+    }
+
+    .scene-stack {
+      position: absolute;
+      inset: 8px 0 0 12px;
+      transform: rotate(1deg);
+    }
+
+    .scene-card {
+      position: absolute;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius);
+      background-position: center;
+      background-size: cover;
+      box-shadow: 0 18px 42px rgba(47, 39, 29, 0.19);
+    }
+
+    .scene-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20, 24, 28, 0.02), rgba(20, 24, 28, 0.34));
+    }
+
+    .scene-card.main {
+      inset: 0 22px 18px 0;
+      animation: scenePan 18s ease-in-out infinite alternate;
+    }
+
+    .scene-card.side-a {
+      right: 0;
+      bottom: 0;
+      width: 46%;
+      height: 46%;
+      background-image: url("https://news.gnjoy.com.tw/Uploads2/2026/04/20/702c52ff188e4087a923b29653b146ee.gif");
+      animation: sceneFloat 5.5s ease-in-out infinite;
+    }
+
+    .scene-card.side-b {
+      left: -8px;
+      bottom: 10px;
+      width: 42%;
+      height: 38%;
+      background-image: url("https://news.gnjoy.com.tw/Uploads2/2026/05/18/42a461648d644c5390cb7b518e55a677.gif");
+      animation: sceneFloat 6.5s ease-in-out infinite reverse;
+    }
+
+    .scene-card.main .slide {
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      opacity: 0;
+      animation: slideShow 20s infinite;
+    }
+
+    .scene-card.main .slide:nth-child(1) {
+      background-image: url("https://news.gnjoy.com.tw/Uploads2/2026/04/20/ea8d67533f4c4defa76d838eb4ea2415.gif");
+      animation-delay: 0s;
+    }
+
+    .scene-card.main .slide:nth-child(2) {
+      background-image: url("https://news.gnjoy.com.tw/Uploads2/2026/03/04/dbf90b603abd4406b8c51c646eb3aa7c.png");
+      animation-delay: 5s;
+    }
+
+    .scene-card.main .slide:nth-child(3) {
+      background-image: url("https://news.gnjoy.com.tw/Uploads2/2026/06/23/337bdcc0161248dc94ffbdd210323ea5.jpg");
+      animation-delay: 10s;
+    }
+
+    .scene-card.main .slide:nth-child(4) {
+      background-image: url("https://news.gnjoy.com.tw/Uploads2/2025/08/12/7bdf19bde7bd4123838d1d3cf0956050.jpg");
+      animation-delay: 15s;
+    }
+
+    .scene-label {
+      position: absolute;
+      left: 18px;
+      bottom: 22px;
+      z-index: 2;
+      display: inline-flex;
+      min-height: 32px;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: var(--radius);
+      background: rgba(32, 35, 41, 0.64);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    @keyframes slideShow {
+      0%, 16% { opacity: 1; transform: scale(1.02); }
+      25%, 91% { opacity: 0; transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1.02); }
+    }
+
+    @keyframes scenePan {
+      from { transform: translateY(0) rotate(-1deg); }
+      to { transform: translateY(-6px) rotate(1deg); }
+    }
+
+    @keyframes sceneFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
     }
 
     .tool-grid {
@@ -257,6 +418,14 @@
         flex-direction: column;
       }
 
+      .intro {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-media {
+        min-height: 210px;
+      }
+
       .tool-grid,
       .meta {
         grid-template-columns: 1fr;
@@ -279,8 +448,35 @@
         padding: 16px;
       }
 
+      .intro h2 {
+        font-size: 34px;
+      }
+
+      .hero-media {
+        min-height: 180px;
+      }
+
+      .scene-stack {
+        inset: 4px 0 0 0;
+      }
+
       .tool-link {
         min-height: 176px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .scene-card.main .slide:first-child {
+        opacity: 1;
       }
     }
   </style>
@@ -299,8 +495,28 @@
     </header>
 
     <section class="panel intro" aria-label="首頁說明">
-      <h2>查詢工具</h2>
-      <p>目前收錄精煉成本、命中迴避、攻速、Base 經驗效率、90 等每日任務、波利村攻略、魔物資料表與副本掉落攻略。首頁保持簡單，點選工具即可開始使用。</p>
+      <div class="hero-copy">
+        <h2>RO樂園查詢工具</h2>
+        <p>把練功、裝備、任務前置與材料查詢集中在同一個入口。今天新增地區前置任務速查，總覽可直接切洛陽、崑崙、哎喲泰雅、天津、朱諾、汶巴拉、死都與龜島。</p>
+        <div class="hero-actions" aria-label="快速入口">
+          <a class="hero-button" href="regional-prereq-guide.html">地區前置任務</a>
+          <a class="hero-button" href="daily-quests-90.html">90 等每日</a>
+          <a class="hero-button" href="refine-calculator.html">精煉計算</a>
+        </div>
+      </div>
+      <div class="hero-media" aria-hidden="true">
+        <div class="scene-stack">
+          <div class="scene-card main">
+            <span class="slide"></span>
+            <span class="slide"></span>
+            <span class="slide"></span>
+            <span class="slide"></span>
+            <span class="scene-label">官方地區圖輪播</span>
+          </div>
+          <div class="scene-card side-a"></div>
+          <div class="scene-card side-b"></div>
+        </div>
+      </div>
     </section>
 
     <section class="tool-grid" aria-label="工具列表">
@@ -397,6 +613,22 @@
           <span class="tag">90 等每日</span>
           <span class="tag">前置任務</span>
           <span class="tag">NPC 座標</span>
+        </div>
+      </a>
+
+      <a class="panel tool-link" href="regional-prereq-guide.html">
+        <div class="tool-top">
+          <span>地區前置</span>
+          <span class="arrow" aria-hidden="true">›</span>
+        </div>
+        <div>
+          <h3>各地區前置任務速查</h3>
+          <p>用分頁整理洛陽、崑崙、哎喲泰雅、天津、朱諾、汶巴拉、死都與龜島的前往方式、NPC 座標與來源圖文。</p>
+        </div>
+        <div class="tags">
+          <span class="tag">分頁速查</span>
+          <span class="tag">官方圖片</span>
+          <span class="tag">/navi 座標</span>
         </div>
       </a>
 

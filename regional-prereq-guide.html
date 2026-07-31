@@ -1,0 +1,1390 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 地區前置任務速查</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f1;
+      --paper: #fffdf8;
+      --ink: #20242a;
+      --muted: #68717a;
+      --line: #d9ded0;
+      --line-strong: #b7c1ad;
+      --green: #1f6b55;
+      --green-dark: #154c3d;
+      --red: #a33238;
+      --gold: #bc812a;
+      --blue: #2f5d88;
+      --field: #ffffff;
+      --shadow: 0 18px 44px rgba(31, 45, 35, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(140deg, rgba(31, 107, 85, 0.12), transparent 34%),
+        linear-gradient(320deg, rgba(188, 129, 42, 0.11), transparent 36%),
+        var(--bg);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 24px 0 38px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(31, 107, 85, 0.25);
+      border-radius: var(--radius);
+      background: #f9fff4;
+      color: var(--green-dark);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, 0.8);
+      color: #3f4a45;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 292px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, 0.93);
+      box-shadow: var(--shadow);
+    }
+
+    .search-panel {
+      padding: 12px;
+    }
+
+    .search-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #44514a;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .search-box {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+      background: var(--field);
+      color: var(--ink);
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(31, 107, 85, 0.12);
+    }
+
+    .tabs {
+      display: grid;
+      gap: 6px;
+      padding: 8px;
+    }
+
+    .tab {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 48px;
+      padding: 7px 9px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: transparent;
+      color: #39423e;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .tab:hover,
+    .tab:focus-visible {
+      border-color: var(--line);
+      background: #f7faf2;
+      outline: none;
+    }
+
+    .tab[aria-selected="true"] {
+      border-color: rgba(31, 107, 85, 0.32);
+      background: #eef7ec;
+      color: var(--green-dark);
+      box-shadow: inset 3px 0 0 var(--green);
+    }
+
+    .tab-icon {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(31, 107, 85, 0.18);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .tab-title {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .tab-meta {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .level-chip {
+      display: inline-flex;
+      min-width: 52px;
+      justify-content: center;
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: #fff5df;
+      color: #7d520d;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .content {
+      min-width: 0;
+    }
+
+    .guide {
+      overflow: hidden;
+    }
+
+    .guide-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 18px;
+      padding: 22px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(31, 107, 85, 0.08), rgba(47, 93, 136, 0.06));
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .guide-title {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .guide-desc {
+      max-width: 740px;
+      margin: 10px 0 0;
+      color: #53605a;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .status-board {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      padding: 13px;
+      border: 1px solid rgba(31, 107, 85, 0.2);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 30px;
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(105, 119, 109, 0.25);
+      font-size: 13px;
+    }
+
+    .stat:last-child {
+      border-bottom: 0;
+    }
+
+    .stat b {
+      color: #46514c;
+      white-space: nowrap;
+    }
+
+    .stat span {
+      color: var(--muted);
+      text-align: right;
+      font-weight: 800;
+    }
+
+    .guide-body {
+      display: grid;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .section {
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 8px;
+      height: 22px;
+      border-radius: 99px;
+      background: var(--green);
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .info-tile {
+      min-height: 92px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .info-tile b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green-dark);
+      font-size: 13px;
+    }
+
+    .info-tile span {
+      color: #4f5b55;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 800;
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .route-step {
+      position: relative;
+      min-height: 132px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .route-num {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      margin-bottom: 9px;
+      border-radius: var(--radius);
+      background: var(--green);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .route-step h3 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .route-step p {
+      margin: 8px 0 0;
+      color: #5b675f;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .npc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+    }
+
+    .npc {
+      min-height: 124px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .npc b {
+      display: block;
+      margin-bottom: 6px;
+      color: #26322d;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .npc code,
+    .coord {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 7px;
+      border: 1px solid #dce6d6;
+      border-radius: 6px;
+      background: #f8fbf5;
+      color: #294f40;
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .npc p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 10px;
+    }
+
+    .note {
+      padding: 12px;
+      border: 1px solid rgba(47, 93, 136, 0.22);
+      border-radius: var(--radius);
+      background: #f5f9fc;
+      color: #405263;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .note.important {
+      border-color: rgba(163, 50, 56, 0.23);
+      background: #fff5f5;
+      color: #6c3437;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    figure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #edf1ea;
+    }
+
+    figcaption {
+      min-height: 44px;
+      padding: 9px 10px;
+      color: #5a655f;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 800;
+    }
+
+    .source-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .source-list a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 9px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: #435048;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .source-list a:hover,
+    .source-list a:focus-visible {
+      border-color: var(--green);
+      outline: none;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 10px;
+    }
+
+    .overview-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      width: 100%;
+      min-height: 188px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .overview-card:hover,
+    .overview-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(31, 107, 85, 0.42);
+      box-shadow: 0 18px 42px rgba(31, 45, 35, 0.16);
+      outline: none;
+    }
+
+    .overview-card.has-image {
+      min-height: 230px;
+      border-color: rgba(20, 39, 31, 0.2);
+      background:
+        linear-gradient(180deg, rgba(13, 22, 19, 0.08), rgba(13, 22, 19, 0.24) 42%, rgba(13, 22, 19, 0.78)),
+        var(--card-image) center / cover no-repeat;
+      color: #ffffff;
+    }
+
+    .overview-card.has-image::after {
+      content: "官方圖";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      border-radius: 999px;
+      background: rgba(19, 29, 25, 0.52);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    .overview-card h3 {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .overview-card p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .overview-card.has-image p {
+      color: rgba(255, 255, 255, 0.86);
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.32);
+    }
+
+    .badge-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 11px;
+    }
+
+    .badge {
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #edf5ea;
+      color: #245343;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .overview-card.has-image .badge {
+      background: rgba(255, 255, 255, 0.88);
+      color: #173e34;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .empty {
+      padding: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 920px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .tabs {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scroll-snap-type: x proximity;
+      }
+
+      .tab {
+        min-width: 220px;
+        scroll-snap-align: start;
+      }
+
+      .guide-head {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100% - 18px, 1180px);
+        padding-top: 14px;
+      }
+
+      .brand {
+        align-items: flex-start;
+      }
+
+      .mark {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+      }
+
+      .guide-head,
+      .guide-body {
+        padding: 14px;
+      }
+
+      .quick-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tab {
+        min-width: 196px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">RO</div>
+        <div>
+          <h1>地區前置任務速查</h1>
+          <p class="subtitle">RO樂園用，整理「怎麼去、先找誰、解完開什麼、常用NPC在哪」。最後更新：2026/07/31。</p>
+        </div>
+      </div>
+      <nav class="top-actions" aria-label="外部連結">
+        <a class="link-button" href="https://roz.gnjoy.com.tw/Notice/List" target="_blank" rel="noreferrer">官方公告</a>
+        <a class="link-button" href="https://rz.fharr.com/" target="_blank" rel="noreferrer">幻想廳</a>
+      </nav>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="地區頁籤">
+        <section class="panel search-panel">
+          <label class="search-label" for="guide-search">搜尋地區、NPC、座標</label>
+          <input id="guide-search" class="search-box" type="search" placeholder="例：貓嘴、火靈礦石、alberta">
+        </section>
+        <nav id="tabs" class="panel tabs" role="tablist" aria-label="地區列表"></nav>
+      </aside>
+
+      <section class="content">
+        <article id="guide" class="panel guide" aria-live="polite"></article>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const guides = [
+      {
+        id: "overview",
+        icon: "ALL",
+        name: "總覽",
+        area: "先看這頁",
+        level: "速查",
+        headline: "先判斷你要解的是「進地圖」還是「解鎖NPC」",
+        desc: "樂園近期地區多半是 BaseLv90 以上，艾爾貝塔搭船進場；真正麻煩的是到當地後，要把主線或居民初次請求跑完，才會開武器、書卷、頭飾、每日或奇物交換。",
+        status: {
+          "最常用起點": "艾爾貝塔",
+          "90等地區": "洛陽 / 崑崙 / 哎喲泰雅 / 天津",
+          "100等地區": "朱諾每日委託",
+          "材料型任務": "汶巴拉屬性礦石"
+        },
+        type: "overview",
+        notes: [
+          "頁面內的官方地圖資訊以 RO樂園公告為主；沒有完整公告步驟的舊任務，會明確標成玩家攻略整理。",
+          "如果你只想打每日，優先確認是否已經跑完當地的第一次對話或主線開通。",
+          "多數奇物交換是 2,000,000 Zeny 每日一次，04:00 重置；有些也可用傑斯塔 20 交換。"
+        ],
+        cards: [
+          { id: "louyang", title: "洛陽", text: "艾爾貝塔 245,40 搭船。王陵士兵與召天線是頭飾與後續功能重點。", image: "https://news.gnjoy.com.tw/Uploads2/2026/04/20/ea8d67533f4c4defa76d838eb4ea2415.gif", tags: ["Base90", "地龍石", "每日/頭飾"] },
+          { id: "gonryun", title: "崑崙", text: "艾爾貝塔 246,62 搭船。先找張青龍，再拜訪堂主史艷文。", image: "https://news.gnjoy.com.tw/Uploads2/2026/03/04/dbf90b603abd4406b8c51c646eb3aa7c.png", tags: ["Base90", "靈幻石", "居民初次請求"] },
+          { id: "ayothaya", title: "哎喲泰雅", text: "航海士安東尼奧前要先處理福蘭奇斯闊與贊助者。當地潑水節線解完開死靈系統。", image: "https://news.gnjoy.com.tw/Uploads2/2026/04/20/702c52ff188e4087a923b29653b146ee.gif", tags: ["Base90", "死靈石", "貓眼/貓嘴材料"] },
+          { id: "amatsu", title: "天津", text: "艾爾貝塔 246,34 搭船。守門士兵接到城主協助線，解完開陰陽武器與戰盔。", image: "https://news.gnjoy.com.tw/Uploads2/2026/05/18/42a461648d644c5390cb7b518e55a677.gif", tags: ["Base90", "魔靈石", "忍者地圖"] },
+          { id: "yuno", title: "朱諾", text: "依斯魯得飛空艇或艾爾帕蘭北上。每日委託多為 Base100。", image: "https://news.gnjoy.com.tw/Uploads2/2026/06/23/337bdcc0161248dc94ffbdd210323ea5.jpg", tags: ["Base100", "飛空艇", "每日委託"] },
+          { id: "umbala", title: "汶巴拉", text: "先做語言任務與薩滿家族線，再用怪物材料換屬性礦石。", tags: ["屬性礦石", "火靈礦石", "蠍子尾巴"] },
+          { id: "niflheim", title: "死都 尼芙菲姆", text: "地域特殊，官方公告明寫不能用傑斯塔、世界移動券前往，也不能 /memo。", image: "https://news.gnjoy.com.tw/Uploads2/2025/08/12/7bdf19bde7bd4123838d1d3cf0956050.jpg", tags: ["死都", "不能memo", "汶巴拉路線"] },
+          { id: "turtle", title: "龜島", text: "以玩家攻略整理為主：艾爾貝塔旅館找烏龜老伯，解前進龜島路線。", tags: ["玩家攻略", "進場任務"] }
+        ],
+        sources: [
+          { label: "RO樂園公告列表", url: "https://roz.gnjoy.com.tw/Notice/List" },
+          { label: "ROZ幻想廳", url: "https://rz.fharr.com/" }
+        ]
+      },
+      {
+        id: "louyang",
+        icon: "LY",
+        name: "龍之城洛陽",
+        area: "louyang",
+        level: "Lv90",
+        headline: "洛陽：搭船進場，王陵線開頭飾與後續功能",
+        desc: "洛陽是官方 2026/04/21 開放的 90 等地區。進場本身很簡單，重點在城內王陵士兵與召天相關任務，會牽到洛陽專屬頭飾與當地系統。",
+        status: {
+          "起點": "艾爾貝塔 245,40",
+          "費用": "10,000 Zeny",
+          "需求": "BaseLv90 以上",
+          "解完開": "地龍系統 / 頭飾 / 奇物"
+        },
+        quick: [
+          ["先到哪", "艾爾貝塔找龍之城廣宣大使"],
+          ["下一步", "抵達原野後往北進洛陽城"],
+          ["主線入口", "王陵士兵 louyang 42,276"],
+          ["補充", "跟召天了解後續，製作專屬頭盔"]
+        ],
+        steps: [
+          ["搭船前往", "在艾爾貝塔找龍之城廣宣大使，付 10,000 Zeny 前往洛陽地區。"],
+          ["進入洛陽城", "抵達洛陽原野後往最北邊走，通過洛陽關口進城。"],
+          ["接王陵線", "找王陵士兵詢問王陵，依序跑完與召天相關的事件。"],
+          ["開功能", "完成後可使用地龍武器、書卷、專屬頭飾與奇物交換相關功能。"]
+        ],
+        npcs: [
+          ["龍之城廣宣大使", "alberta 245 40", "付費搭船，BaseLv90 以上。"],
+          ["王陵士兵", "louyang 42 276", "洛陽王陵線入口。"],
+          ["龍之城武器教官 趙祉龍", "louyang 199 113", "地龍武器交換，官方提示需求地龍石 20。"],
+          ["妖怪專家 召天", "louyang 186 54", "洛陽專屬頭飾相關。"],
+          ["地龍術士", "louyang 207 112", "地龍武器書卷，官方提示地龍石 10。"],
+          ["慕青孃 徐先", "louyang 202 92", "洛陽奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
+        ],
+        notes: [
+          "官方文字表示洛陽城中可進行地龍武器、地龍書兌換；王陵線則牽到專屬頭盔。",
+          "每日任務與奇物內容可能隨版本調整，跑之前先確認背包有足夠空位。"
+        ],
+        images: [
+          ["https://news.gnjoy.com.tw/Uploads2/2026/04/20/f16ce2cedb59485a9da3be43dac87445.gif", "洛陽前往方式示意，來源：官方公告"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/04/20/fbfe03e8e52245d7a15a1cf5041fd7cd.png", "艾爾貝塔龍之城廣宣大使位置圖"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/04/20/ea8d67533f4c4defa76d838eb4ea2415.gif", "洛陽原野與城門路線"]
+        ],
+        sources: [
+          { label: "官方：龍之城洛陽", url: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218356" }
+        ]
+      },
+      {
+        id: "gonryun",
+        icon: "GR",
+        name: "神仙之島崑崙",
+        area: "gonryun / gon_fild01",
+        level: "Lv90",
+        headline: "崑崙：先拜訪張青龍與史艷文，再開居民任務",
+        desc: "崑崙同樣是 90 等地區。到島上後不要急著只打怪，先照著張青龍指引去見堂主，拜訪完堂主後才會開始解鎖居民互動與每日任務。",
+        status: {
+          "起點": "艾爾貝塔 246,62",
+          "費用": "10,000 Zeny",
+          "需求": "BaseLv90 以上",
+          "解完開": "靈幻武器 / 裝備 / 每日"
+        },
+        quick: [
+          ["先到哪", "艾爾貝塔找崑崙廣宣大使"],
+          ["下船後", "找張青龍 gon_fild01 262,87"],
+          ["主線拜訪", "堂主史艷文 gon_in 17,93"],
+          ["每日入口", "完成居民初次請求後開啟"]
+        ],
+        steps: [
+          ["搭船到崑崙", "在艾爾貝塔找崑崙廣宣大使，付 10,000 Zeny。"],
+          ["找張青龍", "抵達後到 gon_fild01 262,87 接到拜訪堂主的指引。"],
+          ["拜訪堂主", "進室內找崑崙堂主史艷文，完成初始拜訪。"],
+          ["跑居民請求", "與島上居民對話並完成第一次請求，即可開每日與兌換功能。"]
+        ],
+        npcs: [
+          ["崑崙廣宣大使", "alberta 246 62", "付費搭船，BaseLv90 以上。"],
+          ["服務人員 張青龍", "gon_fild01 262 87", "抵達崑崙後的第一個指引。"],
+          ["崑崙堂主 史艷文", "gon_in 17 93", "拜訪完可開始居民互動。"],
+          ["靈幻武器 世緣杖", "gonryun 200 153", "靈幻武器交換，官方提示靈幻石 20。"],
+          ["掃墨人 猛牛", "gonryun 137 110", "墨蛇君裝備製作相關。"],
+          ["靈幻咒文牌 妍鎮車", "gonryun 141 113", "咒文牌/靈幻武器能力相關。"],
+          ["藏墨人 摩莎", "gonryun 186 113", "崑崙奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
+        ],
+        notes: [
+          "如果你到崑崙後 NPC 沒反應，多半是張青龍或堂主拜訪少點了一段。",
+          "崑崙主線與每日玩家攻略很多，這版先保留官方可確認的起點與開通順序。"
+        ],
+        images: [
+          ["https://news.gnjoy.com.tw/Uploads2/2026/03/04/aa5575c2e78c4074810bfabb81ebbb2b.apng", "崑崙地區場景，來源：官方公告"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/03/04/13963602fa834518aa3340eec3950620.apng", "艾爾貝塔搭船前往崑崙"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/03/04/0b671fa5a4d84a33a9b8ebd6a06c5d4d.apng", "張青龍與堂主拜訪線示意"]
+        ],
+        sources: [
+          { label: "官方：神仙之島崑崙", url: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218239" },
+          { label: "玩家攻略：崑崙主線/每日", url: "https://forum.gamer.com.tw/C.php?bsn=83142&snA=3339" }
+        ]
+      },
+      {
+        id: "ayothaya",
+        icon: "AY",
+        name: "哎喲泰雅",
+        area: "ayothaya / ayo_fild02",
+        level: "Lv90",
+        headline: "哎喲泰雅：先處理航海贊助，再跑潑水節供水線",
+        desc: "哎喲泰雅進場前不是直接點船就結束，官方明講要先與冒險家福蘭奇斯闊聊聊並找到贊助者。到當地後沿著莫拉4世與佐克瓏的潑水節線跑完，才會開死靈武器、靈魂與古代王帽子功能。",
+        status: {
+          "起點": "艾爾貝塔 246,94",
+          "費用": "任務開船",
+          "需求": "BaseLv90 以上",
+          "解完開": "死靈武器 / 靈魂 / 古代王帽"
+        },
+        quick: [
+          ["先到哪", "艾爾貝塔找航海士安東尼奧"],
+          ["前置確認", "先與福蘭奇斯闊聊並找贊助者"],
+          ["當地推進", "福蘭奇斯闊 ayothaya 157,79"],
+          ["主線重點", "潑水節負責人佐克瓏 203,265"]
+        ],
+        steps: [
+          ["開船前置", "BaseLv90 以上，先處理福蘭奇斯闊與贊助者對話，再找安東尼奧搭船。"],
+          ["拜訪領袖", "抵達後找福蘭奇斯闊，他會建議前往北邊高聳建築拜訪莫拉4世。"],
+          ["接潑水節線", "與潑水節負責人佐克瓏對話，處理供水問題。"],
+          ["開功能", "完成後可進行死靈武器、靈魂兌換、古代王帽子相關功能。"]
+        ],
+        npcs: [
+          ["航海士 安東尼奧", "alberta 246 94", "哎喲泰雅航線入口。"],
+          ["冒險家 福蘭奇斯闊", "ayothaya 157 79", "到達後推進主線的關鍵 NPC。"],
+          ["潑水節負責人 佐克瓏", "ayothaya 203 265", "供水問題與後續開通。"],
+          ["死靈武器鐵匠 雅雲森", "ayothaya 213 191", "死靈武器，官方提示死靈石 20。"],
+          ["王室裁縫師 大丸", "ayothaya 201 190", "古代王帽子製作。"],
+          ["賦魂巫師 棉蓋依", "ayothaya 213 197", "死靈武器賦魂，官方提示死靈石 10。"],
+          ["伴蕉侍 硐門", "ayothaya 251 181", "泰雅奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
+        ],
+        notes: [
+          "貓眼由群葉貓掉落；貓嘴材料常見說法為群葉貓的毛 500、鬍鬚 500，官方奇物表確認硐門會給毛與鬍鬚。",
+          "若你只是要貓嘴，先確認硐門每日奇物與大丸/附近頭飾製作選單；成品 NPC 官方公告沒有把貓嘴寫死。"
+        ],
+        images: [
+          ["https://news.gnjoy.com.tw/Uploads2/2026/04/20/ee06b085bb284b18b2907f5a4bbe5919.gif", "艾爾貝塔往哎喲泰雅任務示意"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/04/20/2d8263a64076423f8c6dd95a8dc65edf.gif", "抵達後找福蘭奇斯闊推進"],
+          ["ayothaya-kibutsu.png", "硐門奇物機率表，來源：官方公告圖"]
+        ],
+        sources: [
+          { label: "官方：哎喲泰雅", url: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218357" },
+          { label: "玩家每日整理", url: "https://forum.gamer.com.tw/Co.php?bsn=83142&sn=13373" }
+        ]
+      },
+      {
+        id: "amatsu",
+        icon: "AM",
+        name: "天津",
+        area: "amatsu / ama_fild01",
+        level: "Lv90",
+        headline: "天津：搭船後找守門士兵，接城主協助線",
+        desc: "天津 90 等開放後，先從艾爾貝塔搭船。抵達後四處逛到守門士兵，他會帶出城主需要協助的線；完成後才會開陰陽武器、陰陽書與無名將軍戰盔。",
+        status: {
+          "起點": "艾爾貝塔 246,34",
+          "費用": "10,000 Zeny",
+          "需求": "BaseLv90 以上",
+          "解完開": "陰陽武器 / 書 / 戰盔"
+        },
+        quick: [
+          ["先到哪", "艾爾貝塔找天津町宣傳使臣"],
+          ["費用", "10,000 Zeny"],
+          ["主線入口", "守門士兵 amatsu 168,175"],
+          ["功能", "陰陽武器、陰陽書、戰盔"]
+        ],
+        steps: [
+          ["搭船到天津", "找天津町宣傳使臣，付 10,000 Zeny 前往。"],
+          ["找守門士兵", "抵達後到 amatsu 168,175 與守門士兵閒聊。"],
+          ["協助城主", "依任務指引協助城主處理問題。"],
+          ["開功能", "完成後可與天津 NPC 互動，做陰陽武器、陰陽書與無名將軍戰盔。"]
+        ],
+        npcs: [
+          ["天津町宣傳使臣", "alberta 246 34", "付費搭船，BaseLv90 以上。"],
+          ["守門士兵", "amatsu 168 175", "城主協助線入口。"],
+          ["武器交換 雷賽伊", "ama_in01 175 182", "陰陽武器交換。"],
+          ["異國吟遊詩人 涂畢河", "ama_in01 171 17", "無名將軍戰盔故事/製作相關。"],
+          ["陰陽術師", "ama_fild01 165 331", "陰陽武器能力相關。"],
+          ["初心者 鼬", "amatsu 99 100", "天津奇物，2,000,000 Zeny 每日一次；亦可用傑斯塔 20。"]
+        ],
+        notes: [
+          "如果只是進天津城鎮，搭船即可；若要開當地裝備/書卷/頭飾功能，要跑守門士兵後續。",
+          "舊版天津密穴另有領主通行證類型任務；樂園 90 等天津主線請以官方 2026/05/18 公告與遊戲內任務為準。"
+        ],
+        images: [
+          ["https://news.gnjoy.com.tw/Uploads2/2026/05/18/1510b5e27b4641639474b92b457af3d5.gif", "艾爾貝塔搭船前往天津"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/05/18/d688ceb4f21d49068adaf6d5f894fb7e.png", "天津町宣傳使臣位置圖"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/05/18/a2fdb0acb3ac4b34941b146cbd79156d.gif", "守門士兵與後續線索"]
+        ],
+        sources: [
+          { label: "官方：天水之國天津", url: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218425" },
+          { label: "舊版參考：天津密穴入場", url: "https://s010381.blogspot.com/2018/02/blog-post_10.html" }
+        ]
+      },
+      {
+        id: "yuno",
+        icon: "YU",
+        name: "朱諾",
+        area: "yuno / yuno_fild",
+        level: "Lv100",
+        headline: "朱諾：不是搭船，是飛空艇或徒步過國界",
+        desc: "朱諾是秀發茲發德共和國首都。首次前往主要靠依斯魯得右下角的巴基力航空飛空艇，也能從艾爾帕蘭北邊跨國界檢查站徒步前往；當地每日委託多數 BaseLv100。",
+        status: {
+          "起點": "依斯魯得右下",
+          "替代路線": "艾爾帕蘭北上",
+          "需求": "每日多為 BaseLv100",
+          "注意": "飛空艇可能遇襲"
+        },
+        quick: [
+          ["先到哪", "依斯魯得右下找巴基力航空"],
+          ["下機方式", "聽機組人員廣播指示"],
+          ["替代路線", "從艾爾帕蘭北面過國界檢查站"],
+          ["每日需求", "官方公告多列 BaseLv100"]
+        ],
+        steps: [
+          ["搭飛空艇", "從依斯魯得右下角搭乘巴基力航空，依廣播下機。"],
+          ["或徒步前往", "由艾爾帕蘭北面區域穿越國界檢查站。"],
+          ["接每日委託", "朱諾與周邊地圖有多個 BaseLv100 委託 NPC。"],
+          ["記傳點", "朱諾卡普拉主要提供朱諾內部瞬移，回程路線先想好。"]
+        ],
+        npcs: [
+          ["博物館職員", "yuno 273 292", "館藏樣本委託，官方列 BaseLv100。"],
+          ["博物館職員", "yuno_fild03 40 150", "館藏樣本委託另一位置。"],
+          ["中年女性", "aldebaran 114 180", "媽媽的午餐盒運送委託，BaseLv100。"],
+          ["檢查站長 蔡迦莉", "yuno_fild01 193 158", "國界檢查站維安工作，BaseLv100。"],
+          ["啟海伊洛學院學生", "yuno_fild01 189 154", "蓬鬆柔軟的夢想委託，BaseLv100。"],
+          ["學院警備兵", "yuno_fild08 198 200", "學院維安工作，BaseLv100。"]
+        ],
+        notes: [
+          "飛空艇航行中可能遇到魔物襲擊，需要等危機排除才會繼續航行。",
+          "朱諾的重點不是單一前置，而是交通與 Base100 每日委託分散。"
+        ],
+        images: [
+          ["https://news.gnjoy.com.tw/Uploads2/2026/06/29/fbe4d8131a82469bb07b8b3f02b2d0a9.jpg", "朱諾地區主視覺，來源：官方公告"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/06/23/e557750f85bf476d99960d062058de71.gif", "飛空艇前往方式"],
+          ["https://news.gnjoy.com.tw/Uploads2/2026/06/23/094b9ed81b674e6cbca4cc958e4142b1.apng", "艾爾帕蘭北上徒步路線"]
+        ],
+        sources: [
+          { label: "官方：賢者之都朱諾", url: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218514" },
+          { label: "玩家心得：朱諾每日", url: "https://forum.gamer.com.tw/C.php?bsn=83142&snA=3535" }
+        ]
+      },
+      {
+        id: "umbala",
+        icon: "UM",
+        name: "汶巴拉 / 屬性礦石",
+        area: "umbala",
+        level: "任務",
+        headline: "汶巴拉：語言任務與薩滿線後，才能穩定換屬性礦石",
+        desc: "你前面問的火靈礦石就是這條。重點是先做汶巴拉語言，再開薩滿家族任務；完成後可用蠍子尾巴等怪物材料換四屬性礦石。",
+        status: {
+          "前置": "汶巴拉語言任務",
+          "開通": "薩滿家族任務",
+          "火靈礦石": "蠍子尾巴 20",
+          "常用目的": "屬性箭 / 製作材料"
+        },
+        quick: [
+          ["先到哪", "卡普拉到克魔島，再轉汶巴拉"],
+          ["語言材料", "版本可能不同，先備羽毛、墨汁、巨大葉子等"],
+          ["薩滿線", "薩滿家附近骷髏頭與村長線"],
+          ["火屬兌換", "蠍子尾巴 20 換火靈礦石 1"]
+        ],
+        steps: [
+          ["到汶巴拉", "城鎮卡普拉到克魔島，再由克魔島前往汶巴拉。"],
+          ["解語言", "先完成汶巴拉語言任務，否則後續 NPC 對話會卡。"],
+          ["進薩滿家", "到薩滿家附近觸發骷髏頭，跑完村長與魔力礦石相關要求。"],
+          ["開始換礦", "完成後以怪物材料交換屬性礦石，火靈礦石用蠍子尾巴 20。"]
+        ],
+        npcs: [
+          ["薩滿家族任務入口", "umbala 約216 190", "玩家攻略多指向右上薩滿家附近骷髏頭。"],
+          ["薩滿/村長線", "umbala", "語言任務後推進屬性分解結合。"],
+          ["火靈礦石兌換", "umbala", "蠍子尾巴 20。"],
+          ["水靈礦石兌換", "umbala", "蝸牛殼 20。"],
+          ["地靈礦石兌換", "umbala", "硬角 15。"],
+          ["風靈礦石兌換", "umbala", "彩色昆蟲外殼 25。"]
+        ],
+        notes: [
+          "語言任務材料各版本資料略有差異；樂園若已調整，請以遊戲內任務要求為準。",
+          "常見舊攻略材料包含微笑面具、光滑的紙、油紙、墨汁、羽毛；你手上如果只缺火靈礦石，先把蠍子尾巴屯好。"
+        ],
+        images: [
+          ["https://roanimealliance.pixnet.net/blog/posts/15069861789", "玩家攻略頁：汶巴拉材料換屬性原石"],
+          ["https://ro.17173.com/banben/ep7/ep7_09_rw3.htm", "17173 舊攻略：汶巴拉屬性分解結合"]
+        ],
+        sources: [
+          { label: "玩家攻略：汶巴拉材料換屬性原石", url: "https://roanimealliance.pixnet.net/blog/posts/15069861789" },
+          { label: "舊攻略：汶巴拉屬性分解結合", url: "https://ro.17173.com/banben/ep7/ep7_09_rw3.htm" },
+          { label: "幻想廳：火靈礦石", url: "https://rz.fharr.com/db/item/990/" }
+        ]
+      },
+      {
+        id: "niflheim",
+        icon: "NF",
+        name: "死都 尼芙菲姆",
+        area: "niflheim / nif_fild",
+        level: "交通",
+        headline: "死都：不能用傑斯塔或世界移動券，只能走特殊路線",
+        desc: "官方 2026/01/13 維護公告開放「亡者國都 尼芙菲姆」，並特別註明因地域特殊，無法透過傑斯塔、世界移動券前往，也不能在地圖記錄 /memo。實際前往多半從汶巴拉往天地樹路線走過去。",
+        status: {
+          "官方限制": "不能傑斯塔 / 世界移動券",
+          "記點": "不能 /memo",
+          "常見起點": "汶巴拉",
+          "路線": "天地樹 -> 偏遠村落 -> 鬼峽谷"
+        },
+        quick: [
+          ["先到哪", "先到汶巴拉"],
+          ["走路路線", "汶巴拉北傳點 -> yggdrasil01"],
+          ["中途地圖", "nif_fild01 偏遠村落、nif_fild02 鬼峽谷"],
+          ["官方提醒", "不能用傑斯塔、世界移動券，也不能 memo"]
+        ],
+        steps: [
+          ["先到汶巴拉", "城鎮卡普拉到克魔島，再轉汶巴拉，或用你平常能到汶巴拉的路線。"],
+          ["進天地樹", "從汶巴拉北方傳點進入天地樹葉樹幹 yggdrasil01。"],
+          ["穿過野外", "依序走到尼芙菲姆偏遠村落斯凱領頓 nif_fild01，再到尼芙菲姆鬼峽谷 nif_fild02。"],
+          ["抵達死都", "從鬼峽谷東側進入尼芙菲姆。路上怪物有危險，建議帶蒼翅、補品或找人護送。"]
+        ],
+        npcs: [
+          ["汶巴拉北方傳點", "umbala", "玩家攻略常見的死都走路起點。"],
+          ["天地樹葉樹幹", "yggdrasil01", "往死都的中途地圖。"],
+          ["偏遠村落斯凱領頓", "nif_fild01", "尼芙菲姆前一段野外路線。"],
+          ["鬼峽谷", "nif_fild02", "往尼芙菲姆城鎮前的危險地圖。"],
+          ["尼芙菲姆", "niflheim", "死都城鎮，官方註明不能 /memo。"]
+        ],
+        notes: [
+          "死都不是一般方便傳送地圖，官方明確限制傑斯塔、世界移動券與 /memo。",
+          "這頁的實際走法參考舊版玩家攻略整理；樂園內如果 NPC 或傳點位置調整，以遊戲內路線為準。"
+        ],
+        images: [
+          ["https://news.gnjoy.com.tw/Uploads2/2025/08/12/7bdf19bde7bd4123838d1d3cf0956050.jpg", "官方維護公告圖：開放死都與龜島相關公告"],
+          ["https://ro.ginyuki.com/2013/07/25/post_76.html", "玩家圖文：往死者國度尼芙菲姆的路"]
+        ],
+        sources: [
+          { label: "官方：2026/01/13 開放死都與龜島", url: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218117" },
+          { label: "玩家攻略：往死者國度尼芙菲姆的路", url: "https://ro.ginyuki.com/2013/07/25/post_76.html" },
+          { label: "任務筆記：尼芙菲姆的生還者", url: "https://s010381.blogspot.com/2020/03/blog-post_2.html" }
+        ]
+      },
+      {
+        id: "turtle",
+        icon: "TI",
+        name: "龜島",
+        area: "tur_dun / alberta",
+        level: "任務",
+        headline: "龜島：先從艾爾貝塔旅館找烏龜老伯",
+        desc: "龜島在樂園玩家間常被拿來跑每日或練功；進島任務目前主要用玩家攻略交叉整理。第一步通常是艾爾貝塔旅館內找烏龜老伯，後面再依航海日誌與龜島石碑推進。",
+        status: {
+          "起點": "艾爾貝塔旅館",
+          "第一NPC": "烏龜老伯",
+          "類型": "玩家攻略整理",
+          "提醒": "帶補品與蝴蝶翅膀"
+        },
+        quick: [
+          ["先到哪", "alberta 65,233 旅館"],
+          ["第一步", "旅館內右側房間找烏龜老伯"],
+          ["關鍵道具", "航海日誌/相關線索"],
+          ["注意", "舊攻略版本多，樂園請以遊戲內指示修正"]
+        ],
+        steps: [
+          ["找烏龜老伯", "進入艾爾貝塔旅館，往右側房間找烏龜老伯對話。"],
+          ["追航海線索", "依任務提示讀航海日誌、找相關 NPC 或島上線索。"],
+          ["進龜島", "取得前往龜島資格後，再由艾爾貝塔相關船員前往。"],
+          ["深入地城", "若要解更深層門或石碑，依龜島內部樓層逐步點石碑。"]
+        ],
+        npcs: [
+          ["艾爾貝塔旅館", "alberta 65 233", "玩家攻略列為任務起點。"],
+          ["烏龜老伯", "alberta_in 23 104", "前進龜島任務第一 NPC。"],
+          ["龜島石碑一", "tur_dun01 約75 249", "舊攻略中第一道門相關。"],
+          ["龜島石碑二", "tur_dun02 約118 233", "舊攻略中第二道門相關。"],
+          ["龜島石碑三", "tur_dun03 約113 178", "舊攻略中第三道門相關。"]
+        ],
+        notes: [
+          "這頁的龜島是玩家攻略整理，因為目前搜尋到的官方樂園公告沒有完整龜島入場步驟。",
+          "若你要的是樂園每日任務路線，不一定需要把深層石碑任務全部做完，先看你要進哪張圖。"
+        ],
+        images: [],
+        sources: [
+          { label: "玩家攻略：前進龜島", url: "https://home.gamer.com.tw/artwork.php?sn=6047484" },
+          { label: "舊攻略：龜島隱密任務", url: "https://games.sina.com.cn/z/ro/2003-09-02/42140.shtml" }
+        ]
+      }
+    ];
+
+    const tabs = document.querySelector("#tabs");
+    const guide = document.querySelector("#guide");
+    const search = document.querySelector("#guide-search");
+
+    function coordLink(raw) {
+      if (!raw || raw === "umbala" || raw === "ayothaya") return "";
+      const parts = raw.trim().split(/\s+/);
+      if (parts.length < 3) return "";
+      return `/navi ${parts[0]}/${parts[1]}/${parts[2]}`;
+    }
+
+    function renderTabs(activeId = "overview", filter = "") {
+      const q = filter.trim().toLowerCase();
+      tabs.innerHTML = "";
+      const visible = guides.filter((item) => {
+        if (!q) return true;
+        return JSON.stringify(item).toLowerCase().includes(q);
+      });
+      if (!visible.length) {
+        tabs.innerHTML = '<div class="empty">找不到相關地區，試試 NPC 名稱、座標或材料名。</div>';
+        return;
+      }
+      for (const item of visible) {
+        const button = document.createElement("button");
+        button.className = "tab";
+        button.type = "button";
+        button.role = "tab";
+        button.id = `tab-${item.id}`;
+        button.setAttribute("aria-controls", `panel-${item.id}`);
+        button.setAttribute("aria-selected", item.id === activeId ? "true" : "false");
+        button.dataset.id = item.id;
+        button.innerHTML = `
+          <span class="tab-icon" aria-hidden="true">${item.icon}</span>
+          <span>
+            <span class="tab-title">${item.name}</span>
+            <span class="tab-meta">${item.area}</span>
+          </span>
+          <span class="level-chip">${item.level}</span>
+        `;
+        tabs.appendChild(button);
+      }
+    }
+
+    function renderGuide(id = "overview") {
+      const item = guides.find((entry) => entry.id === id) || guides[0];
+      document.title = `${item.name}｜RO樂園 地區前置任務速查`;
+      const status = Object.entries(item.status || {}).map(([key, value]) => `
+        <div class="stat"><b>${key}</b><span>${value}</span></div>
+      `).join("");
+      const quick = (item.quick || []).map(([key, value]) => `
+        <div class="info-tile"><b>${key}</b><span>${value}</span></div>
+      `).join("");
+      const steps = (item.steps || []).map(([title, text], index) => `
+        <div class="route-step">
+          <div class="route-num">${index + 1}</div>
+          <h3>${title}</h3>
+          <p>${text}</p>
+        </div>
+      `).join("");
+      const npcs = (item.npcs || []).map(([name, coord, text]) => {
+        const navi = coordLink(coord);
+        return `
+          <div class="npc">
+            <b>${name}</b>
+            <code>${coord}</code>
+            ${navi ? `<p><span class="coord">${navi}</span></p>` : ""}
+            <p>${text}</p>
+          </div>
+        `;
+      }).join("");
+      const notes = (item.notes || []).map((note, index) => `
+        <div class="note ${index === 0 ? "important" : ""}">${note}</div>
+      `).join("");
+      const gallery = (item.images || []).map(([src, caption]) => {
+        const isPage = src.startsWith("http") && !/\.(png|jpg|jpeg|gif|apng|webp)(\?|$)/i.test(src);
+        if (isPage) {
+          return `<div class="note"><a href="${src}" target="_blank" rel="noreferrer">${caption}</a></div>`;
+        }
+        return `
+          <figure>
+            <img src="${src}" alt="${caption}" loading="lazy">
+            <figcaption>${caption}</figcaption>
+          </figure>
+        `;
+      }).join("");
+      const sources = (item.sources || []).map((source) => `
+        <a href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>
+      `).join("");
+
+      if (item.type === "overview") {
+        const cards = item.cards.map((card) => `
+          <button class="overview-card ${card.image ? "has-image" : ""}" type="button" data-jump="${card.id}" ${card.image ? `style="--card-image: url('${card.image}')"` : ""}>
+            <h3>${card.title}</h3>
+            <p>${card.text}</p>
+            <div class="badge-row">${card.tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}</div>
+          </button>
+        `).join("");
+        guide.innerHTML = `
+          <header class="guide-head" id="panel-${item.id}" role="tabpanel" aria-labelledby="tab-${item.id}">
+            <div>
+              <p class="eyebrow">${item.area}</p>
+              <h2 class="guide-title">${item.headline}</h2>
+              <p class="guide-desc">${item.desc}</p>
+            </div>
+            <div class="status-board">${status}</div>
+          </header>
+          <div class="guide-body">
+            <section class="section">
+              <h2 class="section-title">地區卡片</h2>
+              <div class="overview-grid">${cards}</div>
+            </section>
+            <section class="section">
+              <h2 class="section-title">整理原則</h2>
+              <div class="note-grid">${notes}</div>
+            </section>
+            <section class="section">
+              <h2 class="section-title">來源</h2>
+              <div class="source-list">${sources}</div>
+            </section>
+          </div>
+        `;
+        return;
+      }
+
+      guide.innerHTML = `
+        <header class="guide-head" id="panel-${item.id}" role="tabpanel" aria-labelledby="tab-${item.id}">
+          <div>
+            <p class="eyebrow">${item.area}</p>
+            <h2 class="guide-title">${item.headline}</h2>
+            <p class="guide-desc">${item.desc}</p>
+          </div>
+          <div class="status-board">${status}</div>
+        </header>
+        <div class="guide-body">
+          <section class="section">
+            <h2 class="section-title">快速判斷</h2>
+            <div class="quick-grid">${quick}</div>
+          </section>
+          <section class="section">
+            <h2 class="section-title">跑法</h2>
+            <div class="route">${steps}</div>
+          </section>
+          <section class="section">
+            <h2 class="section-title">NPC 與座標</h2>
+            <div class="npc-grid">${npcs}</div>
+          </section>
+          <section class="section">
+            <h2 class="section-title">注意事項</h2>
+            <div class="note-grid">${notes}</div>
+          </section>
+          ${gallery ? `
+            <section class="section">
+              <h2 class="section-title">圖文參考</h2>
+              <div class="gallery">${gallery}</div>
+            </section>
+          ` : ""}
+          <section class="section">
+            <h2 class="section-title">來源</h2>
+            <div class="source-list">${sources}</div>
+          </section>
+        </div>
+      `;
+    }
+
+    function setActive(id, updateHash = true) {
+      const active = guides.some((item) => item.id === id) ? id : "overview";
+      renderTabs(active, search.value);
+      renderGuide(active);
+      if (updateHash) {
+        history.replaceState(null, "", `#${active}`);
+      }
+    }
+
+    tabs.addEventListener("click", (event) => {
+      const button = event.target.closest(".tab");
+      if (!button) return;
+      setActive(button.dataset.id);
+    });
+
+    guide.addEventListener("click", (event) => {
+      const card = event.target.closest(".overview-card[data-jump]");
+      if (!card) return;
+      setActive(card.dataset.jump);
+    });
+
+    search.addEventListener("input", () => {
+      const active = location.hash.replace("#", "") || "overview";
+      renderTabs(active, search.value);
+    });
+
+    window.addEventListener("hashchange", () => setActive(location.hash.replace("#", "") || "overview", false));
+
+    setActive(location.hash.replace("#", "") || "overview", false);
+  </script>
+</body>
+</html>
