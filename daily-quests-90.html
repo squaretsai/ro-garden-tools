@@ -515,6 +515,414 @@
       font-weight: 900;
     }
 
+    .checklist-launch {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: var(--radius);
+      color: #fff;
+      background: var(--accent-strong);
+      box-shadow: 0 12px 30px rgba(67, 24, 27, 0.28);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .checklist-launch:hover,
+    .checklist-launch:focus-visible {
+      background: var(--accent);
+      outline: 3px solid rgba(200, 146, 45, 0.45);
+      outline-offset: 2px;
+    }
+
+    .launch-mark {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+      border-radius: 50%;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .checklist-dialog {
+      width: min(560px, 100%);
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      margin: 0 0 0 auto;
+      padding: 0;
+      border: 0;
+      border-left: 1px solid var(--line);
+      color: var(--ink);
+      background: var(--paper);
+      box-shadow: -20px 0 54px rgba(38, 31, 28, 0.24);
+      overflow: hidden;
+    }
+
+    .checklist-dialog::backdrop {
+      background: rgba(28, 27, 32, 0.48);
+      backdrop-filter: blur(2px);
+    }
+
+    .checklist-shell {
+      display: grid;
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+      height: 100%;
+    }
+
+    .checklist-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fffaf1;
+    }
+
+    .checklist-head h2 {
+      font-size: 23px;
+      line-height: 1.2;
+    }
+
+    .checklist-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
+    .checklist-date {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .icon-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      font-size: 25px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .icon-button:hover,
+    .icon-button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-strong);
+      outline: none;
+    }
+
+    .checklist-progress {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .progress-box {
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8f5ef;
+    }
+
+    .progress-box span,
+    .progress-box strong {
+      display: block;
+    }
+
+    .progress-box span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .progress-box strong {
+      margin-top: 3px;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .progress-track {
+      height: 5px;
+      margin-top: 8px;
+      border-radius: 999px;
+      background: #e6e1d9;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--mint);
+      transition: width 180ms ease;
+    }
+
+    .progress-box.report .progress-fill {
+      background: var(--gold);
+    }
+
+    .checklist-controls {
+      display: grid;
+      gap: 10px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fffdf9;
+    }
+
+    .status-notice {
+      display: none;
+      padding: 10px 12px;
+      border-left: 4px solid var(--mint);
+      border-radius: var(--radius);
+      color: #21594f;
+      background: #eef8f4;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.5;
+    }
+
+    .status-notice.show {
+      display: block;
+    }
+
+    .checklist-filters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .filter-button {
+      min-height: 36px;
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .filter-button[aria-pressed="true"] {
+      border-color: var(--accent);
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .checklist-content {
+      min-height: 0;
+      padding: 4px 18px 20px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .check-group {
+      padding-top: 16px;
+    }
+
+    .check-group[hidden] {
+      display: none;
+    }
+
+    .check-group-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+      color: var(--accent-strong);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .check-group-count {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .check-task {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 64px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .check-task[hidden] {
+      display: none;
+    }
+
+    .check-task.done .task-name {
+      color: var(--muted);
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+
+    .task-npc {
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px 7px;
+      margin-bottom: 4px;
+    }
+
+    .task-kind {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--accent);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .task-location {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .task-name {
+      display: block;
+      margin-top: 3px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .task-checks {
+      display: grid;
+      grid-template-columns: repeat(2, 58px);
+      gap: 5px;
+    }
+
+    .task-check {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      min-height: 46px;
+      padding: 5px 3px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .task-check:has(input:checked) {
+      border-color: rgba(35, 108, 95, 0.45);
+      color: var(--mint);
+      background: #edf7f3;
+    }
+
+    .task-check.report:has(input:checked) {
+      border-color: rgba(200, 146, 45, 0.55);
+      color: #8a5d10;
+      background: #fff8e8;
+    }
+
+    .task-check input {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      accent-color: var(--mint);
+      cursor: pointer;
+    }
+
+    .task-check.report input {
+      accent-color: var(--gold);
+    }
+
+    .checklist-empty {
+      display: none;
+      padding: 30px 12px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .checklist-empty.show {
+      display: block;
+    }
+
+    .checklist-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--line);
+      background: #fffaf1;
+    }
+
+    .checklist-footer span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .reset-button {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(165, 40, 45, 0.35);
+      border-radius: var(--radius);
+      color: var(--accent-strong);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .reset-button:hover,
+    .reset-button:focus-visible {
+      border-color: var(--accent);
+      background: #fff2f1;
+      outline: none;
+    }
+
     @media (max-width: 820px) {
       .topbar,
       .region-head {
@@ -563,6 +971,38 @@
 
       .quick-nav a {
         justify-content: center;
+      }
+
+      .checklist-launch {
+        right: 11px;
+        bottom: 11px;
+      }
+
+      .checklist-dialog {
+        width: 100%;
+        border-left: 0;
+      }
+
+      .checklist-head,
+      .checklist-progress,
+      .checklist-controls,
+      .checklist-footer {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .checklist-content {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .check-task {
+        grid-template-columns: minmax(0, 1fr) 112px;
+        gap: 8px;
+      }
+
+      .task-checks {
+        grid-template-columns: repeat(2, 53px);
       }
     }
   </style>
@@ -647,17 +1087,18 @@
         </details>
 
         <details class="prereq-card">
-          <summary>天津：領主的通行證</summary>
+          <summary>天津：每日任務前置 + 領主的通行證</summary>
           <div class="prereq-content">
-            <span class="source-chip">樂園官方確認 Base90 與前往方式；通行證流程需遊戲內核對</span>
+            <span class="source-chip">樂園官網 + 遊戲內實測確認有兩條不同前置</span>
             <ol>
               <li>Base Lv90 以上，到艾爾貝塔 `246,34` 找「天津町宣傳使臣」，支付 10,000 Zeny 前往天津町。</li>
-              <li>到天津町中間民宅門口，與兩側守門士兵對話，得知城主母親相關事件。</li>
-              <li>到天水閣內部四樓找城主「宜希答 佑西那戈」，接下處理城主母親事件的委託。</li>
-              <li>回天津町中間找「克武基」對話，再到北方神社找「狐狸面具 / 塔慨虎威」學習解決方式。</li>
-              <li>回城主母親住處與老太太互動，成功後取得狐狸尾巴，再回天水閣找城主回報。</li>
-              <li>完成後取得「領主的通行證」，即可進天津町密穴 / 天水閣相關地下區域；遺失時可花費 10,000 Zeny 補發。</li>
+              <li><strong>頂樓每日必解：</strong>先找天津町的「守門士兵」`amatsu 168,175` 開始當地劇情，再依任務引導進東湖城／天水閣協助城主。</li>
+              <li>把城主交代的接續任務完整跑完，直到完成遊戲訊息所稱的「天津町副本關卡」。樂園官網把這段身分稱為「特別指南役」，並明確說明接續完成任務後才會開放各 NPC 互動。</li>
+              <li>完成後再到天水閣內部找「進出管理兵」`ama_in02 117,164`。若仍出現「有前置任務」訊息，代表天津町主線／副本關卡尚未結束，應回守門士兵或城主確認未回報的步驟。</li>
+              <li><strong>地下區域另解：</strong>「領主的通行證」是城主母親事件的通行任務，流程會經過克武基、北方神社與狐狸面具／塔慨虎威，最後回城主回報。</li>
+              <li>領主的通行證用於天津町密穴／榻榻米迷宮等地下區域；它與頂樓每日的「天津町副本關卡」前置不同，只有通行證仍不保證能接天狗、火忍西怒畢每日。</li>
             </ol>
+            <p><strong>目前建議：</strong>要解天狗與火忍每日，先完成「守門士兵 → 城主 → 天津町副本關卡」這條；需要進密穴時，再補領主的通行證。官網沒有公開副本關卡的逐步對話分支，若任務導航中斷，以任務清單內尚未回報的天津町任務為準。</p>
           </div>
         </details>
 
@@ -824,8 +1265,8 @@
       </header>
       <div class="region-body">
         <div class="prep">
-          <strong>前置任務（建議先完成）</strong>
-          <p>天水閣與密穴相關任務建議先解「領主的通行證」。完成後可進天津町密穴與榻榻米迷宮，遺失通行證可補發。</p>
+          <strong>前置任務（頂樓兩項必解）</strong>
+          <p>天狗、火忍西怒畢每日必須先完成「守門士兵 `168,175` → 城主／特別指南役 → 天津町副本關卡」。領主的通行證只負責密穴／榻榻米迷宮等地下區域通行，不能代替每日任務前置。</p>
         </div>
         <div class="table-wrap">
           <table>
@@ -847,9 +1288,9 @@
                 <td><ul class="quest-list"><li>光澤的頭髮 10、米雅畢 30 隻</li><li>巨大傑勒比結晶 1、武士火槍兵 20 隻</li><li>牛蛙之皮 10、牛蛙 30 隻</li></ul></td>
               </tr>
               <tr>
-                <td><span class="map">天水閣內部 頂樓</span><br><span class="coord">88, 236</span></td>
+                <td><span class="map">天水閣內部</span><br><span class="coord">ama_in02 117, 164</span></td>
                 <td class="npc">進出管理兵</td>
-                <td><ul class="quest-list"><li>天狗 20 隻</li><li>火忍西怒畢 20 隻</li></ul></td>
+                <td><ul class="quest-list"><li>天狗 20 隻</li><li>火忍西怒畢 20 隻</li><li><strong>必須先完成天津町主線／副本關卡；只有領主的通行證仍不能接。</strong></li></ul></td>
               </tr>
             </tbody>
           </table>
@@ -953,8 +1394,329 @@
     </section>
 
     <section class="panel source" aria-label="來源">
-      <p>主要來源：<a href="https://ro-zero-site.pages.dev/" target="_blank" rel="noreferrer">RO補給站每日任務整理</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3514" target="_blank" rel="noreferrer">巴哈 RO樂園每日任務整理</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218239" target="_blank" rel="noreferrer">樂園官方崑崙公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218357" target="_blank" rel="noreferrer">樂園官方哎喲泰雅公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218425" target="_blank" rel="noreferrer">樂園官方天津公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218117" target="_blank" rel="noreferrer">樂園官方死都 / 龜島開放公告</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3339" target="_blank" rel="noreferrer">巴哈 RO樂園崑崙主線攻略</a>。前置任務若標示「需遊戲內核對」，代表已查到樂園入口或地圖開放資訊，但完整步驟仍可能因樂園版本調整，最後以遊戲內 NPC 對話為準。</p>
+      <p>主要來源：<a href="https://ro-zero-site.pages.dev/" target="_blank" rel="noreferrer">RO補給站每日任務整理</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3514" target="_blank" rel="noreferrer">巴哈 RO樂園每日任務整理</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218239" target="_blank" rel="noreferrer">樂園官方崑崙公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218357" target="_blank" rel="noreferrer">樂園官方哎喲泰雅公告</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218425" target="_blank" rel="noreferrer">樂園官方天津公告</a>、<a href="https://event.gnjoy.com.tw/RoZ/ACT_20260519_rozAmatsu/Amatsu" target="_blank" rel="noreferrer">樂園官方天津專頁</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218117" target="_blank" rel="noreferrer">樂園官方死都 / 龜島開放公告</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3339" target="_blank" rel="noreferrer">巴哈 RO樂園崑崙主線攻略</a>。前置任務若標示「需遊戲內核對」，代表已查到樂園入口或地圖開放資訊，但完整步驟仍可能因樂園版本調整，最後以遊戲內 NPC 對話為準。</p>
     </section>
   </main>
+
+  <button class="checklist-launch" id="openChecklist" type="button" aria-haspopup="dialog" aria-controls="dailyChecklist">
+    <span class="launch-mark" aria-hidden="true">✓</span>
+    <span>每日清單 <span id="launchProgress">0/34</span></span>
+  </button>
+
+  <dialog class="checklist-dialog" id="dailyChecklist" aria-labelledby="checklistTitle">
+    <div class="checklist-shell">
+      <header class="checklist-head">
+        <div>
+          <h2 id="checklistTitle">90 等每日清單</h2>
+          <p class="checklist-date" id="checklistDate"></p>
+        </div>
+        <div class="checklist-head-actions">
+          <button class="reset-button" type="button" data-reset-checklist>清除勾選</button>
+          <button class="icon-button" id="closeChecklist" type="button" aria-label="關閉每日清單">×</button>
+        </div>
+      </header>
+
+      <section class="checklist-progress" aria-label="今日任務進度">
+        <div class="progress-box">
+          <span>已打完</span>
+          <strong id="huntedProgress">0 / 34</strong>
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="huntedBar"></div></div>
+        </div>
+        <div class="progress-box report">
+          <span>已回報</span>
+          <strong id="reportedProgress">0 / 34</strong>
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="reportedBar"></div></div>
+        </div>
+      </section>
+
+      <section class="checklist-controls">
+        <div class="status-notice" id="statusNotice" role="status"></div>
+        <div class="checklist-filters" aria-label="篩選任務">
+          <button class="filter-button" type="button" data-filter="all" aria-pressed="true">全部</button>
+          <button class="filter-button" type="button" data-filter="hunt" aria-pressed="false">未打完</button>
+          <button class="filter-button" type="button" data-filter="report" aria-pressed="false">待回報</button>
+        </div>
+      </section>
+
+      <div class="checklist-content" id="checklistContent">
+        <div id="checklistGroups"></div>
+        <div class="checklist-empty" id="checklistEmpty">這個分類目前沒有任務。</div>
+      </div>
+
+      <footer class="checklist-footer">
+        <span>紀錄保存在目前裝置，日期變更時自動建立新清單。</span>
+        <button class="reset-button" type="button" data-reset-checklist>清除全部勾選</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <script>
+    const DAILY_TASKS = [
+      {
+        id: "turtle",
+        name: "龜島",
+        tasks: [
+          ["turtle-tibert-1", "騎士提伯特", "討伐刺尾蜻蜓 10 隻、彈簧兔 10 隻", "討伐", "艾爾貝塔 208, 119"],
+          ["turtle-tibert-2", "騎士提伯特", "討伐果樹龜、岩石龜、水靈龜、火靈龜各 10 隻", "討伐", "艾爾貝塔 208, 119"],
+          ["turtle-captain-1", "騎士團長", "討伐風靈龜 10 隻", "討伐", "龜良村 110, 83"]
+        ]
+      },
+      {
+        id: "kunlun",
+        name: "崑崙",
+        tasks: [
+          ["kunlun-kaizhen-1", "凱真", "收集老舊的太極盤 10 個", "收集", "崑輪原野 258, 95"],
+          ["kunlun-kaizhen-2", "凱真", "收集修好的太極盤 10 個", "收集", "崑輪原野 258, 95"],
+          ["kunlun-yanyuanjin-1", "燕元津", "討伐元宵童子 15 隻", "討伐", "神仙之島崑崙 163, 195"],
+          ["kunlun-yanyuanjin-2", "燕元津", "討伐妖仙女 15 隻", "討伐", "神仙之島崑崙 163, 195"],
+          ["kunlun-yanyuanjin-3", "燕元津", "討伐猴桃木 15 隻", "討伐", "神仙之島崑崙 163, 195"],
+          ["kunlun-yanyuanjin-4", "燕元津", "討伐人蔘精 15 隻", "討伐", "神仙之島崑崙 163, 195"]
+        ]
+      },
+      {
+        id: "ayothaya",
+        name: "泰國 / 哎喲泰雅",
+        tasks: [
+          ["ayothaya-monk-1", "哎喲泰雅僧侶", "討伐群葉貓 15 隻", "討伐", "哎喲泰雅原野 123, 200"],
+          ["ayothaya-monk-2", "哎喲泰雅僧侶", "討伐克萊本 15 隻", "討伐", "哎喲泰雅原野 123, 200"],
+          ["ayothaya-monk-3", "哎喲泰雅僧侶", "討伐塔嚕安 10 隻", "討伐", "哎喲泰雅原野 123, 200"],
+          ["ayothaya-collector-1", "古董收藏家", "收集紅色流蘇 10 個", "收集", "哎喲泰雅原野 123, 200"],
+          ["ayothaya-collector-2", "古董收藏家", "收集竹籃 10 個", "收集", "哎喲泰雅原野 123, 200"],
+          ["ayothaya-zoklong-1", "佐克瓏", "依任務指示，替地圖上的 3 位 NPC 灑水", "跑腿", "哎喲泰雅 204, 265"],
+          ["ayothaya-grandma-1", "老奶奶", "完成「放長線釣大魚」互動任務", "互動", "哎喲泰雅 251, 99"],
+          ["ayothaya-marid-1", "瑪莉德辣辣", "準備檸檬 10、蝦子 20、紅辣椒 30，完成料理", "料理", "哎喲泰雅 231, 70"]
+        ]
+      },
+      {
+        id: "amatsu",
+        name: "天津",
+        tasks: [
+          ["amatsu-momoyume-1", "桃夢也", "進入並完成桃太郎體驗館；此任務不吃經驗加倍", "體驗", "天水之國－天津町 225, 235"],
+          ["amatsu-takai-1", "塔慨虎威", "討伐釣魚河童 30 隻", "討伐", "天津町原野 173, 328"],
+          ["amatsu-takai-2", "塔慨虎威", "討伐傘妖 30 隻", "討伐", "天津町原野 173, 328"],
+          ["amatsu-chiyo-1", "千代夫人", "收集光澤的頭髮 10 個，並討伐米雅畢 30 隻", "收集＋討伐", "天水之國－天津町 167, 179"],
+          ["amatsu-chiyo-2", "千代夫人", "準備巨大傑勒比結晶 1 個，並討伐武士火槍兵 20 隻", "道具＋討伐", "天水之國－天津町 167, 179"],
+          ["amatsu-chiyo-3", "千代夫人", "收集牛蛙之皮 10 個，並討伐牛蛙 30 隻", "收集＋討伐", "天水之國－天津町 167, 179"],
+          ["amatsu-guard-1", "進出管理兵", "完成天津町主線／副本關卡後，討伐天狗 20 隻；只有領主的通行證仍不能接", "前置＋討伐", "天水閣內部 ama_in02 117, 164"],
+          ["amatsu-guard-2", "進出管理兵", "完成天津町主線／副本關卡後，討伐火忍西怒畢 20 隻；只有領主的通行證仍不能接", "前置＋討伐", "天水閣內部 ama_in02 117, 164"]
+        ]
+      },
+      {
+        id: "louyang",
+        name: "洛陽 / 龍之城",
+        tasks: [
+          ["louyang-zhu-1", "討伐隊負責職員－朱偉業", "討伐豹皮怪 30 隻", "討伐", "古都龍之城 308, 76"],
+          ["louyang-zhu-2", "討伐隊負責職員－朱偉業", "討伐狐仙 30 隻", "討伐", "古都龍之城 308, 76"],
+          ["louyang-lingzhi-1", "醫院－領智", "準備噬人樹花 5、泥團 5、米糕 10", "收集", "古都龍之城 259, 93"],
+          ["louyang-wang-1", "王仕隆", "收集舞獅之角 20 個，並討伐舞獅 10 隻", "收集＋討伐", "古都龍之城 280, 164"],
+          ["louyang-xiaoxian-1", "小賢", "討伐舞獅 30 隻", "討伐", "龍之城王陵 37, 211"],
+          ["louyang-xiaoxian-2", "小賢", "討伐妖君 30 隻", "討伐", "龍之城王陵內部 149, 106"],
+          ["louyang-xiaoxian-3", "小賢", "討伐小青 30 隻", "討伐", "龍之城審良宮 47, 204"]
+        ]
+      },
+      {
+        id: "niflheim",
+        name: "死都 / 尼芙菲姆",
+        tasks: [
+          ["niflheim-nameless-1", "無名氏", "討伐銀月魔女 20 隻、嗜血怪人 20 隻", "討伐", "尼芙菲姆 225, 244"],
+          ["niflheim-barmund-1", "巴米契", "討伐假面鬼 20 隻、無顱武士 20 隻", "討伐", "偏落村落斯凱鈴領頓 208, 52"]
+        ]
+      }
+    ];
+
+    const STORAGE_KEY = "ro-lv90-daily-checklist-v1";
+    const allTasks = DAILY_TASKS.flatMap((group) => group.tasks);
+    const totalTasks = allTasks.length;
+    const dialog = document.getElementById("dailyChecklist");
+    const groupsElement = document.getElementById("checklistGroups");
+    let activeFilter = "all";
+    let checklistState = loadChecklist();
+
+    function localDateKey(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function emptyChecklist() {
+      return { date: localDateKey(), tasks: {} };
+    }
+
+    function loadChecklist() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return saved && saved.date === localDateKey() && saved.tasks ? saved : emptyChecklist();
+      } catch {
+        return emptyChecklist();
+      }
+    }
+
+    function saveChecklist() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checklistState));
+    }
+
+    function taskState(id) {
+      return checklistState.tasks[id] || { hunted: false, reported: false };
+    }
+
+    function renderChecklist() {
+      groupsElement.innerHTML = DAILY_TASKS.map((group) => `
+        <section class="check-group" data-group="${group.id}">
+          <div class="check-group-title">
+            <span>${group.name}</span>
+            <span class="check-group-count">${group.tasks.length} 個任務</span>
+          </div>
+          <div>
+            ${group.tasks.map(([id, npc, task, kind, location]) => {
+              const state = taskState(id);
+              return `
+                <article class="check-task${state.reported ? " done" : ""}" data-task="${id}">
+                  <div>
+                    <div class="task-meta">
+                      <span class="task-kind">${kind}</span>
+                      <span class="task-location">${location}</span>
+                    </div>
+                    <span class="task-npc">${npc}</span>
+                    <strong class="task-name">${task}</strong>
+                  </div>
+                  <div class="task-checks">
+                    <label class="task-check">
+                      <input type="checkbox" data-kind="hunted" ${state.hunted ? "checked" : ""} aria-label="${task} 已打完">
+                      <span>已打完</span>
+                    </label>
+                    <label class="task-check report">
+                      <input type="checkbox" data-kind="reported" ${state.reported ? "checked" : ""} aria-label="${task} 已回報">
+                      <span>已回報</span>
+                    </label>
+                  </div>
+                </article>`;
+            }).join("")}
+          </div>
+        </section>`).join("");
+
+      groupsElement.querySelectorAll("input[type='checkbox']").forEach((input) => {
+        input.addEventListener("change", handleCheckChange);
+      });
+      applyFilter();
+      updateProgress();
+    }
+
+    function handleCheckChange(event) {
+      const taskElement = event.target.closest(".check-task");
+      const id = taskElement.dataset.task;
+      const state = { ...taskState(id) };
+
+      if (event.target.dataset.kind === "reported") {
+        state.reported = event.target.checked;
+        if (state.reported) state.hunted = true;
+      } else {
+        state.hunted = event.target.checked;
+        if (!state.hunted) state.reported = false;
+      }
+
+      checklistState.tasks[id] = state;
+      saveChecklist();
+      renderChecklist();
+    }
+
+    function getCounts() {
+      return allTasks.reduce((counts, [id]) => {
+        const state = taskState(id);
+        if (state.hunted) counts.hunted += 1;
+        if (state.reported) counts.reported += 1;
+        return counts;
+      }, { hunted: 0, reported: 0 });
+    }
+
+    function updateProgress() {
+      const counts = getCounts();
+      const huntedPercent = counts.hunted / totalTasks * 100;
+      const reportedPercent = counts.reported / totalTasks * 100;
+      document.getElementById("huntedProgress").textContent = `${counts.hunted} / ${totalTasks}`;
+      document.getElementById("reportedProgress").textContent = `${counts.reported} / ${totalTasks}`;
+      document.getElementById("huntedBar").style.width = `${huntedPercent}%`;
+      document.getElementById("reportedBar").style.width = `${reportedPercent}%`;
+      document.getElementById("launchProgress").textContent = `${counts.hunted}/${totalTasks}`;
+
+      const notice = document.getElementById("statusNotice");
+      notice.classList.remove("show");
+      if (counts.reported === totalTasks) {
+        notice.textContent = "今日 34 個任務已全部回報完成。";
+        notice.classList.add("show");
+      } else if (counts.hunted === totalTasks) {
+        notice.textContent = `34 個任務都打完了，還有 ${totalTasks - counts.reported} 個待回報。`;
+        notice.classList.add("show");
+      }
+    }
+
+    function applyFilter() {
+      let visibleTasks = 0;
+      document.querySelectorAll(".check-group").forEach((groupElement) => {
+        let groupVisible = 0;
+        groupElement.querySelectorAll(".check-task").forEach((taskElement) => {
+          const state = taskState(taskElement.dataset.task);
+          const visible = activeFilter === "all"
+            || (activeFilter === "hunt" && !state.hunted)
+            || (activeFilter === "report" && state.hunted && !state.reported);
+          taskElement.hidden = !visible;
+          if (visible) groupVisible += 1;
+        });
+        groupElement.hidden = groupVisible === 0;
+        visibleTasks += groupVisible;
+      });
+      document.getElementById("checklistEmpty").classList.toggle("show", visibleTasks === 0);
+    }
+
+    function formatChecklistDate() {
+      return new Intl.DateTimeFormat("zh-TW", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+      }).format(new Date());
+    }
+
+    document.getElementById("openChecklist").addEventListener("click", () => {
+      if (checklistState.date !== localDateKey()) {
+        checklistState = emptyChecklist();
+        saveChecklist();
+        renderChecklist();
+      }
+      document.getElementById("checklistDate").textContent = formatChecklistDate();
+      dialog.showModal();
+    });
+
+    document.getElementById("closeChecklist").addEventListener("click", () => dialog.close());
+
+    dialog.addEventListener("click", (event) => {
+      const rect = dialog.getBoundingClientRect();
+      const inside = event.clientX >= rect.left && event.clientX <= rect.right
+        && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      if (!inside) dialog.close();
+    });
+
+    document.querySelectorAll(".filter-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll(".filter-button").forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+        applyFilter();
+      });
+    });
+
+    document.querySelectorAll("[data-reset-checklist]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!window.confirm("確定要清除今天 34 個任務的全部勾選紀錄嗎？")) return;
+        checklistState = emptyChecklist();
+        saveChecklist();
+        renderChecklist();
+      });
+    });
+
+    document.getElementById("checklistDate").textContent = formatChecklistDate();
+    renderChecklist();
+  </script>
 </body>
 </html>
