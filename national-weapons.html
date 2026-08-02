@@ -1,0 +1,1173 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO仙境傳說Online：樂園國家武器資料庫，整理地龍、靈幻、死靈、陰陽武器的石頭、附魔、NPC、精煉道具與效果。">
+  <title>國家武器資料庫｜RO樂園 SquareTsai</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --paper: #fffdf8;
+      --ink: #242322;
+      --muted: #6f6961;
+      --line: #d9d2c7;
+      --deep: #24362f;
+      --green: #416f5b;
+      --red: #934338;
+      --gold: #b9852e;
+      --blue: #3e6275;
+      --radius: 8px;
+      --shadow: 0 14px 34px rgba(52, 45, 36, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+
+    button,
+    input { font: inherit; }
+
+    a { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+      color: #fff;
+      background: var(--deep);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: min(1180px, calc(100% - 32px));
+      min-height: 58px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      border: 1px solid rgba(255,255,255,.38);
+      border-radius: 50%;
+      font-size: 12px;
+    }
+
+    .back-link {
+      color: #f5e8c9;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 64px;
+    }
+
+    .page-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+      gap: 28px;
+      align-items: end;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    h1,
+    h2,
+    h3,
+    p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 12px;
+      font-family: Georgia, "Microsoft JhengHei", serif;
+      font-size: 62px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap::before {
+      content: "⌕";
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-52%);
+      color: var(--green);
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 14px 10px 44px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(65,111,91,.14);
+    }
+
+    .series-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+      margin: 22px 0;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #e9e5dd;
+    }
+
+    .tab-button {
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 6px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .tab-button[aria-pressed="true"] {
+      color: #fff;
+      background: var(--deep);
+      box-shadow: 0 3px 10px rgba(36,54,47,.18);
+    }
+
+    .overview {
+      margin-bottom: 30px;
+      border-top: 4px solid var(--gold);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h2 {
+      margin-bottom: 3px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .section-head p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      background: #f1eee8;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+
+    .series-name {
+      color: var(--deep);
+      font-weight: 900;
+    }
+
+    .stone {
+      color: var(--red);
+      font-weight: 900;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #275746;
+      background: #e8f0ec;
+      font-family: Consolas, monospace;
+      font-size: .92em;
+      white-space: nowrap;
+    }
+
+    .inferred {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 6px;
+      border: 1px solid #dfbe83;
+      border-radius: 4px;
+      color: #75521b;
+      background: #fff6df;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      background: #f8f5ef;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      padding: 18px 20px;
+      border-right: 1px solid var(--line);
+    }
+
+    .flow-step:last-child { border-right: 0; }
+
+    .flow-number {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--red);
+      font-weight: 900;
+    }
+
+    .flow-step strong,
+    .flow-step span { display: block; }
+
+    .flow-step span {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .region-list {
+      display: grid;
+      gap: 28px;
+    }
+
+    .region {
+      --region: var(--green);
+      border-top: 5px solid var(--region);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .region[data-region="louyang"] { --region: #a45d32; }
+    .region[data-region="gonryun"] { --region: #3f7759; }
+    .region[data-region="ayothaya"] { --region: #a94040; }
+    .region[data-region="amatsu"] { --region: #4d6682; }
+
+    .region[hidden] { display: none; }
+
+    .region-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .region-kicker {
+      margin-bottom: 4px;
+      color: var(--region);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .region-head h2 {
+      margin-bottom: 5px;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .region-head p {
+      max-width: 700px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .target-badge {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border: 1px solid var(--region);
+      border-radius: 4px;
+      color: var(--region);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .fact {
+      min-width: 0;
+      padding: 16px 18px;
+      border-right: 1px solid var(--line);
+    }
+
+    .fact:last-child { border-right: 0; }
+
+    .fact span,
+    .fact strong { display: block; }
+
+    .fact span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .fact strong {
+      margin-top: 3px;
+      overflow-wrap: anywhere;
+      font-size: 15px;
+    }
+
+    .region-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+      gap: 0;
+    }
+
+    .region-info {
+      padding: 22px 24px 26px;
+      border-right: 1px solid var(--line);
+    }
+
+    .region-visual {
+      min-width: 0;
+      padding: 22px 24px 26px;
+      background: #f7f4ed;
+    }
+
+    .subhead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 12px;
+      font-size: 17px;
+      line-height: 1.3;
+    }
+
+    .subhead:not(:first-child) { margin-top: 24px; }
+
+    .subhead small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .weapon-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .weapon-tag {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: #4f4b46;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .weapon-tag[hidden] { display: none; }
+
+    .effect-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .drop-guide {
+      display: grid;
+      gap: 8px;
+    }
+
+    .drop-map {
+      display: grid;
+      grid-template-columns: minmax(130px, .42fr) minmax(0, 1fr);
+      gap: 12px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .drop-map strong {
+      color: var(--region);
+      font-size: 13px;
+    }
+
+    .drop-map code {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .monster-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .monster-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      background: #f2eee5;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .monster-element {
+      min-width: 23px;
+      padding: 1px 4px;
+      border: 1px solid currentColor;
+      border-radius: 3px;
+      background: #fff;
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .monster-element[data-element="無"] { color: #69645e; }
+    .monster-element[data-element="水"] { color: #23699a; background: #eef8ff; }
+    .monster-element[data-element="地"] { color: #68762b; background: #f5f8e8; }
+    .monster-element[data-element="火"] { color: #b13d2e; background: #fff1ed; }
+    .monster-element[data-element="風"] { color: #28755c; background: #ecf8f2; }
+    .monster-element[data-element="毒"] { color: #7d3d82; background: #faf0fb; }
+    .monster-element[data-element="念"] { color: #9a4f73; background: #fff1f7; }
+    .monster-element[data-element="暗"] { color: #4f4c70; background: #f2f1fa; }
+    .monster-element[data-element="不死"] { color: #6b533f; background: #f7f0e9; }
+
+    .drop-note {
+      margin: 10px 0 0;
+      padding-left: 10px;
+      border-left: 3px solid var(--region);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .effect-line {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--line);
+      font-size: 13px;
+    }
+
+    .effect-line:last-child { border-bottom: 0; }
+
+    .effect-line strong { color: var(--region); }
+
+    .npc-table td:first-child {
+      width: 30%;
+      font-weight: 900;
+    }
+
+    .npc-table td:nth-child(2) { white-space: nowrap; }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .image-button {
+      min-width: 0;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .image-button.wide { grid-column: 1 / -1; }
+
+    .image-button img {
+      display: block;
+      width: 100%;
+      height: 128px;
+      object-fit: contain;
+      background: #fff;
+    }
+
+    .image-button.wide img {
+      height: 270px;
+      object-position: top center;
+    }
+
+    .image-button span {
+      display: block;
+      padding: 9px 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .image-button:hover,
+    .image-button:focus-visible {
+      border-color: var(--region);
+      outline: 3px solid color-mix(in srgb, var(--region) 20%, transparent);
+      outline-offset: 1px;
+    }
+
+    .source-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .source-link {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .enchant-panel {
+      margin-top: 30px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .enchant-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .enchant-column {
+      padding: 22px 24px 26px;
+    }
+
+    .enchant-column + .enchant-column { border-left: 1px solid var(--line); }
+
+    .enchant-column h3 {
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .ability-table td:first-child { font-weight: 800; }
+
+    .ability-table td:last-child {
+      width: 96px;
+      color: var(--red);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .ability-table tr.rare td { background: #fff8e8; }
+
+    .ability-table tr.label td {
+      color: #fff;
+      background: var(--deep);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .notice {
+      margin: 0;
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: #f7f4ed;
+      font-size: 12px;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 48px 24px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: var(--paper);
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .empty-state.show { display: block; }
+
+    dialog {
+      width: min(920px, calc(100% - 24px));
+      max-width: none;
+      max-height: calc(100dvh - 24px);
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 30px 90px rgba(0,0,0,.35);
+      overflow: hidden;
+    }
+
+    dialog::backdrop { background: rgba(24,24,24,.72); }
+
+    .dialog-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .dialog-head strong { font-size: 14px; }
+
+    .close-button {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      background: #fff;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .dialog-scroll {
+      max-height: calc(100dvh - 88px);
+      padding: 16px;
+      overflow: auto;
+      background: #ece9e2;
+    }
+
+    .dialog-scroll img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      background: #fff;
+    }
+
+    footer {
+      padding: 26px 16px;
+      color: #dfe8e4;
+      background: var(--deep);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .page-head,
+      .region-body { grid-template-columns: 1fr; }
+      .region-info { border-right: 0; border-bottom: 1px solid var(--line); }
+      .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fact:nth-child(2) { border-right: 0; }
+      .fact:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .workflow { grid-template-columns: 1fr; }
+      .flow-step { border-right: 0; border-bottom: 1px solid var(--line); }
+      .flow-step:last-child { border-bottom: 0; }
+    }
+
+    @media (max-width: 680px) {
+      .topbar-inner,
+      main { width: min(100% - 20px, 1180px); }
+      main { padding-top: 24px; }
+      .page-head { gap: 20px; }
+      h1 { font-size: 39px; }
+      .series-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tab-button:first-child { grid-column: 1 / -1; }
+      .section-head,
+      .region-head { align-items: start; padding: 18px; }
+      .region-head { flex-direction: column; }
+      .region-info,
+      .region-visual,
+      .enchant-column { padding: 18px; }
+      .enchant-grid { grid-template-columns: 1fr; }
+      .enchant-column + .enchant-column { border-top: 1px solid var(--line); border-left: 0; }
+      .image-grid { grid-template-columns: 1fr; }
+      .image-button.wide { grid-column: auto; }
+      .image-button.wide img { height: 230px; }
+      .drop-map { grid-template-columns: 1fr; gap: 7px; }
+      .back-link span { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">RO</span><span>RO樂園 SquareTsai</span></a>
+      <a class="back-link" href="index.html">‹ <span>返回工具首頁</span></a>
+    </div>
+  </header>
+
+  <main>
+    <header class="page-head">
+      <div>
+        <p class="eyebrow">Base Lv.90 地區裝備</p>
+        <h1>國家武器資料庫</h1>
+        <p class="lead">地龍、靈幻、死靈、陰陽四套武器的兌換成本、附魔能力、NPC 座標、指定 +7 道具與完整官方裝備圖。</p>
+      </div>
+      <label class="search-wrap">
+        <span hidden>搜尋國家武器</span>
+        <input class="search-input" id="weaponSearch" type="search" placeholder="搜尋武器、石頭、怪物、NPC 或座標" autocomplete="off">
+      </label>
+    </header>
+
+    <nav class="series-tabs" aria-label="國家武器系列">
+      <button class="tab-button" type="button" data-filter="all" aria-pressed="true">全部比較</button>
+      <button class="tab-button" type="button" data-filter="louyang" aria-pressed="false">洛陽・地龍</button>
+      <button class="tab-button" type="button" data-filter="gonryun" aria-pressed="false">崑崙・靈幻</button>
+      <button class="tab-button" type="button" data-filter="ayothaya" aria-pressed="false">泰國・死靈</button>
+      <button class="tab-button" type="button" data-filter="amatsu" aria-pressed="false">天津・陰陽</button>
+    </nav>
+
+    <section class="overview" id="overview">
+      <div class="section-head">
+        <div>
+          <h2>四套快速比較</h2>
+          <p>每套皆為 14 種武器、2 洞、武器等級 3、需求 Base Lv90。</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>地區／系列</th><th>武器兌換</th><th>附魔一次</th><th>基本特攻</th><th>+7 專屬道具</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="series-name">洛陽・地龍</span></td><td><span class="stone">地龍石 20</span></td><td>地龍石 10</td><td>無形／地屬性</td><td>白蛇淚滴的守護(+7)</td></tr>
+            <tr><td><span class="series-name">崑崙・靈幻</span></td><td><span class="stone">靈幻石 20</span></td><td>靈幻石 10</td><td>人類型非玩家／暗屬性</td><td>墨蛇君的祈福(+7)</td></tr>
+            <tr><td><span class="series-name">哎喲泰雅・死靈</span></td><td><span class="stone">死靈石 20</span></td><td>死靈石 10</td><td>植物型／風屬性</td><td>嗒妮欽定香蕉皮(+7)</td></tr>
+            <tr><td><span class="series-name">天津・陰陽</span></td><td><span class="stone">魔靈石 20</span><br><span class="inferred">同系統規格，待遊戲內複核</span></td><td>魔靈石 10<br><span class="inferred">同系統規格，待遊戲內複核</span></td><td>惡魔型／火屬性</td><td>暗部的守護(+7)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="workflow">
+        <div class="flow-step"><span class="flow-number">1</span><div><strong>20 顆換武器</strong><span>向武器 NPC 兌換對應系列武器。</span></div></div>
+        <div class="flow-step"><span class="flow-number">2</span><div><strong>10 顆換附魔道具</strong><span>選物理或魔法路線，第一條必出、第二條機率取得。</span></div></div>
+        <div class="flow-step"><span class="flow-number">3</span><div><strong>指定 +7 精煉</strong><span>各地區有專屬 +4／+7 道具與精煉儀式 NPC。</span></div></div>
+      </div>
+      <p class="notice"><strong>石頭掉落說明：</strong>怪物名稱以台灣樂園官方地區魔物圖為準，掉落關聯對照 Zero 地圖掉落調整及台灣玩家實測。官方未公布掉率，伺服器端也可能於維護時調整；MVP 未列入下方一般怪物名單。</p>
+    </section>
+
+    <div class="region-list" id="regionList"></div>
+    <div class="empty-state" id="emptyState">找不到符合條件的國家武器資料。</div>
+
+    <section class="enchant-panel" id="enchantEffects">
+      <div class="section-head">
+        <div>
+          <h2>共通附魔能力範圍</h2>
+          <p>四套武器使用相同能力池；差別在附魔道具名稱與消耗的地區石頭。</p>
+        </div>
+      </div>
+      <div class="enchant-grid">
+        <section class="enchant-column">
+          <h3>物理系列</h3>
+          <div class="table-wrap">
+            <table class="ability-table">
+              <tbody>
+                <tr class="label"><td colspan="2">第一條</td></tr>
+                <tr><td>STR／AGI／VIT／DEX</td><td>1～5</td></tr>
+                <tr><td>ATK</td><td>7～35</td></tr>
+                <tr><td>HIT</td><td>7～25</td></tr>
+                <tr><td>MHP／MSP</td><td>100～450／20～100</td></tr>
+                <tr><td>FLEE／CRI</td><td>10～25／3～8</td></tr>
+                <tr><td>受到治癒量增加</td><td>6～12%</td></tr>
+                <tr><td>ASPD</td><td>1～2</td></tr>
+                <tr class="label"><td colspan="2">第二條・機率取得</td></tr>
+                <tr class="rare"><td>攻擊速度增加</td><td>6～9%</td></tr>
+                <tr class="rare"><td>ATK</td><td>3～8%</td></tr>
+                <tr class="rare"><td>遠距離物理傷害增加</td><td>5～12%</td></tr>
+                <tr class="rare"><td>暴擊傷害增加</td><td>6～15%</td></tr>
+                <tr class="rare"><td>對小／中／大型物理傷害</td><td>4～12%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="enchant-column">
+          <h3>魔法系列</h3>
+          <div class="table-wrap">
+            <table class="ability-table">
+              <tbody>
+                <tr class="label"><td colspan="2">第一條</td></tr>
+                <tr><td>INT／AGI／VIT／DEX</td><td>1～5</td></tr>
+                <tr><td>MATK</td><td>7～35</td></tr>
+                <tr><td>MHP／MSP</td><td>100～450／20～100</td></tr>
+                <tr><td>DEF／MDEF</td><td>10～40／1～4</td></tr>
+                <tr><td>FLEE</td><td>10～25</td></tr>
+                <tr><td>治癒量</td><td>6～12%</td></tr>
+                <tr><td>ASPD</td><td>1～2</td></tr>
+                <tr class="label"><td colspan="2">第二條・機率取得</td></tr>
+                <tr class="rare"><td>攻擊速度增加</td><td>6～9%</td></tr>
+                <tr class="rare"><td>MATK</td><td>3～8%</td></tr>
+                <tr class="rare"><td>變動詠唱</td><td>-5～12%</td></tr>
+                <tr class="rare"><td>SP 消耗量減少</td><td>6～15%</td></tr>
+                <tr class="rare"><td>對小／中／大型魔法傷害</td><td>4～12%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <p class="notice"><strong>資料判讀：</strong>官方能力圖將一般能力列為「第一條」，稀有能力列為「第二條・機率取得」。附魔是否覆蓋舊能力、是否保留精煉與卡片，官網未在這批地區公告中明載，操作前以 NPC 最終確認視窗為準。</p>
+    </section>
+  </main>
+
+  <dialog id="imageDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-head"><strong id="dialogTitle">官方資料圖</strong><button class="close-button" id="closeDialog" type="button" aria-label="關閉">×</button></div>
+    <div class="dialog-scroll"><img id="dialogImage" src="" alt=""></div>
+  </dialog>
+
+  <footer>RO樂園 SquareTsai｜官方公告資料整理，版本差異以遊戲內 NPC 對話為準。</footer>
+
+  <script>
+    const regions = [
+      {
+        id: "louyang",
+        area: "龍之城洛陽",
+        series: "地龍武器",
+        code: "LOCAL 01",
+        stone: "地龍石",
+        stoneId: "25620",
+        target: "無形／地屬性",
+        physical: "地龍飛天書",
+        physicalId: "23738",
+        magical: "地龍魔傳書",
+        magicalId: "23739",
+        ticket: "白蛇淚滴的守護(+7)",
+        ticketId: "1002893",
+        weaponNpc: ["龍之城武器教官 趙祉龍", "louyang 199,113"],
+        enchantNpc: ["地龍術士", "louyang 207,112"],
+        ticketNpc: ["〈慕青孃〉徐先", "louyang 202,92"],
+        description: "以無形種族與地屬性為主要特攻。官網明載 20 顆地龍石換武器、10 顆換對應附魔書卷。",
+        source: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218356",
+        db: "https://ragnaplace.com/zh-t/roztw/item/23738",
+        images: ["louyang-weapons.png", "louyang-scrolls.png", "louyang-effects.png", "louyang-ticket.png", "louyang-monsters.png"],
+        dropMaps: [
+          { name: "洛陽原野", code: "lou_fild01", monsters: ["米糕"] },
+          { name: "王陵", code: "lou_dun01", monsters: ["米糕", "舞獅", "豹皮怪"] },
+          { name: "王陵內部", code: "lou_dun02", monsters: ["舞獅", "妖君"] },
+          { name: "水龍宮", code: "lou_dun03", monsters: ["狐仙", "舞獅", "小青", "妖君"] }
+        ],
+        dropNote: "同名的流浪、頭目等特殊型也可能列入。白素貞未列入目前可確認的一般掉落名單；實際掉率未公開。",
+        weapons: ["地龍拳套", "地龍劍", "地龍槌", "地龍弓", "地龍巨劍", "地龍槍", "地龍杖", "地龍書", "地龍鞭", "地龍殺刀", "地龍斧", "地龍短刀", "地龍忍刀", "地龍弦"]
+      },
+      {
+        id: "gonryun",
+        area: "神仙之島崑崙",
+        series: "靈幻武器",
+        code: "LOCAL 03",
+        stone: "靈幻石",
+        stoneId: "1000020",
+        target: "人類型非玩家／暗屬性",
+        physical: "靈幻武攻牌",
+        physicalId: "100056",
+        magical: "靈幻魔攻牌",
+        magicalId: "100057",
+        ticket: "墨蛇君的祈福(+7)",
+        ticketId: "1002814",
+        weaponNpc: ["〈靈幻武器〉世緣杖", "gonryun 200,153"],
+        enchantNpc: ["〈靈幻咒文牌〉妍鎮 車", "gonryun 141,113"],
+        ticketNpc: ["〈藏墨人〉摩莎", "gonryun 186,113"],
+        description: "以人類型魔物（不包含玩家）與暗屬性為主要特攻。靈幻石可由崑崙地區任務與魔物取得。",
+        source: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218239",
+        db: "https://ragnaplace.com/zh-t/roztw/item/100056",
+        images: ["gonryun-weapons.png", "gonryun-scrolls.png", "gonryun-effects.png", "gonryun-ticket.png", "gonryun-monsters.png"],
+        dropMaps: [
+          { name: "崑崙原野", code: "gon_fild01", monsters: ["元宵童子", "小花豹"] },
+          { name: "西王母神殿", code: "gon_dun01", monsters: ["猴桃木", "拉鍊熊", "血蝴蝶"] },
+          { name: "神仙圍棋台", code: "gon_dun02", monsters: ["猴桃木", "小花豹", "惡雲仙人", "血蝴蝶"] },
+          { name: "武陵桃源", code: "gon_dun03", monsters: ["人蔘精", "妖仙女", "惡雲仙人"] }
+        ],
+        dropNote: "墨蛇君未列入一般掉落名單。台灣樂園玩家曾回報崑崙原野在維護後沒有掉石，伺服器端可能另有調整，長時間無掉落時請以當期遊戲實測為準。",
+        weapons: ["靈幻劍", "靈幻短刀", "靈幻忍刀", "靈幻書", "靈幻杖", "靈幻拳套", "靈幻弦", "靈幻鞭", "靈幻錘", "靈幻巨劍", "靈幻殺刀", "靈幻斧", "靈幻長槍", "靈幻弓"]
+      },
+      {
+        id: "ayothaya",
+        area: "哎喲泰雅",
+        series: "死靈武器",
+        code: "LOCAL 04",
+        stone: "死靈石",
+        stoneId: "1000390",
+        target: "植物型／風屬性",
+        physical: "戰士的靈魂",
+        physicalId: "100530",
+        magical: "咒術師的靈魂",
+        magicalId: "100531",
+        ticket: "嗒妮欽定香蕉皮(+7)",
+        ticketId: "1002895",
+        weaponNpc: ["死靈武器鐵匠 雅雲森", "ayothaya 213,191"],
+        enchantNpc: ["賦魂巫師 棉蓋依", "ayothaya 213,197"],
+        ticketNpc: ["〈伴蕉侍〉硐門", "ayothaya 251,181"],
+        description: "以植物型魔物與風屬性為主要特攻。死靈武器的附魔在設定上稱為灌注戰士或咒術師靈魂。",
+        source: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218357",
+        db: "https://ragnaplace.com/zh-t/roztw/item/100530",
+        images: ["ayothaya-weapons.png", "ayothaya-scrolls.png", "ayothaya-effects.png", "ayothaya-ticket.png", "ayothaya-monsters.png"],
+        dropMaps: [
+          { name: "哎喲泰雅原野一", code: "ayo_fild01", monsters: ["群葉貓"] },
+          { name: "哎喲泰雅原野二", code: "ayo_fild02", monsters: ["群葉貓", "克萊本"] },
+          { name: "古代神殿迷宮", code: "ayo_dun01", monsters: ["群葉貓", "克萊本"] },
+          { name: "古代神殿內部", code: "ayo_dun02", monsters: ["克萊本", "塔穆安"] }
+        ],
+        dropNote: "群葉貓、克萊本與塔穆安的頭目／強化型也可能列入。嗒妮小姐未列入目前可確認的一般掉落名單；實際掉率未公開。",
+        weapons: ["死靈劍", "死靈短劍", "死靈書", "死靈杖", "死靈拳套", "死靈弦", "死靈鞭", "死靈錘", "死靈大刀", "死靈殺刀", "死靈斧", "死靈長槍", "死靈飛鏢", "死靈弓"]
+      },
+      {
+        id: "amatsu",
+        area: "天水之國天津",
+        series: "陰陽武器",
+        code: "LOCAL 02",
+        stone: "魔靈石",
+        stoneId: "25628",
+        target: "惡魔型／火屬性",
+        physical: "陰陽術書",
+        physicalId: "23740",
+        magical: "陰陽魔書",
+        magicalId: "23741",
+        ticket: "暗部的守護(+7)",
+        ticketId: "1002937",
+        weaponNpc: ["天津町武器交換 雷賽伊", "ama_in01 175,182"],
+        enchantNpc: ["陰陽術師", "ama_fild01 165,331"],
+        ticketNpc: ["〈初心者〉鼬", "amatsu 99,100"],
+        description: "以惡魔型魔物與火屬性為主要特攻。功能需先完成天津守門士兵後續的城主主線。",
+        source: "https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218425",
+        db: "https://ragnaplace.com/zh-t/roztw/item/23740",
+        images: ["amatsu-weapons.png", "amatsu-scrolls.png", "amatsu-effects.png", "amatsu-ticket.png", "amatsu-monsters.png"],
+        dropMaps: [
+          { name: "天津原野", code: "ama_fild01", monsters: ["傘妖", "釣魚河童", "米雅畢", "牛蛙"] },
+          { name: "榻榻米迷宮", code: "ama_dun01", monsters: ["米雅畢"] },
+          { name: "地下森林戰場", code: "ama_dun02", monsters: ["牛蛙", "米雅畢", "火忍西怒畢"] },
+          { name: "地下神社", code: "ama_dun03", monsters: ["米雅畢", "火忍西怒畢", "天狗"] }
+        ],
+        dropNote: "紙妖、武士火槍兵不在魔靈石名單；台灣樂園玩家也實測回報牛蛙會掉、另兩者未掉。元靈武士未列入一般掉落名單，掉率未公開。",
+        weapons: ["陰陽拳套", "陰陽劍", "陰陽錘", "陰陽弓", "陰陽巨劍", "陰陽長槍", "陰陽杖", "陰陽鞭", "陰陽殺刀", "陰陽斧", "陰陽書", "陰陽短刀", "陰陽忍刀", "陰陽弦"]
+      }
+    ];
+
+    const regionList = document.getElementById("regionList");
+    const searchInput = document.getElementById("weaponSearch");
+    const emptyState = document.getElementById("emptyState");
+    const overview = document.getElementById("overview");
+    const imageDialog = document.getElementById("imageDialog");
+    const dialogImage = document.getElementById("dialogImage");
+    const dialogTitle = document.getElementById("dialogTitle");
+    let activeFilter = "all";
+
+    const monsterElements = {
+      "米糕": "地",
+      "舞獅": "風",
+      "豹皮怪": "地",
+      "妖君": "不死",
+      "狐仙": "風",
+      "小青": "風",
+      "元宵童子": "無",
+      "小花豹": "念",
+      "猴桃木": "地",
+      "拉鍊熊": "暗",
+      "血蝴蝶": "風",
+      "惡雲仙人": "無",
+      "妖仙女": "暗",
+      "人蔘精": "火",
+      "群葉貓": "地",
+      "克萊本": "念",
+      "塔穆安": "暗",
+      "傘妖": "無",
+      "釣魚河童": "水",
+      "米雅畢": "暗",
+      "牛蛙": "毒",
+      "火忍西怒畢": "暗",
+      "天狗": "地"
+    };
+
+    function regionMarkup(region) {
+      const inferred = region.id === "amatsu" ? '<span class="inferred">數量待遊戲內複核</span>' : '';
+      const labels = ["完整武器與基本能力", "附魔道具", "附魔能力範圍", "+7 指定精煉道具", "官方地區魔物"];
+      const dropTerms = region.dropMaps.flatMap(group => [group.name, group.code, ...group.monsters]);
+      const localDropReport = ["gonryun", "amatsu"].includes(region.id)
+        ? '<a class="source-link" href="https://forum.gamer.com.tw/C.php?bsn=83142&amp;snA=3469" target="_blank" rel="noreferrer">台灣樂園掉落回報</a>'
+        : '';
+      return `
+        <article class="region" data-region="${region.id}" data-meta="${[region.area, region.series, region.stone, region.target, region.physical, region.magical, region.ticket, ...region.weaponNpc, ...region.enchantNpc, ...region.ticketNpc, ...dropTerms].join(" ").toLowerCase()}" data-search="${[region.area, region.series, region.stone, region.target, region.physical, region.magical, region.ticket, ...region.weaponNpc, ...region.enchantNpc, ...region.ticketNpc, ...dropTerms, ...region.weapons].join(" ").toLowerCase()}">
+          <header class="region-head">
+            <div><p class="region-kicker">${region.code}・${region.area}</p><h2>${region.series}</h2><p>${region.description}</p></div>
+            <span class="target-badge">${region.target}</span>
+          </header>
+          <div class="facts">
+            <div class="fact"><span>武器兌換</span><strong>${region.stone} 20 顆</strong>${inferred}</div>
+            <div class="fact"><span>附魔一次</span><strong>${region.stone} 10 顆</strong>${inferred}</div>
+            <div class="fact"><span>物理／魔法道具</span><strong>${region.physical}<br>${region.magical}</strong></div>
+            <div class="fact"><span>專屬 +7 道具</span><strong>${region.ticket}</strong></div>
+          </div>
+          <div class="region-body">
+            <div class="region-info">
+              <h3 class="subhead">NPC 與座標</h3>
+              <div class="table-wrap"><table class="npc-table"><tbody>
+                <tr><td>武器兌換</td><td>${region.weaponNpc[0]}</td><td><code>${region.weaponNpc[1]}</code></td></tr>
+                <tr><td>附魔道具</td><td>${region.enchantNpc[0]}</td><td><code>${region.enchantNpc[1]}</code></td></tr>
+                <tr><td>指定精煉</td><td>${region.ticketNpc[0]}</td><td><code>${region.ticketNpc[1]}</code></td></tr>
+              </tbody></table></div>
+
+              <h3 class="subhead"><span>${region.stone} 要打哪些怪</span><small>掉率未公開</small></h3>
+              <div class="drop-guide">
+                ${region.dropMaps.map(group => `<div class="drop-map"><div><strong>${group.name}</strong><code>${group.code}</code></div><div class="monster-tags">${group.monsters.map(monster => `<span class="monster-tag">${monster}<span class="monster-element" data-element="${monsterElements[monster]}" title="${monsterElements[monster]}屬性">${monsterElements[monster]}</span></span>`).join("")}</div></div>`).join("")}
+              </div>
+              <p class="drop-note">${region.dropNote}</p>
+
+              <h3 class="subhead">武器效果</h3>
+              <div class="effect-stack">
+                <div class="effect-line"><strong>基本</strong><span>SP 消耗量 -10%；對 ${region.target.split("／")[0]} 與 ${region.target.split("／")[1]}敵人的物理／魔法傷害各 +5%。</span></div>
+                <div class="effect-line"><strong>精煉 +7</strong><span>兩類對象的物理／魔法傷害各再 +5%。</span></div>
+                <div class="effect-line"><strong>精煉 +9</strong><span>兩類對象的物理／魔法傷害各再 +10%。</span></div>
+                <div class="effect-line"><strong>附魔</strong><span>${region.physical}或${region.magical}；第一條一般能力，第二條為機率取得的進階能力。</span></div>
+                <div class="effect-line"><strong>+7 道具</strong><span>${region.ticket}用於對應國家武器／地區裝備的指定 +7 精煉儀式，本身不是額外附魔效果。</span></div>
+              </div>
+
+              <h3 class="subhead"><span>武器品項</span><small>14 種</small></h3>
+              <div class="weapon-tags">${region.weapons.map(name => `<span class="weapon-tag" data-weapon="${name.toLowerCase()}">${name} [2]</span>`).join("")}</div>
+
+              <h3 class="subhead">道具編號</h3>
+              <div class="table-wrap"><table><tbody>
+                <tr><td>${region.stone}</td><td><code>${region.stoneId}</code></td></tr>
+                <tr><td>${region.physical}</td><td><code>${region.physicalId}</code></td></tr>
+                <tr><td>${region.magical}</td><td><code>${region.magicalId}</code></td></tr>
+                <tr><td>${region.ticket}</td><td><code>${region.ticketId}</code></td></tr>
+              </tbody></table></div>
+            </div>
+            <div class="region-visual">
+              <h3 class="subhead">官方資料圖片</h3>
+              <div class="image-grid">
+                ${region.images.map((image, index) => `<button class="image-button ${index === 0 || index === 4 ? "wide" : ""}" type="button" data-image="assets/national-weapons/${image}" data-title="${region.series}・${labels[index]}"><img src="assets/national-weapons/${image}" alt="${region.series}${labels[index]}" loading="lazy"><span>${labels[index]}・開啟原圖</span></button>`).join("")}
+              </div>
+              <div class="source-row"><a class="source-link" href="${region.source}" target="_blank" rel="noreferrer">樂園官方公告</a><a class="source-link" href="${region.db}" target="_blank" rel="noreferrer">RagnaPlace 台灣 Zero 道具資料</a><a class="source-link" href="https://gall.dcinside.com/mgallery/board/view/?id=ragzero&amp;no=54802" target="_blank" rel="noreferrer">Zero 地圖掉落調整</a>${localDropReport}</div>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    regionList.innerHTML = regions.map(regionMarkup).join("");
+
+    function updateView() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll(".region").forEach(region => {
+        const filterMatch = activeFilter === "all" || region.dataset.region === activeFilter;
+        const queryMatch = !query || region.dataset.search.includes(query);
+        const show = filterMatch && queryMatch;
+        region.hidden = !show;
+        if (show) visible += 1;
+        const metaMatch = !query || region.dataset.meta.includes(query);
+        region.querySelectorAll(".weapon-tag").forEach(tag => {
+          tag.hidden = Boolean(query) && !metaMatch && !tag.dataset.weapon.includes(query);
+        });
+      });
+      overview.hidden = activeFilter !== "all" || Boolean(query);
+      emptyState.classList.toggle("show", visible === 0);
+    }
+
+    document.querySelectorAll(".tab-button").forEach(button => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll(".tab-button").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+        updateView();
+      });
+    });
+
+    searchInput.addEventListener("input", updateView);
+
+    regionList.addEventListener("click", event => {
+      const button = event.target.closest(".image-button");
+      if (!button) return;
+      dialogImage.src = button.dataset.image;
+      dialogImage.alt = button.dataset.title;
+      dialogTitle.textContent = button.dataset.title;
+      imageDialog.showModal();
+    });
+
+    document.getElementById("closeDialog").addEventListener("click", () => imageDialog.close());
+    imageDialog.addEventListener("click", event => {
+      if (event.target === imageDialog) imageDialog.close();
+    });
+  </script>
+</body>
+</html>
