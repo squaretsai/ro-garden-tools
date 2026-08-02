@@ -495,6 +495,42 @@
       margin-top: 4px;
     }
 
+    .monster-elements {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 6px;
+    }
+
+    .monster-element {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 22px;
+      padding: 2px 6px;
+      border: 1px solid currentColor;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+
+    .monster-element strong {
+      font-size: 10px;
+    }
+
+    .monster-element[data-element="無"] { color: #69645e; background: #f7f5f2; }
+    .monster-element[data-element="水"] { color: #23699a; background: #eef8ff; }
+    .monster-element[data-element="地"] { color: #68762b; background: #f5f8e8; }
+    .monster-element[data-element="火"] { color: #b13d2e; background: #fff1ed; }
+    .monster-element[data-element="風"] { color: #28755c; background: #ecf8f2; }
+    .monster-element[data-element="毒"] { color: #7d3d82; background: #faf0fb; }
+    .monster-element[data-element="念"] { color: #9a4f73; background: #fff1f7; }
+    .monster-element[data-element="暗"] { color: #4f4c70; background: #f2f1fa; }
+    .monster-element[data-element="不死"] { color: #6b533f; background: #f7f0e9; }
+
     .note {
       padding: 13px 14px;
       border-left: 4px solid var(--gold);
@@ -1524,6 +1560,54 @@
       }
     ];
 
+    const MONSTER_ELEMENTS = {
+      "刺尾蜻蜓": "風2",
+      "彈簧兔": "地2",
+      "果樹龜": "無2",
+      "岩石龜": "地2",
+      "水靈龜": "水2",
+      "火靈龜": "火2",
+      "風靈龜": "風2",
+      "元宵童子": "無1",
+      "妖仙女": "暗3",
+      "猴桃木": "地2",
+      "人蔘精": "火2",
+      "群葉貓": "地1",
+      "克萊本": "念2",
+      "塔嚕安": "暗3",
+      "釣魚河童": "水1",
+      "傘妖": "無3",
+      "米雅畢": "暗1",
+      "武士火槍兵": "不死2",
+      "牛蛙": "毒2",
+      "天狗": "地2",
+      "火忍西怒畢": "暗3",
+      "豹皮怪": "地3",
+      "狐仙": "風2",
+      "米糕": "地3",
+      "舞獅": "風2",
+      "妖君": "不死2",
+      "小青": "風2",
+      "銀月魔女": "暗4",
+      "嗜血怪人": "暗3",
+      "假面鬼": "地4",
+      "無顱武士": "不死2"
+    };
+
+    function monsterElementsMarkup(text) {
+      const matches = Object.entries(MONSTER_ELEMENTS)
+        .filter(([name]) => text.includes(name));
+      if (!matches.length) return "";
+      return `<span class="monster-elements" aria-label="怪物屬性">${matches.map(([name, element]) => {
+        const elementType = element.replace(/\d/g, "");
+        return `<span class="monster-element" data-element="${elementType}" title="${name}：${element}屬性"><span>${name}</span><strong>${element}</strong></span>`;
+      }).join("")}</span>`;
+    }
+
+    document.querySelectorAll(".quest-list li").forEach((item) => {
+      item.insertAdjacentHTML("beforeend", monsterElementsMarkup(item.textContent));
+    });
+
     const STORAGE_KEY = "ro-lv90-daily-checklist-v1";
     const allTasks = DAILY_TASKS.flatMap((group) => group.tasks);
     const totalTasks = allTasks.length;
@@ -1579,6 +1663,7 @@
                     </div>
                     <span class="task-npc">${npc}</span>
                     <strong class="task-name">${task}</strong>
+                    ${monsterElementsMarkup(task)}
                   </div>
                   <div class="task-checks">
                     <label class="task-check">
