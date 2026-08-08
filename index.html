@@ -484,6 +484,183 @@
       line-height: 1.7;
     }
 
+    .category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .category-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 11px;
+      border: 1px solid rgba(165, 40, 45, 0.24);
+      border-radius: var(--radius);
+      background: #fff6ea;
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .category-nav a:hover,
+    .category-nav a:focus-visible {
+      border-color: rgba(165, 40, 45, 0.55);
+      outline: none;
+    }
+
+    .latest-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      margin: 0 0 16px;
+      padding: 10px 14px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 247, 227, 0.88);
+      color: #5a4a30;
+      font-size: 13px;
+    }
+
+    .latest-note strong { color: var(--accent-strong); }
+
+    .legacy-directory { display: none !important; }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .category-card {
+      position: relative;
+      min-height: 238px;
+      overflow: visible;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .category-card:hover,
+    .category-card:focus-within,
+    .category-card.is-open { z-index: 3; }
+
+    .category-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 82px;
+      border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+      background:
+        linear-gradient(90deg, rgba(27, 31, 36, 0.78), rgba(27, 31, 36, 0.24)),
+        var(--category-image) center / cover;
+      z-index: -1;
+    }
+
+    .category-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 82px;
+      padding: 16px 18px;
+      border: 0;
+      border-radius: var(--radius) var(--radius) 0 0;
+      background: transparent;
+      color: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .category-trigger span:first-child {
+      font-size: clamp(20px, 2.6vw, 28px);
+      font-weight: 900;
+      line-height: 1.15;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+    }
+
+    .category-trigger span:last-child {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 50%;
+      background: rgba(20, 23, 27, 0.34);
+      font-size: 20px;
+      font-weight: 900;
+      transition: transform 150ms ease;
+    }
+
+    .category-card.is-open .category-trigger span:last-child { transform: rotate(90deg); }
+
+    .category-body { padding: 16px 18px 18px; }
+
+    .category-body p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+    .category-contains {
+      margin-top: 12px !important;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: #4b555e !important;
+    }
+
+    .category-contains strong { color: var(--accent-strong); }
+
+    .category-dropdown {
+      position: absolute;
+      right: -1px;
+      left: -1px;
+      top: 100%;
+      z-index: 5;
+      display: grid;
+      gap: 1px;
+      max-height: 0;
+      overflow: hidden;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: #fffdf9;
+      box-shadow: 0 22px 48px rgba(47, 39, 29, 0.2);
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: max-height 180ms ease, opacity 150ms ease, transform 150ms ease, border-color 150ms ease;
+    }
+
+    .category-card:hover .category-dropdown,
+    .category-card:focus-within .category-dropdown,
+    .category-card.is-open .category-dropdown {
+      max-height: 360px;
+      border-color: var(--line);
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .category-dropdown a {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 53px;
+      padding: 10px 14px;
+      color: var(--ink);
+      background: #fffdf9;
+      text-decoration: none;
+    }
+
+    .category-dropdown a:hover,
+    .category-dropdown a:focus-visible { background: #fff3dc; outline: none; }
+
+    .dropdown-title { display: block; color: var(--accent-strong); font-size: 14px; font-weight: 900; }
+    .dropdown-summary { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .dropdown-arrow { color: var(--accent); font-size: 18px; font-weight: 900; }
+
     @media (max-width: 820px) {
       .topbar {
         align-items: flex-start;
@@ -500,6 +677,7 @@
 
       .tool-grid,
       .feature-grid,
+      .category-grid,
       .meta {
         grid-template-columns: 1fr;
       }
@@ -536,6 +714,21 @@
       .tool-link {
         min-height: 176px;
       }
+
+      .category-card { min-height: 0; }
+
+      .category-card::before,
+      .category-trigger { min-height: 74px; height: 74px; }
+
+      .category-dropdown {
+        position: static;
+        margin: 0 12px 12px;
+        box-shadow: none;
+      }
+
+      .category-card:hover .category-dropdown { max-height: 0; opacity: 0; transform: translateY(-6px); pointer-events: none; }
+      .category-card.is-open .category-dropdown,
+      .category-card:focus-within .category-dropdown { max-height: 360px; opacity: 1; transform: translateY(0); pointer-events: auto; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -569,17 +762,14 @@
 
     <section class="panel intro" aria-label="首頁說明">
       <div class="hero-copy">
-        <h2>RO樂園查詢工具</h2>
-        <p>把練功、裝備、任務前置與材料查詢集中在同一個入口。今天新增地區前置任務速查，總覽可直接切洛陽、崑崙、哎喲泰雅、天津、朱諾、汶巴拉、死都與龜島。</p>
-        <div class="hero-actions" aria-label="快速入口">
-          <a class="hero-button" href="national-weapons.html">國家武器</a>
-          <a class="hero-button" href="lucky-hair-accessory.html">幸運髮飾</a>
-          <a class="hero-button" href="sp-cost-calculator.html">SP 消耗門檻</a>
-          <a class="hero-button" href="arrow-crafting-guide.html">箭矢材料</a>
-          <a class="hero-button" href="quest_drop_rates.html">副本攻略</a>
-          <a class="hero-button" href="regional-prereq-guide.html">地區前置任務</a>
-          <a class="hero-button" href="monster-map-density.html">怪物地圖密度</a>
-          <a class="hero-button" href="daily-quests-90.html">90 等每日</a>
+        <h2>RO樂園工具總覽</h2>
+        <p>依今天要做的事找工具：解任務、規劃裝備、算傷害或挑練功地圖。四個分類都能滑過展開，直接進到需要的頁面。</p>
+        <nav class="category-nav" aria-label="分類跳轉">
+          <a href="#quests">每日任務與副本</a>
+          <a href="#equipment">裝備與材料</a>
+          <a href="#calculators">戰鬥試算</a>
+          <a href="#training">練功與魔物</a>
+        </nav>
         </div>
       </div>
       <div class="hero-media" aria-hidden="true">
@@ -597,7 +787,73 @@
       </div>
     </section>
 
-    <section class="feature-grid" aria-label="重點入口">
+    <p class="latest-note"><strong>最近新增</strong> 箭矢製作材料大全：21 種箭矢、136 種素材，支援箭矢與素材雙向查詢。</p>
+
+    <section class="category-grid" aria-label="工具分類">
+      <article class="category-card" id="quests" style="--category-image: url('assets/poring-village/hero.jpg')">
+        <button class="category-trigger" type="button" aria-expanded="false" aria-controls="quests-menu">
+          <span>每日任務與副本</span><span aria-hidden="true">›</span>
+        </button>
+        <div class="category-body">
+          <p>把每日、地區前置與副本攻略放在同一條任務路線上。</p>
+          <p class="category-contains"><strong>收錄頁面：</strong>90 等每日、地區前置、副本攻略</p>
+        </div>
+        <div class="category-dropdown" id="quests-menu">
+          <a href="daily-quests-90.html"><span><span class="dropdown-title">Base Lv.90 每日任務</span><span class="dropdown-summary">勾選任務、NPC、前置與討伐內容</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="regional-prereq-guide.html"><span><span class="dropdown-title">各地區前置任務</span><span class="dropdown-summary">洛陽、天津、龜島等前置與座標</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="quest_drop_rates.html"><span><span class="dropdown-title">副本攻略</span><span class="dropdown-summary">波利村與各副本攻略入口</span></span><span class="dropdown-arrow">›</span></a>
+        </div>
+      </article>
+
+      <article class="category-card" id="equipment" style="--category-image: url('assets/national-weapons/gonryun-weapons.png')">
+        <button class="category-trigger" type="button" aria-expanded="false" aria-controls="equipment-menu">
+          <span>裝備與材料</span><span aria-hidden="true">›</span>
+        </button>
+        <div class="category-body">
+          <p>武器、幸運髮飾、升級材料與箭矢素材的集中資料庫。</p>
+          <p class="category-contains"><strong>收錄頁面：</strong>國家武器、幸運髮飾、裝備升級、箭矢材料</p>
+        </div>
+        <div class="category-dropdown" id="equipment-menu">
+          <a href="national-weapons.html"><span><span class="dropdown-title">國家武器資料庫</span><span class="dropdown-summary">石頭、附魔、NPC 與 +7 效果</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="lucky-hair-accessory.html"><span><span class="dropdown-title">幸運髮飾完整攻略</span><span class="dropdown-summary">取得、附魔、能力池與材料</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="instance-equipment-upgrade.html"><span><span class="dropdown-title">征伐隊・遠征隊・殲滅隊材料表</span><span class="dropdown-summary">60～80 裝備升級總材料</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="arrow-crafting-guide.html"><span><span class="dropdown-title">箭矢製作材料大全</span><span class="dropdown-summary">21 種箭矢與 136 種素材雙向查詢</span></span><span class="dropdown-arrow">›</span></a>
+        </div>
+      </article>
+
+      <article class="category-card" id="calculators" style="--category-image: url('assets/lucky-hair-accessory/official-hero.jpg')">
+        <button class="category-trigger" type="button" aria-expanded="false" aria-controls="calculators-menu">
+          <span>戰鬥試算</span><span aria-hidden="true">›</span>
+        </button>
+        <div class="category-body">
+          <p>把攻速、SP、命中與精煉成本放進同一組試算工具。</p>
+          <p class="category-contains"><strong>收錄頁面：</strong>ASPD、SP 消耗、音速投擲、精煉期望值</p>
+        </div>
+        <div class="category-dropdown" id="calculators-menu">
+          <a href="attack-speed-calculator.html"><span><span class="dropdown-title">攻速 ASPD 計算器</span><span class="dropdown-summary">AGI、DEX、裝備與藥水推算攻速</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="sp-cost-calculator.html"><span><span class="dropdown-title">技能 SP 消耗門檻</span><span class="dropdown-summary">評估幸運髮飾的有效減耗</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="sonic-blow-hit-calculator.html"><span><span class="dropdown-title">音速投擲命中率</span><span class="dropdown-summary">命中、迴避與魔物條件帶入</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="refine-calculator.html"><span><span class="dropdown-title">精煉成本與鐵祝</span><span class="dropdown-summary">+7～+10 的期望成本比較</span></span><span class="dropdown-arrow">›</span></a>
+        </div>
+      </article>
+
+      <article class="category-card" id="training" style="--category-image: url('https://news.gnjoy.com.tw/Uploads2/2026/06/23/337bdcc0161248dc94ffbdd210323ea5.jpg')">
+        <button class="category-trigger" type="button" aria-expanded="false" aria-controls="training-menu">
+          <span>練功與魔物</span><span aria-hidden="true">›</span>
+        </button>
+        <div class="category-body">
+          <p>先看經驗效率，再確認魔物屬性、命中需求與地圖密度。</p>
+          <p class="category-contains"><strong>收錄頁面：</strong>經驗換算、魔物命中迴避、地圖密度</p>
+        </div>
+        <div class="category-dropdown" id="training-menu">
+          <a href="base-exp-converter.html"><span><span class="dropdown-title">Base 經驗百分比轉換器</span><span class="dropdown-summary">以時間與百分比換算 %/hr、EXP/hr</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="monster-stat-table.html"><span><span class="dropdown-title">魔物命中迴避表</span><span class="dropdown-summary">等級、屬性、種族與命中需求</span></span><span class="dropdown-arrow">›</span></a>
+          <a href="monster-map-density.html"><span><span class="dropdown-title">怪物地圖密度表</span><span class="dropdown-summary">用怪名或地圖查出怪物密度</span></span><span class="dropdown-arrow">›</span></a>
+        </div>
+      </article>
+    </section>
+
+    <section class="feature-grid legacy-directory" aria-hidden="true">
       <a class="feature-card" href="quest_drop_rates.html" style="--feature-image: url('assets/poring-village/hero.jpg')">
         <span class="feature-badge">副本攻略</span>
         <h3>副本攻略</h3>
@@ -615,7 +871,7 @@
       </a>
     </section>
 
-    <section class="tool-grid" aria-label="工具列表">
+    <section class="tool-grid legacy-directory" aria-hidden="true">
       <a class="panel tool-link" href="national-weapons.html">
         <div class="tool-top">
           <span>裝備資料</span>
@@ -858,5 +1114,50 @@
 
     <p class="footer">本頁是靜態入口，可直接本機開啟，也能部署到 GitHub Pages。</p>
   </main>
+  <script>
+    const categoryCards = [...document.querySelectorAll(".category-card")];
+
+    function closeCategory(card) {
+      card.classList.remove("is-open");
+      card.querySelector(".category-trigger").setAttribute("aria-expanded", "false");
+    }
+
+    function openCategory(card) {
+      categoryCards.forEach(item => {
+        if (item !== card) closeCategory(item);
+      });
+      card.classList.add("is-open");
+      card.querySelector(".category-trigger").setAttribute("aria-expanded", "true");
+    }
+
+    categoryCards.forEach(card => {
+      const trigger = card.querySelector(".category-trigger");
+      trigger.addEventListener("click", () => {
+        if (window.matchMedia("(hover: hover)").matches) {
+          openCategory(card);
+        } else if (card.classList.contains("is-open")) {
+          closeCategory(card);
+        } else {
+          openCategory(card);
+        }
+      });
+
+      card.addEventListener("mouseenter", () => {
+        if (window.matchMedia("(hover: hover)").matches) openCategory(card);
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (window.matchMedia("(hover: hover)").matches) closeCategory(card);
+      });
+
+      card.addEventListener("focusout", event => {
+        if (!card.contains(event.relatedTarget)) closeCategory(card);
+      });
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") categoryCards.forEach(closeCategory);
+    });
+  </script>
 </body>
 </html>
