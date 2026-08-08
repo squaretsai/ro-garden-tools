@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO仙境傳說Online：樂園幸運髮飾完整攻略，整理取得方式、NPC座標、五階附加能力、指定與隨機技能抗性附魔、材料成本與重置規則。">
+  <title>幸運髮飾完整攻略｜RO樂園 SquareTsai</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #25272a;
+      --muted: #666d70;
+      --paper: #fffef9;
+      --soft: #f3f5ed;
+      --line: #d9ddd0;
+      --green: #457a42;
+      --green-dark: #294f31;
+      --lime: #dce99a;
+      --gold: #c49127;
+      --coral: #b34b3e;
+      --blue: #3f6681;
+      --charcoal: #222725;
+      --radius: 8px;
+      --shadow: 0 16px 36px rgba(38, 43, 35, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+      line-height: 1.65;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    a { color: inherit; }
+    button, select, input { font: inherit; }
+    button { color: inherit; }
+    img { display: block; max-width: 100%; }
+    code {
+      padding: 2px 6px;
+      border: 1px solid #d7dfcb;
+      border-radius: 4px;
+      color: var(--green-dark);
+      background: #f2f6ea;
+      font-family: Consolas, "Microsoft JhengHei", monospace;
+      font-size: .93em;
+    }
+
+    .sitebar {
+      position: absolute;
+      inset: 0 0 auto;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0;
+      color: #fff;
+    }
+
+    .site-name {
+      font-size: 14px;
+      font-weight: 900;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, .72);
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: var(--radius);
+      color: #fff;
+      background: rgba(22, 26, 24, .7);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      align-items: end;
+      min-height: clamp(420px, 54vw, 610px);
+      isolation: isolate;
+      background: url("assets/lucky-hair-accessory/official-hero.jpg") right center / cover no-repeat;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(16, 20, 18, .64);
+    }
+
+    .hero-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 112px 0 46px;
+      color: #fff;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .hero .eyebrow { color: #e6f3a8; }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 820px;
+      margin-bottom: 0;
+      font-size: clamp(46px, 8vw, 86px);
+      line-height: 1;
+      letter-spacing: 0;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, .65);
+    }
+
+    .hero-copy {
+      max-width: 720px;
+      margin: 16px 0 0;
+      font-size: clamp(15px, 2vw, 19px);
+      text-shadow: 0 2px 12px rgba(0, 0, 0, .72);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 255, 255, .6);
+      border-radius: var(--radius);
+      color: #fff;
+      background: rgba(26, 33, 29, .72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    @media (min-width: 901px) {
+      .hero-inner { padding-left: clamp(240px, 22vw, 290px); }
+      .hero-copy { max-width: 500px; }
+    }
+
+    .facts-band {
+      border-bottom: 1px solid var(--line);
+      background: #eef3e5;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .fact {
+      min-width: 0;
+      padding: 18px 20px;
+      border-left: 1px solid var(--line);
+    }
+
+    .fact:last-child { border-right: 1px solid var(--line); }
+    .fact span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .fact strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 254, 249, .96);
+      backdrop-filter: blur(12px);
+    }
+
+    .quick-nav-inner {
+      display: flex;
+      gap: 8px;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 10px 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .quick-nav a {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #4f574f;
+      background: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .content {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .section {
+      scroll-margin-top: 72px;
+      padding: 58px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section:last-child { border-bottom: 0; }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 0;
+      font-size: clamp(29px, 4vw, 43px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      max-width: 560px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .obtain-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps li {
+      position: relative;
+      padding: 20px 20px 20px 72px;
+      border-bottom: 1px solid var(--line);
+      counter-increment: step;
+    }
+
+    .steps li:last-child { border-bottom: 0; }
+    .steps li::before {
+      content: counter(step, decimal-leading-zero);
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .steps strong { display: block; margin-bottom: 3px; }
+    .steps p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+
+    .npc-panel { overflow: hidden; }
+    .npc-image {
+      display: grid;
+      place-items: center;
+      min-height: 230px;
+      padding: 22px;
+      background: #1f2522;
+    }
+
+    .npc-image img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    .npc-copy { padding: 18px 20px; }
+    .npc-copy h3 { margin-bottom: 8px; font-size: 21px; }
+    .npc-copy p { margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+
+    .route-table, .cost-table, .ability-table, .planner-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #525a52;
+      background: #edf2e5;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+    .route-table strong, .cost-table strong { color: var(--green-dark); }
+
+    .note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--gold);
+      color: #5f563e;
+      background: #fff8df;
+      font-size: 14px;
+    }
+
+    .note.danger {
+      border-left-color: var(--coral);
+      color: #713d38;
+      background: #fff0eb;
+    }
+
+    .ability-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .summary-item {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--soft);
+    }
+
+    .summary-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 19px;
+      line-height: 1.35;
+    }
+
+    .tier {
+      color: var(--green-dark);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .range {
+      color: var(--coral);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .ability-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .ability-list span {
+      display: inline-flex;
+      padding: 4px 7px;
+      border: 1px solid #d7dfcb;
+      border-radius: 5px;
+      background: #f6f8f1;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .mode {
+      padding: 20px;
+      border-top: 4px solid var(--blue);
+    }
+
+    .mode.random { border-top-color: var(--gold); }
+    .mode h3 { margin-bottom: 8px; font-size: 23px; }
+    .mode p { margin-bottom: 14px; color: var(--muted); font-size: 14px; }
+
+    .cost-table td:nth-child(n+2) { white-space: nowrap; }
+    .slot-label { font-weight: 900; color: var(--green-dark); }
+
+    .filterbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 22px 0 14px;
+    }
+
+    .filterbar button {
+      min-height: 36px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .filterbar button[aria-pressed="true"] {
+      color: #fff;
+      border-color: var(--green-dark);
+      background: var(--green-dark);
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .skill-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 54px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .skill-item[hidden] { display: none; }
+    .skill-name { font-size: 13px; font-weight: 900; }
+    .skill-rate {
+      min-width: 50px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .stack-example {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .stack-example div {
+      padding: 12px;
+      border: 1px solid #ccd7c6;
+      border-radius: var(--radius);
+      color: var(--green-dark);
+      background: #f0f5ea;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .planner-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .planner-controls { padding: 20px; }
+    .planner-controls h3, .planner-result h3 { margin-bottom: 14px; font-size: 22px; }
+    .planner-row {
+      display: grid;
+      grid-template-columns: 82px minmax(150px, 1fr) 86px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .planner-row label { font-size: 13px; font-weight: 900; }
+    .planner-row select, .planner-row input, .box-control select, .box-control input {
+      width: 100%;
+      min-height: 40px;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .box-control {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 92px;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .box-control label { display: block; margin-bottom: 5px; font-size: 12px; font-weight: 900; }
+    .check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .check-row label { display: inline-flex; align-items: center; gap: 7px; }
+    .check-row input { width: 17px; height: 17px; accent-color: var(--green); }
+
+    .planner-result {
+      overflow: hidden;
+      border-top: 4px solid var(--green);
+    }
+
+    .planner-result h3 { padding: 18px 18px 0; }
+    .planner-table th { width: 54%; }
+    .planner-table td { color: var(--coral); font-weight: 900; }
+    .planner-caption { padding: 14px 18px 18px; color: var(--muted); font-size: 12px; }
+
+    .formula {
+      margin: 20px 0 0;
+      padding: 20px;
+      border: 1px solid #e0d4bd;
+      border-radius: var(--radius);
+      background: #fff9e9;
+    }
+
+    .formula strong { color: var(--coral); }
+    .formula p:last-child { margin-bottom: 0; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .source-shot {
+      overflow: hidden;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      text-align: left;
+      cursor: zoom-in;
+    }
+
+    .source-shot img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      background: #f3f4ef;
+    }
+
+    .source-shot span {
+      display: block;
+      padding: 11px 12px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .source-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .source-link {
+      display: block;
+      min-height: 68px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--green-dark);
+      background: #f6f8f1;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .source-link small { display: block; margin-top: 3px; color: var(--muted); font-weight: 700; }
+
+    dialog {
+      width: min(1000px, calc(100% - 30px));
+      max-height: calc(100vh - 30px);
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .42);
+    }
+
+    dialog::backdrop { background: rgba(12, 15, 13, .78); }
+    .dialog-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dialog-head strong { font-size: 14px; }
+    .dialog-close {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .dialog-body { max-height: calc(100vh - 92px); overflow: auto; padding: 12px; }
+    .dialog-body img { width: auto; max-width: 100%; margin: 0 auto; }
+
+    .footer {
+      padding: 28px 16px 42px;
+      color: var(--muted);
+      background: #eef2e9;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fact:nth-child(2) { border-right: 1px solid var(--line); }
+      .fact:nth-child(n+3) { border-top: 1px solid var(--line); }
+      .obtain-layout, .planner-layout { grid-template-columns: 1fr; }
+      .skill-grid, .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ability-summary { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .sitebar { align-items: flex-start; }
+      .hero { min-height: 520px; background-position: 70% center; }
+      .hero::before { background: rgba(16, 20, 18, .66); }
+      .hero-inner { padding-bottom: 34px; }
+      .facts { width: 100%; }
+      .fact { padding: 14px 16px; }
+      .fact strong { font-size: 15px; }
+      .section { padding: 44px 0; }
+      .section-heading { display: block; }
+      .section-heading p { margin-top: 10px; }
+      .mode-grid, .skill-grid, .gallery, .source-list { grid-template-columns: 1fr; }
+      .planner-row { grid-template-columns: 68px minmax(0, 1fr) 74px; }
+      .stack-example { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .source-shot img { height: 260px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="sitebar">
+    <span class="site-name">RO樂園 SquareTsai</span>
+    <a class="home-link" href="index.html">回到首頁</a>
+  </header>
+
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-inner">
+      <p class="eyebrow">特殊裝備完整攻略</p>
+      <h1 id="page-title">幸運髮飾</h1>
+      <p class="hero-copy">從服飾換代幣、購買本體與能力箱，到五條能力重洗、四洞技能抗性附魔，一頁整理成本、機率與容易誤解的規則。</p>
+      <div class="hero-actions">
+        <a href="#obtain">先看取得流程</a>
+        <a href="#planner">計算附魔材料</a>
+        <a href="sp-cost-calculator.html">計算 SP 消耗</a>
+        <a href="#official-images">查看官方原圖</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="facts-band" aria-label="幸運髮飾重點">
+    <div class="facts">
+      <div class="fact"><span>購買 NPC</span><strong>歐弗萬</strong></div>
+      <div class="fact"><span>位置</span><strong>普隆德拉 239, 267</strong></div>
+      <div class="fact"><span>本體價格</span><strong>100,000 Zeny</strong></div>
+      <div class="fact"><span>能力結構</span><strong>五條能力 + 四洞抗性</strong></div>
+    </div>
+  </section>
+
+  <nav class="quick-nav" aria-label="頁面章節">
+    <div class="quick-nav-inner">
+      <a href="#obtain">取得流程</a>
+      <a href="#abilities">五條附加能力</a>
+      <a href="#enchants">技能抗性附魔</a>
+      <a href="#planner">材料試算</a>
+      <a href="#rules">規則與避雷</a>
+      <a href="#official-images">官方圖表</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <section class="section" id="obtain">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">GET STARTED</p>
+          <h2>取得流程</h2>
+        </div>
+        <p>本體不需要任務，直接找普隆德拉的「服飾蒐集狂－歐弗萬」購買；服飾則用來換能力箱需要的代幣。</p>
+      </div>
+
+      <div class="obtain-layout">
+        <ol class="steps panel">
+          <li>
+            <strong>前往服飾蒐集狂－歐弗萬</strong>
+            <p>輸入 <code>/navi prontera 239/267</code>，NPC 位於普隆德拉北側。</p>
+          </li>
+          <li>
+            <strong>購買幸運髮飾本體</strong>
+            <p>每個 100,000 Zeny。道具 ID <code>1270187</code>，特殊裝備、飾品（左）、全職業、Lv.1 可裝備，基礎 MDEF +1。</p>
+          </li>
+          <li>
+            <strong>把不需要的服飾換成代幣</strong>
+            <p>非歸屬服飾 1 個換幸運代幣 1 個；歸屬服飾 3 個換幸運代幣－歸屬 1 個。服飾會被消耗。</p>
+          </li>
+          <li>
+            <strong>購買幸運髮飾附加能力箱子</strong>
+            <p>一般路線：幸運代幣 1 + 哥布靈碎幣 1。歸屬路線：幸運代幣－歸屬 1 + 哥布靈碎幣 2。</p>
+          </li>
+          <li>
+            <strong>對髮飾套用能力箱</strong>
+            <p>箱子會一次產生完整五條附加能力；再次使用時，原本整組五條能力會全部消失並重抽。</p>
+          </li>
+        </ol>
+
+        <aside class="npc-panel panel">
+          <div class="npc-image">
+            <img src="assets/lucky-hair-accessory/npc-sprite.png" alt="服飾蒐集狂歐弗萬 NPC">
+          </div>
+          <div class="npc-copy">
+            <h3>服飾蒐集狂－歐弗萬</h3>
+            <p><strong>地圖：</strong>普隆德拉</p>
+            <p><strong>座標：</strong>239, 267</p>
+            <p><strong>功能：</strong>買本體、服飾換代幣、買能力箱、指定或隨機附魔、重置附魔。</p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="table-wrap" style="margin-top:20px">
+        <table class="route-table">
+          <thead><tr><th>用途</th><th>一般代幣路線</th><th>歸屬代幣路線</th></tr></thead>
+          <tbody>
+            <tr><td><strong>代幣取得</strong></td><td>非歸屬服飾 1 → 幸運代幣 1</td><td>歸屬服飾 3 → 幸運代幣－歸屬 1</td></tr>
+            <tr><td><strong>能力箱成本</strong></td><td>幸運代幣 1 + 哥布靈碎幣 1</td><td>幸運代幣－歸屬 1 + 哥布靈碎幣 2</td></tr>
+            <tr><td><strong>抗性附魔</strong></td><td>第四洞可使用一般幸運代幣</td><td>官方表格未列歸屬代幣可替代</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">哥布靈碎幣可找普隆德拉的「想飛的魔像」兌換：哥布靈銅幣 1 → 碎幣 1；哥布靈銀幣 1 → 碎幣 10；或隨機支付 180,000～400,000 Zeny，隨機取得 1～3 個。</div>
+    </section>
+
+    <section class="section" id="abilities">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FIVE BONUS LINES</p>
+          <h2>五條附加能力</h2>
+        </div>
+        <p>每次能力箱會依第一至第五條各抽一項。數值範圍由官方公開，但各數值的個別機率未公開。</p>
+      </div>
+
+      <div class="ability-summary">
+        <div class="summary-item"><span>SP 自然恢復上限</span><strong>第三條 20% + 第四條 20% = 40%</strong></div>
+        <div class="summary-item"><span>技能 SP 消耗減少</span><strong>第四條最高 20%</strong></div>
+        <div class="summary-item"><span>全種族經驗</span><strong>第五條最高 10%</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="ability-table">
+          <thead><tr><th>能力條</th><th>可能出現的能力</th><th>數值範圍</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="tier">第一條</td>
+              <td><div class="ability-list"><span>MaxHP</span><span>MaxSP</span></div></td>
+              <td><span class="range">HP +1～150</span><br><span class="range">SP +1～50</span></td>
+            </tr>
+            <tr>
+              <td class="tier">第二條</td>
+              <td><div class="ability-list"><span>MaxHP (%)</span><span>MaxSP (%)</span></div></td>
+              <td><span class="range">各 +1～5%</span></td>
+            </tr>
+            <tr>
+              <td class="tier">第三條</td>
+              <td><div class="ability-list"><span>HP 自然恢復速度增加</span><span>SP 自然恢復速度增加</span></div></td>
+              <td><span class="range">各 +1～20%</span></td>
+            </tr>
+            <tr>
+              <td class="tier">第四條</td>
+              <td><div class="ability-list"><span>MaxHP</span><span>MaxSP</span><span>HP 自然恢復</span><span>SP 自然恢復</span><span>受到治癒量</span><span>技能 SP 消耗減少</span></div></td>
+              <td><span class="range">HP +1～150</span><br><span class="range">SP +1～50</span><br><span class="range">自然恢復 +1～20%</span><br><span class="range">治癒量 +5～10%</span><br><span class="range">SP 消耗 -1～20%</span></td>
+            </tr>
+            <tr>
+              <td class="tier">第五條<br>稀有</td>
+              <td><div class="ability-list"><span>無形</span><span>不死</span><span>動物</span><span>植物</span><span>昆蟲</span><span>魚貝</span><span>惡魔</span><span>人形</span><span>天使</span><span>龍族</span><span>所有怪物</span></div></td>
+              <td><span class="range">擊殺經驗 +1～10%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note danger"><strong>重洗會整組覆蓋：</strong>只要再次使用「幸運髮飾附加能力箱子」，舊的五條能力全部消失，不能鎖定其中一條保留。</div>
+    </section>
+
+    <section class="section" id="enchants">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FOUR RESISTANCE SLOTS</p>
+          <h2>技能抗性附魔</h2>
+        </div>
+        <p>四個洞與前面的五條能力互相獨立。每一洞都能從同一個 23 種技能池取得一個「受到該技能傷害 -15%」的抗性。</p>
+      </div>
+
+      <div class="mode-grid">
+        <article class="mode panel">
+          <h3>指定附魔</h3>
+          <p>成功率 100%，直接指定技能。成本高，但不需要賭機率。</p>
+          <div class="table-wrap">
+            <table class="cost-table">
+              <thead><tr><th>洞位</th><th>哥布靈碎幣</th><th>幸運代幣</th><th>Zeny</th></tr></thead>
+              <tbody>
+                <tr><td class="slot-label">第一洞</td><td>30</td><td>0</td><td>3,000,000</td></tr>
+                <tr><td class="slot-label">第二洞</td><td>30</td><td>0</td><td>3,000,000</td></tr>
+                <tr><td class="slot-label">第三洞</td><td>60</td><td>0</td><td>3,000,000</td></tr>
+                <tr><td class="slot-label">第四洞</td><td>90</td><td>30</td><td>3,000,000</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="mode random panel">
+          <h3>隨機附魔</h3>
+          <p>成功率 100%，技能結果隨機。每次重洗該洞都要重新支付材料。</p>
+          <div class="table-wrap">
+            <table class="cost-table">
+              <thead><tr><th>洞位</th><th>哥布靈碎幣</th><th>幸運代幣</th><th>Zeny</th></tr></thead>
+              <tbody>
+                <tr><td class="slot-label">第一洞</td><td>1</td><td>0</td><td>100,000</td></tr>
+                <tr><td class="slot-label">第二洞</td><td>1</td><td>0</td><td>100,000</td></tr>
+                <tr><td class="slot-label">第三洞</td><td>2</td><td>0</td><td>100,000</td></tr>
+                <tr><td class="slot-label">第四洞</td><td>3</td><td>1</td><td>100,000</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+
+      <h3 style="margin-bottom:0">23 種共同技能池</h3>
+      <div class="filterbar" aria-label="隨機附魔機率篩選">
+        <button type="button" data-rate="all" aria-pressed="true">全部 23 種</button>
+        <button type="button" data-rate="4.5" aria-pressed="false">4.5%</button>
+        <button type="button" data-rate="4.4" aria-pressed="false">4.4%</button>
+        <button type="button" data-rate="4.3" aria-pressed="false">4.3%</button>
+      </div>
+
+      <div class="skill-grid" id="skill-grid">
+        <div class="skill-item" data-rate="4.4"><span class="skill-name">暴風雪抵抗精通</span><span class="skill-rate">4.4%</span></div>
+        <div class="skill-item" data-rate="4.4"><span class="skill-name">隕石術抵抗精通</span><span class="skill-rate">4.4%</span></div>
+        <div class="skill-item" data-rate="4.4"><span class="skill-name">怒雷強擊抵抗精通</span><span class="skill-rate">4.4%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">十字驅魔攻擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">黑暗瞬間抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">螺旋擊刺抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">強酸火煙瓶投擲抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">連刺攻擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">怪物互擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">水球術抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.5"><span class="skill-name">音速投擲抵抗精通</span><span class="skill-rate">4.5%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">連續盾擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">迴旋盾擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">聖十字攻擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.5"><span class="skill-name">獵鷹突擊抵抗精通</span><span class="skill-rate">4.5%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">閃電衝擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.4"><span class="skill-name">阿修羅霸凰拳抵抗精通</span><span class="skill-rate">4.4%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">浸透勁抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.5"><span class="skill-name">奧義箭亂舞抵抗精通</span><span class="skill-rate">4.5%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">二連矢抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">銳利射擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.3"><span class="skill-name">念力連擊抵抗精通</span><span class="skill-rate">4.3%</span></div>
+        <div class="skill-item" data-rate="4.4"><span class="skill-name">重力原野抵抗精通</span><span class="skill-rate">4.4%</span></div>
+      </div>
+
+      <div class="note">四洞可以重複同一技能。四洞都選同一種時，標示值合計為該技能傷害 <strong>-60%</strong>。</div>
+      <div class="stack-example" aria-label="四洞相同技能範例">
+        <div>第一洞 -15%</div><div>第二洞 -15%</div><div>第三洞 -15%</div><div>第四洞 -15%</div>
+      </div>
+    </section>
+
+    <section class="section" id="planner">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">MATERIAL PLANNER</p>
+          <h2>材料試算器</h2>
+        </div>
+        <p>每一洞選擇指定或隨機，並填入預計操作次數；能力箱則可切換一般或歸屬代幣路線。</p>
+      </div>
+
+      <div class="planner-layout">
+        <div class="planner-controls panel">
+          <h3>抗性洞規劃</h3>
+          <div class="planner-row"><label for="slot-1">第一洞</label><select id="slot-1" data-slot="1"><option value="none">不處理</option><option value="random">隨機附魔</option><option value="specified">指定附魔</option></select><input id="tries-1" type="number" min="0" max="999" value="1" aria-label="第一洞操作次數"></div>
+          <div class="planner-row"><label for="slot-2">第二洞</label><select id="slot-2" data-slot="2"><option value="none">不處理</option><option value="random">隨機附魔</option><option value="specified">指定附魔</option></select><input id="tries-2" type="number" min="0" max="999" value="1" aria-label="第二洞操作次數"></div>
+          <div class="planner-row"><label for="slot-3">第三洞</label><select id="slot-3" data-slot="3"><option value="none">不處理</option><option value="random">隨機附魔</option><option value="specified">指定附魔</option></select><input id="tries-3" type="number" min="0" max="999" value="1" aria-label="第三洞操作次數"></div>
+          <div class="planner-row"><label for="slot-4">第四洞</label><select id="slot-4" data-slot="4"><option value="none">不處理</option><option value="random">隨機附魔</option><option value="specified">指定附魔</option></select><input id="tries-4" type="number" min="0" max="999" value="1" aria-label="第四洞操作次數"></div>
+
+          <div class="box-control">
+            <div><label for="box-route">能力箱代幣路線</label><select id="box-route"><option value="normal">一般幸運代幣</option><option value="bound">幸運代幣－歸屬</option></select></div>
+            <div><label for="box-count">能力箱數量</label><input id="box-count" type="number" min="0" max="999" value="0"></div>
+          </div>
+
+          <div class="check-row">
+            <label><input id="include-item" type="checkbox" checked> 包含髮飾本體 100,000 Zeny</label>
+            <label>重置次數 <input id="reset-count" type="number" min="0" max="99" value="0" style="width:66px;min-height:34px;padding:4px 7px;border:1px solid var(--line);border-radius:6px"></label>
+          </div>
+        </div>
+
+        <aside class="planner-result panel" aria-live="polite">
+          <h3>合計材料</h3>
+          <table class="planner-table">
+            <tbody>
+              <tr><th>Zeny</th><td id="total-zeny">100,000</td></tr>
+              <tr><th>哥布靈碎幣</th><td id="total-goblin">0</td></tr>
+              <tr><th>幸運代幣</th><td id="total-token">0</td></tr>
+              <tr><th>幸運代幣－歸屬</th><td id="total-bound-token">0</td></tr>
+              <tr><th>傑斯塔</th><td id="total-jesta">0</td></tr>
+            </tbody>
+          </table>
+          <p class="planner-caption">試算以每次操作都支付一次材料計算。隨機附魔沒有保底，因此實際重洗次數請自行估入。</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="rules">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">RULES & WARNINGS</p>
+          <h2>規則與避雷</h2>
+        </div>
+        <p>這幾項是花材料前最值得先確認的設定。</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>項目</th><th>實際規則</th></tr></thead>
+          <tbody>
+            <tr><td><strong>能力箱</strong></td><td>一次重抽完整五條附加能力，舊能力全部覆蓋，不能逐條鎖定。</td></tr>
+            <tr><td><strong>抗性附魔</strong></td><td>四洞與五條能力分開；附魔不會改變前面的五條附加能力。</td></tr>
+            <tr><td><strong>重置附魔</strong></td><td>消耗傑斯塔 1，成功率 100%；會重置抗性附魔。</td></tr>
+            <tr><td><strong>生效地圖</strong></td><td>抗性能力僅在隱世地圖、MVP-PK 棲息地、公會密穴生效。</td></tr>
+            <tr><td><strong>同技能堆疊</strong></td><td>允許四洞使用相同技能抗性，標示總和最高 -60%。</td></tr>
+            <tr><td><strong>減傷算法</strong></td><td>官方確認與攻擊方技能增傷採加減算，不是最後傷害再獨立乘上 40%。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="formula">
+        <p><strong>加減算範例：</strong>攻擊方技能增傷 +80%，防守方四洞相同抗性 -60%。</p>
+        <p>結果係數為 <code>1 + 80% - 60% = 1.2</code>，也就是基礎傷害的 120%，不是 <code>1.8 × 0.4 = 0.72</code>。</p>
+      </div>
+    </section>
+
+    <section class="section" id="official-images">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">OFFICIAL TABLES</p>
+          <h2>官方圖表核對</h2>
+        </div>
+        <p>下列圖片取自 RO樂園官方「服飾蒐集狂－歐弗萬」公告。點擊圖片可放大查看原始尺寸。</p>
+      </div>
+
+      <div class="gallery">
+        <button class="source-shot" type="button" data-image="assets/lucky-hair-accessory/item-description.png" data-title="幸運髮飾遊戲內說明"><img src="assets/lucky-hair-accessory/item-description.png" alt="幸運髮飾遊戲內道具說明"><span>幸運髮飾本體</span></button>
+        <button class="source-shot" type="button" data-image="assets/lucky-hair-accessory/ability-pool.png" data-title="幸運髮飾五條附加能力池"><img src="assets/lucky-hair-accessory/ability-pool.png" alt="幸運髮飾五條附加能力官方表格"><span>五條附加能力池</span></button>
+        <button class="source-shot" type="button" data-image="assets/lucky-hair-accessory/specified-enchants.png" data-title="幸運髮飾指定附魔"><img src="assets/lucky-hair-accessory/specified-enchants.png" alt="幸運髮飾指定附魔官方表格"><span>指定附魔材料</span></button>
+        <button class="source-shot" type="button" data-image="assets/lucky-hair-accessory/random-enchants.png" data-title="幸運髮飾隨機附魔"><img src="assets/lucky-hair-accessory/random-enchants.png" alt="幸運髮飾隨機附魔官方表格"><span>隨機附魔機率</span></button>
+      </div>
+
+      <div class="source-list">
+        <a class="source-link" href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218112" target="_blank" rel="noreferrer">RO樂園官方：服飾蒐集狂－歐弗萬<small>取得、能力池、指定與隨機附魔原始公告</small></a>
+        <a class="source-link" href="https://ragnaplace.com/zh-t/roztw/item/1270187/ztwluckyhairpin" target="_blank" rel="noreferrer">RagnaPlace：幸運髮飾 1270187<small>道具欄位、交易屬性與附魔資料庫</small></a>
+        <a class="source-link" href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3170" target="_blank" rel="noreferrer">巴哈討論：技能抗性算法實測<small>官方回覆為加減算，內含獵鷹突擊傷害測試</small></a>
+        <a class="source-link" href="https://forum.gamer.com.tw/Co.php?bsn=83142&sn=8165" target="_blank" rel="noreferrer">巴哈整理：哥布靈碎幣取得<small>想飛的魔像位置與三種兌換方式</small></a>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="image-dialog">
+    <div class="dialog-head"><strong id="dialog-title">官方圖片</strong><button class="dialog-close" type="button" aria-label="關閉圖片">×</button></div>
+    <div class="dialog-body"><img id="dialog-image" src="" alt=""></div>
+  </dialog>
+
+  <footer class="footer">資料整理日期：2026-08-06。官方提醒版本更新時可能調整幸運髮飾設定，請以最新公告與遊戲內顯示為準。</footer>
+
+  <script>
+    const skillItems = document.querySelectorAll(".skill-item");
+
+    document.querySelectorAll(".filterbar button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetRate = button.dataset.rate;
+        document.querySelectorAll(".filterbar button").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        skillItems.forEach((item) => {
+          item.hidden = targetRate !== "all" && item.dataset.rate !== targetRate;
+        });
+      });
+    });
+
+    const enchantCosts = {
+      1: { random: { zeny: 100000, goblin: 1, token: 0 }, specified: { zeny: 3000000, goblin: 30, token: 0 } },
+      2: { random: { zeny: 100000, goblin: 1, token: 0 }, specified: { zeny: 3000000, goblin: 30, token: 0 } },
+      3: { random: { zeny: 100000, goblin: 2, token: 0 }, specified: { zeny: 3000000, goblin: 60, token: 0 } },
+      4: { random: { zeny: 100000, goblin: 3, token: 1 }, specified: { zeny: 3000000, goblin: 90, token: 30 } }
+    };
+
+    const formatNumber = (value) => new Intl.NumberFormat("zh-TW").format(value);
+
+    function updatePlanner() {
+      let zeny = document.getElementById("include-item").checked ? 100000 : 0;
+      let goblin = 0;
+      let token = 0;
+      let boundToken = 0;
+
+      for (let slot = 1; slot <= 4; slot += 1) {
+        const mode = document.getElementById(`slot-${slot}`).value;
+        const triesInput = document.getElementById(`tries-${slot}`);
+        const tries = Math.max(0, Number.parseInt(triesInput.value, 10) || 0);
+        triesInput.disabled = mode === "none";
+        if (mode === "none") continue;
+        const cost = enchantCosts[slot][mode];
+        zeny += cost.zeny * tries;
+        goblin += cost.goblin * tries;
+        token += cost.token * tries;
+      }
+
+      const boxCount = Math.max(0, Number.parseInt(document.getElementById("box-count").value, 10) || 0);
+      const boxRoute = document.getElementById("box-route").value;
+      if (boxRoute === "normal") {
+        token += boxCount;
+        goblin += boxCount;
+      } else {
+        boundToken += boxCount;
+        goblin += boxCount * 2;
+      }
+
+      const jesta = Math.max(0, Number.parseInt(document.getElementById("reset-count").value, 10) || 0);
+      document.getElementById("total-zeny").textContent = formatNumber(zeny);
+      document.getElementById("total-goblin").textContent = formatNumber(goblin);
+      document.getElementById("total-token").textContent = formatNumber(token);
+      document.getElementById("total-bound-token").textContent = formatNumber(boundToken);
+      document.getElementById("total-jesta").textContent = formatNumber(jesta);
+    }
+
+    document.querySelectorAll(".planner-controls select, .planner-controls input").forEach((control) => {
+      control.addEventListener("input", updatePlanner);
+      control.addEventListener("change", updatePlanner);
+    });
+    updatePlanner();
+
+    const dialog = document.getElementById("image-dialog");
+    const dialogImage = document.getElementById("dialog-image");
+    const dialogTitle = document.getElementById("dialog-title");
+
+    document.querySelectorAll(".source-shot").forEach((button) => {
+      button.addEventListener("click", () => {
+        dialogImage.src = button.dataset.image;
+        dialogImage.alt = button.dataset.title;
+        dialogTitle.textContent = button.dataset.title;
+        dialog.showModal();
+      });
+    });
+
+    document.querySelector(".dialog-close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  </script>
+</body>
+</html>

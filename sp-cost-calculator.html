@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO仙境傳說Online：樂園技能 SP 消耗計算器，計算國家武器、武器附魔與幸運髮飾的減耗門檻及無條件捨去結果。">
+  <title>技能 SP 消耗門檻計算器｜RO樂園 SquareTsai</title>
+  <style>
+    :root {
+      --ink: #17201c;
+      --muted: #68716b;
+      --paper: #f7f5ef;
+      --white: #fff;
+      --line: #d9ded8;
+      --green: #24704a;
+      --green-dark: #174d35;
+      --green-soft: #e7f1e9;
+      --blue: #245f87;
+      --blue-soft: #e5f0f6;
+      --coral: #c8543f;
+      --coral-soft: #f8e7e1;
+      --gold: #a77818;
+      --gold-soft: #f6edcf;
+      --shadow: 0 16px 38px rgba(20, 29, 24, .09);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.65;
+    }
+
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+
+    .topbar {
+      position: absolute;
+      inset: 0 0 auto;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0;
+      color: #fff;
+    }
+
+    .brand { font-weight: 900; }
+    .home-link {
+      padding: 7px 11px;
+      border: 1px solid rgba(255, 255, 255, .58);
+      border-radius: 6px;
+      background: rgba(15, 20, 17, .68);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .page-head {
+      position: relative;
+      min-height: 278px;
+      display: grid;
+      align-items: end;
+      isolation: isolate;
+      color: #fff;
+      background: url("assets/lucky-hair-accessory/official-hero.jpg") right 43% / cover no-repeat;
+    }
+
+    .page-head::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(14, 21, 17, .7);
+    }
+
+    .head-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 96px 0 34px;
+    }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: #d8edaf;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 760px;
+      margin-bottom: 8px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .head-copy {
+      max-width: 720px;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, .87);
+      font-size: 16px;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(350px, .92fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .input-panel { padding: 22px; }
+    .panel-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .panel-head h2 { margin-bottom: 3px; font-size: 24px; }
+    .panel-head p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+    .formula-badge {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border: 1px solid #b9d2c0;
+      border-radius: 6px;
+      color: var(--green-dark);
+      background: var(--green-soft);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field { min-width: 0; }
+    .field label, .field-label {
+      display: block;
+      margin-bottom: 6px;
+      color: #38443d;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .field input[type="number"] {
+      width: 100%;
+      min-height: 44px;
+      padding: 8px 11px;
+      border: 1px solid #bfc8c1;
+      border-radius: 6px;
+      color: var(--ink);
+      background: #fff;
+      font-weight: 800;
+    }
+
+    input:focus-visible, button:focus-visible, a:focus-visible {
+      outline: 3px solid rgba(36, 95, 135, .22);
+      outline-offset: 2px;
+    }
+
+    .field small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .equipment-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 126px;
+      gap: 14px;
+      align-items: center;
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fafbf8;
+    }
+
+    .equipment-row img {
+      width: 126px;
+      height: 82px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #eef0ec;
+    }
+
+    .toggle-line {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+
+    .toggle-line input { width: 18px; height: 18px; accent-color: var(--green); }
+    .inline-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .hair-control {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid #bdd0dc;
+      border-radius: 7px;
+      background: var(--blue-soft);
+    }
+
+    .hair-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .hair-head strong { color: #183b52; }
+    .hair-number {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hair-number input {
+      width: 66px;
+      min-height: 38px;
+      padding: 5px 7px;
+      border: 1px solid #88a9bd;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .hair-number span { font-weight: 900; }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .range-scale {
+      display: flex;
+      justify-content: space-between;
+      color: #61727c;
+      font-size: 11px;
+    }
+
+    .result-panel {
+      position: sticky;
+      top: 14px;
+      overflow: hidden;
+    }
+
+    .result-main {
+      padding: 24px;
+      color: #fff;
+      background: var(--green-dark);
+    }
+
+    .result-main span { color: rgba(255, 255, 255, .75); font-size: 13px; }
+    .result-main strong {
+      display: block;
+      margin-top: 2px;
+      font-size: clamp(50px, 7vw, 76px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .result-main strong small { font-size: 18px; }
+    .formula-line {
+      margin: 14px 0 0;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, .18);
+      color: rgba(255, 255, 255, .85);
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .metric {
+      min-width: 0;
+      padding: 15px 17px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric:nth-child(2n) { border-right: 0; }
+    .metric span { display: block; color: var(--muted); font-size: 12px; }
+    .metric strong { display: block; margin-top: 2px; font-size: 20px; overflow-wrap: anywhere; }
+
+    .advice-list { padding: 17px; }
+    .advice {
+      display: grid;
+      grid-template-columns: 9px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      padding: 10px 0;
+      border-bottom: 1px solid #edf0ec;
+    }
+
+    .advice:last-child { border-bottom: 0; }
+    .advice-dot { width: 9px; height: 9px; margin-top: 7px; border-radius: 50%; background: var(--green); }
+    .advice.blue .advice-dot { background: var(--blue); }
+    .advice.gold .advice-dot { background: var(--gold); }
+    .advice p { margin: 0; color: #3c4841; font-size: 14px; }
+    .advice strong { color: var(--ink); }
+
+    .section { padding-top: 46px; }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .section-heading h2 { margin-bottom: 0; font-size: 28px; }
+    .section-heading p { max-width: 560px; margin-bottom: 0; color: var(--muted); font-size: 14px; }
+
+    .band-strip {
+      display: grid;
+      grid-template-columns: repeat(21, minmax(30px, 1fr));
+      gap: 3px;
+      overflow-x: auto;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+    }
+
+    .band-cell {
+      min-width: 30px;
+      padding: 7px 2px;
+      border: 0;
+      border-radius: 5px;
+      color: #536058;
+      background: #edf0eb;
+      text-align: center;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .band-cell.breakpoint { color: var(--green-dark); background: var(--green-soft); }
+    .band-cell.selected { color: #fff; background: var(--blue); }
+    .band-cell span { display: block; }
+    .band-cell strong { display: block; margin-top: 3px; font-size: 14px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 15px; border-bottom: 1px solid var(--line); text-align: left; }
+    th { color: #4b5750; background: #eef1ec; font-size: 12px; }
+    td { font-size: 14px; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr.current { background: var(--blue-soft); }
+    tbody tr.recommended { background: var(--green-soft); }
+    .tag {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--blue);
+      background: #fff;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .method-item {
+      padding: 18px;
+      border-top: 3px solid var(--green);
+      background: #fff;
+    }
+
+    .method-item:nth-child(2) { border-top-color: var(--blue); }
+    .method-item:nth-child(3) { border-top-color: var(--coral); }
+    .method-item strong { display: block; margin-bottom: 5px; }
+    .method-item p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+    code { padding: 2px 5px; border-radius: 4px; color: #244536; background: #e8eee9; }
+
+    .related {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .related a {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      text-decoration: none;
+    }
+
+    .related img { width: 92px; height: 70px; object-fit: cover; border-radius: 5px; }
+    .related strong { display: block; }
+    .related span { display: block; color: var(--muted); font-size: 12px; }
+
+    footer {
+      padding: 22px 16px 36px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    @media (max-width: 880px) {
+      .calculator-layout { grid-template-columns: 1fr; }
+      .result-panel { position: static; }
+      .method-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .page-head { min-height: 330px; background-position: 68% center; }
+      .head-inner { padding-bottom: 26px; }
+      h1 { font-size: 28px; }
+      main { padding-top: 18px; }
+      .input-panel { padding: 16px; }
+      .panel-head, .section-heading { display: block; }
+      .formula-badge { display: inline-block; margin-top: 10px; }
+      .field-grid, .inline-fields, .related { grid-template-columns: 1fr; }
+      .equipment-row { grid-template-columns: 1fr; }
+      .equipment-row img { width: 100%; height: 112px; object-position: center; }
+      .hair-head { align-items: flex-start; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .metric { border-right: 0; }
+      .section { padding-top: 36px; }
+      .section-heading p { margin-top: 7px; }
+      th, td { padding: 10px 11px; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-head">
+    <div class="topbar">
+      <span class="brand">RO樂園 SquareTsai</span>
+      <a class="home-link" href="index.html">回到首頁</a>
+    </div>
+    <div class="head-inner">
+      <p class="eyebrow">國家武器 × 幸運髮飾</p>
+      <h1>技能 SP 消耗門檻計算器</h1>
+      <p class="head-copy">輸入技能原始消耗與現有減耗，直接找出值得購買的幸運髮飾百分比，不必為同一個捨去結果多花錢。</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="calculator-layout" aria-label="技能 SP 消耗計算器">
+      <div class="input-panel panel">
+        <div class="panel-head">
+          <div>
+            <h2>配裝輸入</h2>
+            <p>百分比以樂園目前裝備說明的整數值計算。</p>
+          </div>
+          <span class="formula-badge">最終無條件捨去</span>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="base-sp">技能原始 SP 消耗</label>
+            <input id="base-sp" type="number" min="1" max="9999" step="1" value="30" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="max-sp">角色目前 MaxSP</label>
+            <input id="max-sp" type="number" min="1" max="999999" step="1" value="1000" inputmode="numeric">
+            <small>用來估算滿 SP 可施放次數。</small>
+          </div>
+        </div>
+
+        <div class="equipment-row">
+          <div>
+            <label class="toggle-line"><input id="weapon-base" type="checkbox" checked> 裝備國家武器（本體 -10%）</label>
+            <div class="inline-fields">
+              <div class="field">
+                <label for="weapon-enchant">武器附魔減耗</label>
+                <input id="weapon-enchant" type="number" min="0" max="15" step="1" value="10" inputmode="numeric">
+                <small>魔法第二條範圍 6～15%；沒有就填 0。</small>
+              </div>
+              <div class="field">
+                <label for="other-reduction">其他裝備減耗</label>
+                <input id="other-reduction" type="number" min="0" max="50" step="1" value="0" inputmode="numeric">
+                <small>沒有其他來源就維持 0。</small>
+              </div>
+            </div>
+          </div>
+          <img src="assets/national-weapons/gonryun-weapons.png" alt="樂園國家武器官方圖">
+        </div>
+
+        <div class="hair-control">
+          <div class="hair-head">
+            <div>
+              <strong>想評估的幸運髮飾</strong>
+              <div class="field-label">技能 SP 消耗減少</div>
+            </div>
+            <label class="hair-number"><input id="hair-number" type="number" min="0" max="20" step="1" value="10" aria-label="幸運髮飾技能 SP 消耗減少"><span>%</span></label>
+          </div>
+          <input id="hair-range" type="range" min="0" max="20" step="1" value="10" aria-label="調整幸運髮飾減耗百分比">
+          <div class="range-scale"><span>0% 無髮飾</span><span>10%</span><span>20% 上限</span></div>
+        </div>
+
+        <div class="field-grid" style="margin-top:16px">
+          <div class="field">
+            <label for="target-sp">希望壓到每次多少 SP</label>
+            <input id="target-sp" type="number" min="1" max="9999" step="1" placeholder="選填" inputmode="numeric">
+            <small>填入後會反推髮飾至少需要幾％。</small>
+          </div>
+        </div>
+      </div>
+
+      <aside class="result-panel panel" aria-live="polite">
+        <div class="result-main">
+          <span>目前每次實際消耗</span>
+          <strong id="final-sp">21 <small>SP</small></strong>
+          <p class="formula-line" id="formula-line">⌊30 × (100 - 30)%⌋ = 21</p>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span>總減耗</span><strong id="total-reduction">30%</strong></div>
+          <div class="metric"><span>乘算結果</span><strong id="raw-sp">21.00</strong></div>
+          <div class="metric"><span>每次省下</span><strong id="saved-sp">9 SP</strong></div>
+          <div class="metric"><span>滿 SP 可施放</span><strong id="cast-count">47 次</strong></div>
+        </div>
+        <div class="advice-list">
+          <div class="advice"><span class="advice-dot"></span><p id="current-band"></p></div>
+          <div class="advice blue"><span class="advice-dot"></span><p id="minimum-advice"></p></div>
+          <div class="advice gold"><span class="advice-dot"></span><p id="next-advice"></p></div>
+          <div class="advice blue" id="target-advice-row" hidden><span class="advice-dot"></span><p id="target-advice"></p></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="breakpoints">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color:var(--green)">BUYING BREAKPOINTS</p>
+          <h2>髮飾購買門檻</h2>
+        </div>
+        <p>點選任一百分比即可帶回計算器。綠色代表比前一個百分比少 1 SP 以上；灰色通常只是同一個捨去區間。</p>
+      </div>
+      <div class="band-strip" id="band-strip" aria-label="0 至 20% 幸運髮飾消耗速查"></div>
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <thead><tr><th>幸運髮飾範圍</th><th>每次消耗</th><th>比無髮飾省</th><th>滿 SP 可施放</th><th>判讀</th></tr></thead>
+          <tbody id="band-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color:var(--green)">CALCULATION RULE</p>
+          <h2>這頁怎麼算</h2>
+        </div>
+      </div>
+      <div class="method-grid">
+        <article class="method-item panel"><strong>1. 加總減耗百分比</strong><p>國家武器本體 10% + 武器附魔 0～15% + 幸運髮飾 0～20% + 其他裝備。</p></article>
+        <article class="method-item panel"><strong>2. 乘上剩餘比例</strong><p><code>原始 SP × (100 - 總減耗)%</code>，畫面會保留乘算前的小數供核對。</p></article>
+        <article class="method-item panel"><strong>3. 最後無條件捨去</strong><p>例如 21.9 會變成 21 SP。因此相鄰的髮飾百分比可能得到完全相同的實際消耗。</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading"><div><h2>相關資料</h2></div><p>裝備效果與能力範圍可回原資料頁核對。</p></div>
+      <div class="related">
+        <a href="national-weapons.html"><img src="assets/national-weapons/gonryun-effects.png" alt="國家武器效果官方圖"><div><strong>國家武器資料庫</strong><span>本體固定減耗與魔法附魔範圍</span></div></a>
+        <a href="lucky-hair-accessory.html"><img src="assets/lucky-hair-accessory/item-description.png" alt="幸運髮飾道具說明"><div><strong>幸運髮飾完整攻略</strong><span>第四條技能 SP 消耗減少 1～20%</span></div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>計算規則整理日期：2026-08-07。若樂園後續調整減耗疊加或取整順序，請以遊戲內實測為準。</footer>
+
+  <script>
+    const controls = {
+      baseSp: document.querySelector("#base-sp"),
+      maxSp: document.querySelector("#max-sp"),
+      weaponBase: document.querySelector("#weapon-base"),
+      weaponEnchant: document.querySelector("#weapon-enchant"),
+      otherReduction: document.querySelector("#other-reduction"),
+      hairNumber: document.querySelector("#hair-number"),
+      hairRange: document.querySelector("#hair-range"),
+      targetSp: document.querySelector("#target-sp")
+    };
+
+    const output = {
+      finalSp: document.querySelector("#final-sp"),
+      totalReduction: document.querySelector("#total-reduction"),
+      rawSp: document.querySelector("#raw-sp"),
+      savedSp: document.querySelector("#saved-sp"),
+      castCount: document.querySelector("#cast-count"),
+      formulaLine: document.querySelector("#formula-line"),
+      currentBand: document.querySelector("#current-band"),
+      minimumAdvice: document.querySelector("#minimum-advice"),
+      nextAdvice: document.querySelector("#next-advice"),
+      targetAdviceRow: document.querySelector("#target-advice-row"),
+      targetAdvice: document.querySelector("#target-advice"),
+      bandStrip: document.querySelector("#band-strip"),
+      bandTable: document.querySelector("#band-table")
+    };
+
+    function integerValue(input, fallback, min, max) {
+      const parsed = Number.parseInt(input.value, 10);
+      if (!Number.isFinite(parsed)) return fallback;
+      return Math.min(max, Math.max(min, parsed));
+    }
+
+    function state() {
+      return {
+        baseSp: integerValue(controls.baseSp, 1, 1, 9999),
+        maxSp: integerValue(controls.maxSp, 1, 1, 999999),
+        weaponBase: controls.weaponBase.checked ? 10 : 0,
+        weaponEnchant: integerValue(controls.weaponEnchant, 0, 0, 15),
+        otherReduction: integerValue(controls.otherReduction, 0, 0, 50),
+        hair: integerValue(controls.hairNumber, 0, 0, 20)
+      };
+    }
+
+    function costAt(data, hair) {
+      const reduction = Math.min(99, data.weaponBase + data.weaponEnchant + data.otherReduction + hair);
+      const numerator = data.baseSp * (100 - reduction);
+      return {
+        reduction,
+        raw: numerator / 100,
+        final: Math.floor(numerator / 100)
+      };
+    }
+
+    function buildBands(data) {
+      const values = Array.from({ length: 21 }, (_, hair) => ({ hair, ...costAt(data, hair) }));
+      const bands = [];
+      values.forEach((item) => {
+        const last = bands.at(-1);
+        if (last && last.final === item.final) {
+          last.end = item.hair;
+        } else {
+          bands.push({ start: item.hair, end: item.hair, final: item.final });
+        }
+      });
+      return { values, bands };
+    }
+
+    function rangeLabel(start, end) {
+      return start === end ? `${start}%` : `${start}～${end}%`;
+    }
+
+    function render() {
+      const data = state();
+      controls.baseSp.value = data.baseSp;
+      controls.maxSp.value = data.maxSp;
+      controls.weaponEnchant.value = data.weaponEnchant;
+      controls.otherReduction.value = data.otherReduction;
+      controls.hairNumber.value = data.hair;
+      controls.hairRange.value = data.hair;
+
+      const selected = costAt(data, data.hair);
+      const withoutHair = costAt(data, 0);
+      const { values, bands } = buildBands(data);
+      const currentBand = bands.find((band) => data.hair >= band.start && data.hair <= band.end);
+      const minimumEffective = values.find((item) => item.hair > 0 && item.final < withoutHair.final);
+      const nextUpgrade = values.find((item) => item.hair > data.hair && item.final < selected.final);
+      const casts = selected.final > 0 ? Math.floor(data.maxSp / selected.final) : 0;
+
+      output.finalSp.innerHTML = `${selected.final.toLocaleString()} <small>SP</small>`;
+      output.totalReduction.textContent = `${selected.reduction}%`;
+      output.rawSp.textContent = selected.raw.toFixed(2);
+      output.savedSp.textContent = `${(data.baseSp - selected.final).toLocaleString()} SP`;
+      output.castCount.textContent = `${casts.toLocaleString()} 次`;
+      output.formulaLine.textContent = `⌊${data.baseSp} × (100 - ${selected.reduction})%⌋ = ${selected.final}`;
+
+      output.currentBand.innerHTML = `目前的 <strong>-${data.hair}%</strong> 位於 <strong>-${rangeLabel(currentBand.start, currentBand.end)}</strong> 區間，這一段都消耗 ${selected.final} SP。`;
+      output.minimumAdvice.innerHTML = minimumEffective
+        ? `相較完全沒有髮飾，最低買到 <strong>-${minimumEffective.hair}%</strong> 就會開始少 1 SP。`
+        : `在幸運髮飾 1～20% 範圍內，這套配裝都無法再少 1 SP。`;
+      output.nextAdvice.innerHTML = nextUpgrade
+        ? `從目前數值繼續升級，下一個有效門檻是 <strong>-${nextUpgrade.hair}%</strong>，會降到 ${nextUpgrade.final} SP。`
+        : `目前往上到 -20% 都不會再出現更低的實際消耗。`;
+
+      const targetText = controls.targetSp.value.trim();
+      if (targetText) {
+        const target = integerValue(controls.targetSp, selected.final, 1, 9999);
+        const targetMatch = values.find((item) => item.final <= target);
+        output.targetAdviceRow.hidden = false;
+        output.targetAdvice.innerHTML = targetMatch
+          ? `要壓到每次 <strong>${target} SP 以下</strong>，髮飾至少需要 <strong>-${targetMatch.hair}%</strong>。`
+          : `即使髮飾 -20%，也無法壓到每次 ${target} SP；需要提高其他減耗。`;
+      } else {
+        output.targetAdviceRow.hidden = true;
+      }
+
+      output.bandStrip.innerHTML = values.map((item, index) => {
+        const breakpoint = index === 0 || item.final < values[index - 1].final;
+        const classes = ["band-cell", breakpoint ? "breakpoint" : "", item.hair === data.hair ? "selected" : ""].filter(Boolean).join(" ");
+        return `<button class="${classes}" type="button" data-hair="${item.hair}" title="髮飾 -${item.hair}%：每次 ${item.final} SP"><span>-${item.hair}%</span><strong>${item.final}</strong></button>`;
+      }).join("");
+
+      output.bandTable.innerHTML = bands.map((band) => {
+        const includesCurrent = data.hair >= band.start && data.hair <= band.end;
+        const isMinimum = minimumEffective && minimumEffective.hair >= band.start && minimumEffective.hair <= band.end;
+        const className = includesCurrent ? "current" : (isMinimum ? "recommended" : "");
+        const bandCasts = band.final > 0 ? Math.floor(data.maxSp / band.final) : 0;
+        const note = includesCurrent ? '<span class="tag">目前</span>' : (isMinimum ? '<span class="tag">最低有效</span>' : "");
+        return `<tr class="${className}"><td><strong>-${rangeLabel(band.start, band.end)}</strong>${note}</td><td>${band.final} SP</td><td>${withoutHair.final - band.final} SP</td><td>${bandCasts.toLocaleString()} 次</td><td>${band.start === band.end ? "單一門檻" : "區間內效果相同"}</td></tr>`;
+      }).join("");
+    }
+
+    controls.hairRange.addEventListener("input", () => {
+      controls.hairNumber.value = controls.hairRange.value;
+      render();
+    });
+
+    controls.hairNumber.addEventListener("input", () => {
+      controls.hairRange.value = integerValue(controls.hairNumber, 0, 0, 20);
+      render();
+    });
+
+    Object.values(controls).forEach((control) => {
+      if (control === controls.hairRange || control === controls.hairNumber) return;
+      control.addEventListener("input", render);
+      control.addEventListener("change", render);
+    });
+
+    output.bandStrip.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-hair]");
+      if (!button) return;
+      controls.hairNumber.value = button.dataset.hair;
+      controls.hairRange.value = button.dataset.hair;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

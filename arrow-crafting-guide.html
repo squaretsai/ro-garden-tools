@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園製作箭材料大全，可依箭矢或素材雙向搜尋，並標示四轉服版本差異。">
+  <title>箭矢製作材料大全｜RO樂園</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18242a;
+      --muted: #5c6a6d;
+      --paper: #f7f5ee;
+      --surface: #fffdf8;
+      --line: #d8d5ca;
+      --green: #176b55;
+      --green-dark: #0e493b;
+      --gold: #bf7a18;
+      --red: #a63e33;
+      --blue: #236ca1;
+      --shadow: 0 12px 30px rgba(31, 43, 43, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      line-height: 1.65;
+    }
+    button, input { font: inherit; }
+    a { color: inherit; }
+    button:focus-visible, input:focus-visible, a:focus-visible {
+      outline: 3px solid rgba(35, 108, 161, 0.38);
+      outline-offset: 2px;
+    }
+
+    .hero {
+      min-height: 310px;
+      display: grid;
+      align-items: end;
+      position: relative;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(9, 28, 28, .95) 0%, rgba(9, 28, 28, .76) 48%, rgba(9, 28, 28, .18) 100%),
+        url("assets/arrow-crafting/arrow-crafting-quest.png") center 42% / cover;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero-inner, .page, .band-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .hero-inner { padding: 34px 0 30px; }
+    .eyebrow {
+      margin: 0 0 6px;
+      color: #ffd789;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .hero p { max-width: 650px; margin: 14px 0 0; color: #f4f5ed; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 24px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .fact-band { background: #132f2b; color: #fff; }
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: rgba(255,255,255,.16);
+    }
+    .fact { min-width: 0; padding: 18px 20px; background: #132f2b; }
+    .fact strong { display: block; color: #ffd789; font-size: 1.45rem; }
+    .fact span { font-size: .9rem; color: #dce8e3; }
+
+    .page { padding: 34px 0 64px; }
+    .notice {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 15px 17px;
+      border-left: 4px solid var(--gold);
+      background: #fff3d7;
+    }
+    .notice strong { color: #79480b; }
+    .notice p { margin: 0; }
+    .notice-icon { font-weight: 900; color: var(--gold); }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+
+    .lookup {
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .lookup-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+    h2, h3 { letter-spacing: 0; }
+    h2 { margin: 0; font-size: clamp(1.45rem, 3vw, 2rem); }
+    .lookup-head p { margin: 4px 0 0; color: var(--muted); }
+    .result-count { flex: none; color: var(--green); font-weight: 800; }
+    .search-wrap { position: relative; }
+    .search-wrap input {
+      width: 100%;
+      min-height: 50px;
+      padding: 10px 44px 10px 15px;
+      border: 1px solid #aeb9b5;
+      border-radius: 6px;
+      color: var(--ink);
+      background: #fff;
+    }
+    .search-wrap input::placeholder { color: #75817e; }
+    .clear-search {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .control-label { font-size: .85rem; font-weight: 800; color: var(--muted); }
+    .segmented {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #ecebe5;
+    }
+    .segmented button, .filter-btn {
+      min-height: 36px;
+      padding: 6px 12px;
+      border: 0;
+      border-radius: 5px;
+      color: #384748;
+      background: transparent;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .segmented button[aria-pressed="true"], .filter-btn[aria-pressed="true"] {
+      color: #fff;
+      background: var(--green);
+    }
+    .filter-btn { border: 1px solid var(--line); background: #fff; }
+
+    .results { margin-top: 26px; }
+    .arrow-catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .arrow-card {
+      width: 100%;
+      min-width: 0;
+      min-height: 78px;
+      display: grid;
+      grid-template-columns: 50px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 11px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+    }
+    .arrow-card:hover { border-color: #7e9d92; transform: translateY(-1px); }
+    .arrow-card[aria-pressed="true"] {
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px rgba(23, 107, 85, .16);
+    }
+    .arrow-icon {
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border-radius: 5px;
+      border: 1px solid rgba(32, 45, 45, .08);
+      background: #eff2f0;
+    }
+    .arrow-icon[data-element="火"] { background: #fee8df; }
+    .arrow-icon[data-element="水"] { background: #e4f2fb; }
+    .arrow-icon[data-element="風"] { background: #e5f3e8; }
+    .arrow-icon[data-element="地"] { background: #f2ead8; }
+    .arrow-icon[data-element="聖"] { background: #fff3c9; }
+    .arrow-icon[data-element="念"] { background: #eee8f9; }
+    .arrow-icon[data-element="毒"] { background: #e9efd8; }
+    .arrow-icon[data-element="暗"] { background: #e8e3ec; }
+    .arrow-icon img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+    .arrow-card-title {
+      display: block;
+      overflow-wrap: anywhere;
+      color: var(--green-dark);
+      font-weight: 850;
+      line-height: 1.25;
+    }
+    .arrow-card-meta { display: block; margin-top: 4px; color: var(--muted); font-size: .78rem; }
+    .card-chevron { color: #71807c; font-size: 1.35rem; }
+    .arrow-section {
+      margin-bottom: 14px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .arrow-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #edf3ef;
+    }
+    .arrow-detail-title { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .arrow-detail-title .arrow-icon { width: 46px; height: 46px; flex: none; }
+    .arrow-detail-title .arrow-icon img { width: 32px; height: 32px; }
+    .arrow-name { font-size: 1.1rem; font-weight: 850; color: var(--green-dark); }
+    .arrow-effect { color: #465456; font-size: .84rem; }
+    .count-pill, .source-badge {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .count-pill { padding: 4px 9px; color: #fff; background: var(--green); }
+    .table-wrap { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 16px; border-top: 1px solid #e4e2da; text-align: left; vertical-align: middle; }
+    th { color: var(--muted); background: #faf9f4; font-size: .79rem; }
+    td strong { color: var(--ink); }
+    .amount { color: var(--red); font-weight: 850; white-space: nowrap; }
+    .source-badge { padding: 3px 8px; color: var(--green-dark); background: #dcece4; }
+    .source-badge.tested { color: #744006; background: #ffdf9f; }
+    .output-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .output-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 4px; color: #174c40; background: #e1f0e9; white-space: nowrap; }
+    .output-icon { width: 20px; height: 20px; object-fit: contain; image-rendering: pixelated; }
+    .empty { padding: 52px 20px; text-align: center; color: var(--muted); background: #fff; border: 1px dashed #aeb8b4; border-radius: 7px; }
+
+    .edition-band { padding: 48px 0; background: #e7ece7; border-block: 1px solid #cbd4cd; }
+    .section-intro { max-width: 790px; margin-bottom: 22px; }
+    .section-intro p { color: var(--muted); }
+    .difference-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .difference {
+      padding: 18px;
+      border-radius: 6px;
+      border-top: 4px solid var(--blue);
+      background: #fff;
+    }
+    .difference h3 { margin: 0 0 9px; font-size: 1rem; }
+    .compare { display: grid; grid-template-columns: 78px 1fr; gap: 5px; margin: 0; font-size: .9rem; }
+    .compare dt { color: var(--muted); font-weight: 800; }
+    .compare dd { margin: 0; }
+    .uncraftable { margin-top: 22px; padding: 20px; border-left: 4px solid var(--red); background: #fff; }
+    .uncraftable h3 { margin: 0 0 7px; }
+
+    .sources { padding: 42px 0; background: #172624; color: #eaf0ec; }
+    .sources h2 { color: #fff; }
+    .sources p { max-width: 880px; color: #bfd0c9; }
+    .source-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .source-links a { padding: 7px 10px; border: 1px solid #57716a; border-radius: 5px; color: #fff; text-decoration: none; }
+    .source-links a:hover { border-color: #ffd789; color: #ffd789; }
+    .footer { margin-top: 20px; color: #8eaaa2; font-size: .83rem; }
+
+    @media (max-width: 860px) {
+      .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .difference-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .hero {
+        min-height: 365px;
+        background-image:
+          linear-gradient(rgba(9, 28, 28, .84), rgba(9, 28, 28, .84)),
+          url("assets/arrow-crafting/arrow-crafting-quest.png");
+        background-position: 62% 42%;
+      }
+      .hero-inner, .page, .band-inner { width: min(100% - 22px, 1180px); }
+      .facts { grid-template-columns: 1fr 1fr; }
+      .fact { padding: 14px 12px; }
+      .fact strong { font-size: 1.18rem; }
+      .lookup { padding: 15px 12px; }
+      .lookup-head { align-items: start; flex-direction: column; gap: 5px; }
+      .arrow-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .arrow-card { min-height: 70px; grid-template-columns: 43px minmax(0, 1fr); gap: 8px; padding: 8px; }
+      .arrow-icon { width: 43px; height: 43px; }
+      .arrow-icon img { width: 30px; height: 30px; }
+      .card-chevron { display: none; }
+      .arrow-card-meta { font-size: .72rem; }
+      .arrow-header { align-items: flex-start; }
+      .count-pill { margin-top: 4px; }
+      th, td { padding: 9px 11px; }
+      .notice { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <a class="back-link" href="index.html" aria-label="回到首頁">‹ 回首頁</a>
+      <p class="eyebrow">RO樂園玩家資料 × 四轉服差異</p>
+      <h1>箭矢製作材料大全</h1>
+      <p>把倉庫雜物變成箭矢前先查一次。可依箭矢找材料，也能輸入素材反查產物與數量。</p>
+    </div>
+  </header>
+
+  <section class="fact-band" aria-label="資料摘要">
+    <div class="band-inner facts">
+      <div class="fact"><strong id="arrowTotal">21 種</strong><span>可製作箭矢</span></div>
+      <div class="fact"><strong id="materialTotal">136 種</strong><span>素材轉換資料</span></div>
+      <div class="fact"><strong>負重 70%</strong><span>樂園技能不可使用門檻</span></div>
+      <div class="fact"><strong>雙版本</strong><span>樂園與四轉服分開標示</span></div>
+    </div>
+  </section>
+
+  <main class="page">
+    <div class="notice" role="note">
+      <span class="notice-icon" aria-hidden="true">!</span>
+      <p><strong>先看這裡：</strong>上方 136 筆都是樂園討論串所連結的玩家素材表，不是「四轉服配方」。其中只有部分項目另有樂園玩家回覆或實測佐證；其餘標為「樂園參考」，不代表樂園沒有。製作會消耗選定素材，大量轉換前請先用少量素材在技能視窗確認。</p>
+    </div>
+
+    <div class="legend" aria-label="資料標記說明">
+      <span><span class="source-badge tested">樂園實測</span>另有樂園玩家回覆或實測佐證</span>
+      <span><span class="source-badge">樂園參考</span>收錄於樂園玩家素材表，尚未逐筆實測</span>
+    </div>
+
+    <section class="lookup" aria-labelledby="lookupTitle">
+      <div class="lookup-head">
+        <div>
+          <h2 id="lookupTitle">材料查詢</h2>
+          <p>輸入「毒牙」、「鐵鏽箭矢」或任何素材名稱。</p>
+        </div>
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+      </div>
+
+      <div class="search-wrap">
+        <input id="searchInput" type="search" autocomplete="off" placeholder="搜尋素材或箭矢…" aria-label="搜尋素材或箭矢">
+        <button class="clear-search" id="clearSearch" type="button" aria-label="清除搜尋" title="清除搜尋">×</button>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">查詢方式</span>
+        <div class="segmented" role="group" aria-label="查詢方式">
+          <button type="button" data-view="arrow" aria-pressed="true">依箭矢查</button>
+          <button type="button" data-view="material" aria-pressed="false">依素材查</button>
+        </div>
+      </div>
+      <div class="control-row" id="groupControls">
+        <span class="control-label">箭矢分類</span>
+        <button class="filter-btn" type="button" data-group="all" aria-pressed="true">全部</button>
+        <button class="filter-btn" type="button" data-group="element" aria-pressed="false">屬性箭</button>
+        <button class="filter-btn" type="button" data-group="status" aria-pressed="false">狀態箭</button>
+        <button class="filter-btn" type="button" data-group="physical" aria-pressed="false">物理箭</button>
+      </div>
+    </section>
+
+    <div class="results" id="results"></div>
+  </main>
+
+  <section class="edition-band" id="fourthJobNotes" aria-labelledby="editionTitle">
+    <div class="band-inner">
+      <div class="section-intro">
+        <p class="eyebrow" style="color:#8b550d">一般伺服器補充</p>
+        <h2 id="editionTitle">四轉服已知差異</h2>
+        <p>多數箭矢種類相同，但以下轉換數量與樂園玩家表不同。四轉服資料只放在這一區，不會混入上方樂園主表。</p>
+      </div>
+      <div class="difference-grid">
+        <article class="difference">
+          <h3>傑勒比結晶</h3>
+          <dl class="compare"><dt>樂園</dt><dd>箭矢 ×3</dd><dt>四轉服</dt><dd>箭矢 ×4</dd></dl>
+        </article>
+        <article class="difference">
+          <h3>木製鎧甲［0］</h3>
+          <dl class="compare"><dt>樂園</dt><dd>箭矢 ×700、鐵箭矢 ×100</dd><dt>四轉服</dt><dd>箭矢 ×700、鐵箭矢 ×500</dd></dl>
+        </article>
+        <article class="difference">
+          <h3>剎勒空結晶</h3>
+          <dl class="compare"><dt>樂園</dt><dd>銀箭矢 ×40</dd><dt>四轉服</dt><dd>銀箭矢 ×50</dd></dl>
+        </article>
+      </div>
+      <div class="uncraftable">
+        <h3>四轉服有，但不能用「製作箭」取得</h3>
+        <p><strong>終極獵殺箭矢</strong>（ATK 35）與<strong>守護精靈箭矢</strong>（ATK 45、Base Lv.100）屬 NPC 販售箭矢；不要為了這兩種箭收製作素材。一般服資料另有負重 50% 以上不能製作的記載，與樂園技能頁的 70% 門檻不同。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sources">
+    <div class="band-inner">
+      <h2>資料來源與判讀</h2>
+      <p>樂園主表採用樂園討論串連結的玩家素材表；技能條件、四轉服配方與箭矢效果再以技能資料頁及一般伺服器整理交叉檢查。伺服器改版後仍可能調整，遊戲內結果優先。</p>
+      <div class="source-links">
+        <a href="https://forum.gamer.com.tw/C.php?bsn=83142&amp;snA=287" target="_blank" rel="noreferrer">樂園玩家討論</a>
+        <a href="https://docs.google.com/spreadsheets/d/1IXL6EK-qfjhZiHtgB6HuIgL4U1jLdBtEcoUCzou2IsE/pubhtml/sheet?headers=false&amp;gid=1" target="_blank" rel="noreferrer">樂園素材表</a>
+        <a href="https://ragnaplace.com/zh-t/roztw/skill/147" target="_blank" rel="noreferrer">製作箭技能資料</a>
+        <a href="https://forum.gamer.com.tw/Co.php?bsn=4212&amp;sn=2771309" target="_blank" rel="noreferrer">四轉服箭矢整理</a>
+        <a href="https://irowiki.org/wiki/Arrow_Crafting" target="_blank" rel="noreferrer">iRO Wiki 對照</a>
+        <a href="https://www.divine-pride.net/database/item/1750/arrow" target="_blank" rel="noreferrer">箭矢道具圖示</a>
+        <a href="https://discover.hubpages.com/games-hobbies/Ragnarok-Online-Archer-Platinum-Skills-Quest-Guide" target="_blank" rel="noreferrer">頁首圖片來源</a>
+      </div>
+      <p class="footer">整理日期：2026-08-08｜RO樂園個人查詢工具</p>
+    </div>
+  </footer>
+
+  <script>
+    const arrows = {
+      "箭矢": ["無", 25, "一般箭矢", "physical", 1750],
+      "銀箭矢": ["聖", 30, "聖屬性", "element", 1751],
+      "火箭矢": ["火", 30, "火屬性", "element", 1752],
+      "鋼鐵箭矢": ["無", 40, "高物理攻擊", "physical", 1753],
+      "水靈箭矢": ["水", 30, "水屬性", "element", 1754],
+      "風靈箭矢": ["風", 30, "風屬性", "element", 1755],
+      "地靈箭矢": ["地", 30, "地屬性", "element", 1756],
+      "無形箭矢": ["念", 30, "念屬性", "element", 1757],
+      "昏迷箭矢": ["無", 1, "低機率使目標暈眩", "status", 1758],
+      "冰凍箭矢": ["水", 1, "低機率使目標冰凍", "status", 1759],
+      "光芒箭矢": ["無", 1, "低機率使目標黑暗", "status", 1760],
+      "詛咒箭矢": ["無", 1, "低機率使目標詛咒", "status", 1761],
+      "鐵鏽箭矢": ["毒", 30, "毒屬性", "element", 1762],
+      "毒箭矢": ["毒", 1, "低機率使目標中毒", "status", 1763],
+      "銳利箭矢": ["無", 10, "CRI +10", "physical", 1764],
+      "神之金屬箭矢": ["無", 50, "最高物理攻擊箭矢", "physical", 1765],
+      "影子箭矢": ["暗", 30, "暗屬性", "element", 1767],
+      "睡眠箭矢": ["無", 1, "低機率使目標睡眠", "status", 1768],
+      "寧靜箭矢": ["無", 1, "低機率使目標沉默", "status", 1769],
+      "鐵箭矢": ["無", 30, "一般物理箭矢", "physical", 1770],
+      "神聖的箭矢": ["聖", 50, "對惡魔型傷害 +5%", "element", 1772]
+    };
+
+    const recipes = [
+      ["樹根","箭矢7"],["傑勒比結晶","箭矢3"],["仙人掌刺","箭矢50"],["瑪哪樹枝","箭矢40"],["刺蝟尖刺","箭矢70","地靈箭矢30"],["天地樹枝","箭矢20"],["世界樹枝","箭矢20"],["智慧樹枝","箭矢20"],["指針","箭矢100","睡眠箭矢5"],["木製鎧甲","箭矢700","鐵箭矢100"],["木製鎧甲[1]","箭矢1000","鐵箭矢700"],["竹筒","箭矢100"],
+      ["剎勒空結晶","銀箭矢40"],["強化武器金屬-級數二","銀箭矢40","鐵箭矢200"],["銳利錐子","銀箭矢40","銳利箭矢2"],["獸角頭飾","銀箭矢1000"],["秘銀之衣","銀箭矢700"],["秘銀之衣[1]","銀箭矢1000","無形箭矢10"],["金色手環","銀箭矢200","神聖的箭矢300"],["黃色寶珠","銀箭矢50","無形箭矢50","睡眠箭矢80"],
+      ["火靈礦石","火箭矢600"],["火靈原石","火箭矢1800","寧靜箭矢5"],["火柴","火箭矢3000"],["燃燒一半的木材","火箭矢250"],["燃燒的心臟","火箭矢150"],["火種","火箭矢100"],["火龍的麟片","火箭矢300","昏迷箭矢300"],["紅色寶珠","火箭矢100","光芒箭矢80"],
+      ["獸人犬齒","鋼鐵箭矢5","地靈箭矢10","鐵箭矢30"],["雪勒結晶","鋼鐵箭矢8"],["鋁原石","鋼鐵箭矢200","昏迷箭矢5"],["鋁","鋼鐵箭矢1000","昏迷箭矢50"],["鋼鐵","鋼鐵箭矢100"],["獸人指甲","鋼鐵箭矢10"],["人魚之牙","鋼鐵箭矢20","水靈箭矢300"],["鞭繩","鋼鐵箭矢50","鐵箭矢100"],["手銬","鋼鐵箭矢50"],["腳鍊","鋼鐵箭矢50","鐵箭矢700"],["鋼鐵面具","鋼鐵箭矢200","昏迷箭矢40"],["整人面具","鋼鐵箭矢300","銳利箭矢200"],["舞會面具","鋼鐵箭矢200","寧靜箭矢40"],["鐵蠍尾巴","鋼鐵箭矢250","毒箭矢1"],["獸人之牙","鋼鐵箭矢30","鐵鏽箭矢5"],["劍士頭盔","鋼鐵箭矢200","水靈箭矢600"],["黑狐頸鏈","鋼鐵箭矢100","風靈箭矢150","銳利箭矢10"],["破裂的鎧甲一角","鋼鐵箭矢150"],["龍皮","鋼鐵箭矢10","詛咒箭矢50","寧靜箭矢50"],["燃燒的馬蹄鐵","鋼鐵箭矢100"],["盾牌的碎片","鋼鐵箭矢100","無形箭矢300","神之金屬箭矢100"],["糾纏鐵鍊","鋼鐵箭矢50","影子箭矢50"],["變形水壺","鋼鐵箭矢50"],["老舊的鐵板","鋼鐵箭矢100","鐵鏽箭矢100"],["老舊的十字鎬","鋼鐵箭矢50","鐵鏽箭矢100"],
+      ["藍色魔力礦石","水靈箭矢30","冰凍箭矢1"],["鰓刺","水靈箭矢150","鐵箭矢80"],["水靈原石","水靈箭矢450","冰凍箭矢5"],["水靈礦石","水靈箭矢150"],["冰鱗片","水靈箭矢150","冰凍箭矢400","寧靜箭矢200"],["冰心臟","水靈箭矢50","冰凍箭矢50"],["藍色寶珠","水靈箭矢50","風靈箭矢50","冰凍箭矢80"],["冰塊一角","水靈箭矢100"],["卡崙之牙","水靈箭矢300"],
+      ["貓眼石","風靈箭矢200"],["風靈原石","風靈箭矢450","睡眠箭矢5"],["風靈礦石","風靈箭矢150"],
+      ["黃色魔力礦石","地靈箭矢30","睡眠箭矢1"],["地靈礦石","地靈箭矢150"],["土靈原石","地靈箭矢450","光芒箭矢5"],["綠色寶珠","地靈箭矢100","毒箭矢80"],["石頭一角","地靈箭矢50","昏迷箭矢30"],["鼠指甲","地靈箭矢60","鐵箭矢50"],
+      ["返魂符","詛咒箭矢40"],["紅色魔力礦石","詛咒箭矢1","鐵鏽箭矢10","毒箭矢1"],["小惡魔角","詛咒箭矢2","鐵箭矢50"],["詛咒紅寶石","詛咒箭矢50","睡眠箭矢10"],["惡夢之石","詛咒箭矢1000"],["血染之刀","詛咒箭矢200","銳利箭矢600"],["搖晃的骷髏","詛咒箭矢50","影子箭矢50"],["紅色黑暗的意志","詛咒箭矢200","毒箭矢200","影子箭矢100"],["受詛咒的印","詛咒箭矢50","寧靜箭矢50"],["黑暗的意志","詛咒箭矢30","毒箭矢30","影子箭矢50"],["黑色水晶碎片","詛咒箭矢30","影子箭矢50"],
+      ["神秘箱子","銳利箭矢50","睡眠箭矢50"],["受損的鑽石","銳利箭矢50"],["螳螂臂","銳利箭矢1"],["銳利的觸角","銳利箭矢20"],["尖銳的葉子","銳利箭矢30"],["斷柄之刀","銳利箭矢600","影子箭矢200"],["昆蟲的長腿","毒箭矢50","銳利箭矢10"],["花豹指甲","銳利箭矢10"],
+      ["牛蛙之皮","毒箭矢20"],["腐爛鱗片","毒箭矢1"],["毒牙","毒箭矢1"],
+      ["蝙蝠牙","影子箭矢1"],["煤礦","影子箭矢8"],["亡者牙齒","影子箭矢5"],["無顱武士的鎧甲一角","影子箭矢150"],["鐘塔鑰匙","影子箭矢100"],["傲慢之像","影子箭矢1000"],["土人之角","影子箭矢2","鐵箭矢40"],
+      ["枯樹枝","寧靜箭矢40"],["小樹枝","寧靜箭矢1000"],
+      ["手提燈","鐵箭矢80"],["強化武器金屬-級數一","鐵箭矢50"],["鐵","鐵箭矢100"],["鐵礦石","鐵箭矢50"],["空瓶","鐵箭矢2"],["加勒結晶","鐵箭矢12"],["狼指甲","鐵箭矢15"],["硬角","鐵箭矢35"],
+      ["黃金","光芒箭矢50","神之金屬箭矢50"],["星星的角","光芒箭矢30"],["星星的粉末","光芒箭矢10"],["秘衣惡德","光芒箭矢1000"],["黑暗的盧恩","光芒箭矢150","影子箭矢300"],["水晶碎片","光芒箭矢10","睡眠箭矢30"],["盲人之證","光芒箭矢200"],
+      ["蠍子尾巴","鐵鏽箭矢3"],["亡者指甲","鐵鏽箭矢1","影子箭矢1"],["蜂針","鐵鏽箭矢1"],["茲諾克之牙","鐵鏽箭矢5"],["斷裂的農器具","詛咒箭矢20","鐵鏽箭矢50","鐵箭矢10"],
+      ["神之金屬原石","神之金屬箭矢50"],["神之金屬","神之金屬箭矢250"],["老舊劍柄","神之金屬箭矢1000"],["龍牙","神之金屬箭矢1","鐵箭矢50"],["閃亮的槍錐","神之金屬箭矢100"],["鐘塔之鑰","神之金屬箭矢50"],
+      ["惡魔角","昏迷箭矢5","光芒箭矢10","影子箭矢20"],["獸人英雄之證","昏迷箭矢5","神之金屬箭矢1"],["鋼硬之角","昏迷箭矢2"],["石榴桃","昏迷箭矢30"],["魔王之眼淚","昏迷箭矢800","睡眠箭矢800","寧靜箭矢400"],
+      ["華麗金屬","無形箭矢600","神之金屬箭矢600","寧靜箭矢600"],["巴哈拉的花","無形箭矢600","銳利箭矢600","神聖的箭矢600"],["骷髏鎧甲的一角","無形箭矢500","神之金屬箭矢100","影子箭矢200"]
+    ];
+
+    const testedMaterials = new Set(["木製鎧甲", "木製鎧甲[1]", "秘銀之衣", "秘銀之衣[1]"]);
+    const parseOutput = text => {
+      const match = text.match(/^(.*?)(\d+)$/);
+      return { name: match ? match[1] : text, amount: match ? Number(match[2]) : 0 };
+    };
+    const records = recipes.map(([material, ...raw]) => ({
+      material,
+      outputs: raw.map(parseOutput)
+    }));
+
+    const searchInput = document.querySelector("#searchInput");
+    const results = document.querySelector("#results");
+    const resultCount = document.querySelector("#resultCount");
+    const groupControls = document.querySelector("#groupControls");
+    let view = "arrow";
+    let group = "all";
+    let selectedArrow = null;
+
+    document.querySelector("#arrowTotal").textContent = `${Object.keys(arrows).length} 種`;
+    document.querySelector("#materialTotal").textContent = `${records.length} 種`;
+
+    const includesTerm = (record, term) => {
+      if (!term) return true;
+      return record.material.toLowerCase().includes(term) ||
+        record.outputs.some(output => output.name.toLowerCase().includes(term));
+    };
+
+    const badge = material => testedMaterials.has(material)
+      ? '<span class="source-badge tested">樂園實測</span>'
+      : '<span class="source-badge">樂園參考</span>';
+
+    const itemIcon = (name, className = "") => {
+      const id = arrows[name]?.[4];
+      return `<img class="${className}" src="assets/arrow-crafting/items/${id}.png" alt="" width="34" height="34" loading="lazy">`;
+    };
+
+    function arrowDetail(name, meta, filtered) {
+      const rows = filtered.flatMap(record => record.outputs
+        .filter(output => output.name === name)
+        .map(output => ({ material: record.material, amount: output.amount })));
+      return `
+        <article class="arrow-section">
+          <header class="arrow-header">
+            <div class="arrow-detail-title">
+              <span class="arrow-icon" data-element="${meta[0]}">${itemIcon(name)}</span>
+              <div><div class="arrow-name">${name}</div><div class="arrow-effect">${meta[2]} · ${meta[0]}屬性 · ATK ${meta[1]}</div></div>
+            </div>
+            <span class="count-pill">${rows.length} 種素材</span>
+          </header>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>消耗素材</th><th>製成數量</th><th>資料標記</th></tr></thead>
+              <tbody>${rows.map(row => `<tr><td><strong>${row.material}</strong></td><td class="amount">×${row.amount.toLocaleString("zh-TW")}</td><td>${badge(row.material)}</td></tr>`).join("")}</tbody>
+            </table>
+          </div>
+        </article>`;
+    }
+
+    function renderArrowView(filtered, term) {
+      const arrowNameMatches = term
+        ? Object.keys(arrows).filter(name => name.toLowerCase().includes(term))
+        : [];
+      const sections = Object.entries(arrows).filter(([name, meta]) => {
+        if (group !== "all" && meta[3] !== group) return false;
+        if (arrowNameMatches.length && !arrowNameMatches.includes(name)) return false;
+        return filtered.some(record => record.outputs.some(output => output.name === name));
+      });
+      if (!sections.some(([name]) => name === selectedArrow)) {
+        selectedArrow = sections.length === 1 ? sections[0][0] : null;
+      }
+      resultCount.textContent = `${sections.length} 種箭矢`;
+      const cards = sections.map(([name, meta]) => {
+        const rows = filtered.flatMap(record => record.outputs
+          .filter(output => output.name === name)
+          .map(output => ({ material: record.material, amount: output.amount })));
+        return `
+          <button class="arrow-card" type="button" data-arrow="${name}" aria-pressed="${selectedArrow === name}" title="查看 ${name} 的製作材料">
+            <span class="arrow-icon" data-element="${meta[0]}">${itemIcon(name)}</span>
+            <span><span class="arrow-card-title">${name}</span><span class="arrow-card-meta">${meta[0]}屬性 · ATK ${meta[1]}</span></span>
+            <span class="card-chevron" aria-hidden="true">›</span>
+          </button>`;
+      }).join("");
+      if (!sections.length) {
+        results.innerHTML = '<div class="empty">找不到符合條件的箭矢或素材。</div>';
+        return;
+      }
+      const selected = sections.find(([name]) => name === selectedArrow);
+      results.innerHTML = `<div class="arrow-catalog">${cards}</div>${selected ? arrowDetail(selected[0], selected[1], filtered) : ""}`;
+      results.querySelectorAll("[data-arrow]").forEach(button => button.addEventListener("click", () => {
+        selectedArrow = button.dataset.arrow;
+        renderArrowView(filtered, term);
+      }));
+    }
+
+    function renderMaterialView(filtered) {
+      resultCount.textContent = `${filtered.length} 種素材`;
+      if (!filtered.length) {
+        results.innerHTML = '<div class="empty">找不到符合條件的素材或箭矢。</div>';
+        return;
+      }
+      results.innerHTML = `
+        <article class="arrow-section">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>消耗素材</th><th>可製成</th><th>資料標記</th></tr></thead>
+              <tbody>${filtered.map(record => `
+                <tr>
+                  <td><strong>${record.material}</strong></td>
+                  <td><div class="output-list">${record.outputs.map(output => `<span class="output-tag">${itemIcon(output.name, "output-icon")}${output.name} ×${output.amount.toLocaleString("zh-TW")}</span>`).join("")}</div></td>
+                  <td>${badge(record.material)}</td>
+                </tr>`).join("")}
+              </tbody>
+            </table>
+          </div>
+        </article>`;
+    }
+
+    function render() {
+      const term = searchInput.value.trim().toLowerCase();
+      const filtered = records.filter(record => includesTerm(record, term));
+      if (view === "arrow") renderArrowView(filtered, term);
+      else renderMaterialView(filtered);
+    }
+
+    searchInput.addEventListener("input", () => {
+      selectedArrow = null;
+      render();
+    });
+    document.querySelector("#clearSearch").addEventListener("click", () => {
+      searchInput.value = "";
+      searchInput.focus();
+      selectedArrow = null;
+      render();
+    });
+    document.querySelectorAll("[data-view]").forEach(button => button.addEventListener("click", () => {
+      view = button.dataset.view;
+      selectedArrow = null;
+      document.querySelectorAll("[data-view]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      groupControls.hidden = view !== "arrow";
+      render();
+    }));
+    document.querySelectorAll("[data-group]").forEach(button => button.addEventListener("click", () => {
+      group = button.dataset.group;
+      selectedArrow = null;
+      document.querySelectorAll("[data-group]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      render();
+    }));
+
+    render();
+  </script>
+</body>
+</html>
