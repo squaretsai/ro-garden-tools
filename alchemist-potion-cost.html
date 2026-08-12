@@ -356,6 +356,120 @@
       margin-top: 12px;
     }
 
+    .action-button {
+      width: 100%;
+      min-height: 42px;
+      margin-top: 12px;
+      border: 1px solid rgba(156, 47, 36, 0.28);
+      border-radius: var(--radius);
+      background: #fff0dc;
+      color: var(--accent);
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .action-button:hover,
+    .action-button:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(156, 47, 36, 0.50);
+      box-shadow: 0 12px 28px rgba(43, 35, 26, 0.13);
+      outline: none;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(22, 25, 29, 0.58);
+    }
+
+    .modal-backdrop.is-open { display: grid; }
+
+    .modal {
+      width: min(860px, 100%);
+      max-height: min(760px, calc(100vh - 36px));
+      overflow: auto;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    .modal-head {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.96);
+    }
+
+    .modal-head h2 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .icon-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff7e9;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .modal-body {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .result-box {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .result-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .result-box strong {
+      display: block;
+      color: var(--accent);
+      font-size: 24px;
+      line-height: 1.12;
+    }
+
     .footer {
       color: var(--muted);
       font-size: 13px;
@@ -385,6 +499,7 @@
       .card,
       .result-card { padding: 14px; }
       .controls { grid-template-columns: 1fr; }
+      .result-grid { grid-template-columns: 1fr; }
       table { min-width: 700px; }
     }
   </style>
@@ -409,30 +524,30 @@
       </div>
       <div class="panel result-card">
         <span>預設成功率</span>
-        <div class="result-number" id="heroRate">65.45%</div>
-        <p>預設條件：Base 54 / Job 50，INT20、DEX51、LUK56，知識藥水10、配藥10，詩人 DEX60 魁儡、天賜/慈悲、幸運頌歌全上。</p>
+        <div class="result-number" id="heroRate">66.5%</div>
+        <p>預設條件：Base 54 / Job 50，INT20、DEX51、LUK56，知識藥水10、配藥10，詩人 DEX60 魁儡、慈悲術 Job70、幸運頌歌全上。</p>
       </div>
     </section>
 
     <dl class="quick-grid" aria-label="市價結論">
       <div class="panel metric">
         <dt>水抵抗平均成本</dt>
-        <dd id="waterAvg">539z</dd>
+        <dd id="waterAvg">531z</dd>
         <small>市價低標 3,000z，材料自取時很有空間。</small>
       </div>
       <div class="panel metric">
         <dt>風抵抗平均成本</dt>
-        <dd id="windAvg">539z</dd>
+        <dd id="windAvg">531z</dd>
         <small>市價低標 6,000z，是這組裡最甜的品項。</small>
       </div>
       <div class="panel metric">
         <dt>火抵抗平均成本</dt>
-        <dd id="fireAvg">1,062z</dd>
+        <dd id="fireAvg">1,045z</dd>
         <small>紅石全買也仍低於 4,000z 市價低標。</small>
       </div>
       <div class="panel metric">
         <dt>地抵抗平均成本</dt>
-        <dd id="earthAvg">2,107z</dd>
+        <dd id="earthAvg">2,074z</dd>
         <small>黃石貴，但市價也高，仍有期望利潤。</small>
       </div>
     </dl>
@@ -441,8 +556,11 @@
       <aside class="panel card">
         <h2>試算條件</h2>
         <div class="controls">
+          <label>Base 等級
+            <input id="baseLv" type="number" min="1" max="150" value="54">
+          </label>
           <label>Job 等級
-            <input id="jobLv" type="number" min="1" max="50" value="50">
+            <input id="jobLv" type="number" min="1" max="70" value="50">
           </label>
           <label>知識藥水
             <input id="learningPotion" type="number" min="0" max="10" value="10">
@@ -452,6 +570,9 @@
           </label>
           <label>詩人 DEX
             <input id="bardDex" type="number" min="0" max="99" value="60">
+          </label>
+          <label>慈悲術 Job
+            <input id="clementiaJob" type="number" min="1" max="70" value="70">
           </label>
           <label>煉金 INT
             <input id="baseInt" type="number" min="1" max="99" value="20">
@@ -468,20 +589,21 @@
         </div>
 
         <div class="toggle-row">
-          <label class="check">計入煉金 Job50 加成 INT+7 / DEX+9
+          <label class="check">計入煉金 Job 加成
             <input id="jobBonus" type="checkbox" checked>
           </label>
           <label class="check">詩人魁儡，能力補到 99 上限
             <input id="marionette" type="checkbox" checked>
           </label>
-          <label class="check">天賜 / 慈悲 +10 INT / DEX
+          <label class="check">慈悲術：天賜10 + floor(Job/10)
             <input id="blessing" type="checkbox" checked>
           </label>
           <label class="check">幸運頌歌 +30 LUK
             <input id="gloria" type="checkbox" checked>
           </label>
         </div>
-        <p class="note">魁儡的計算採「先魁儡再天賜」，避免 DEX 超過 99 時浪費。若你的實際施放順序不同，請把成功率覆寫成實測值。</p>
+        <button class="action-button" id="bestBuildButton" type="button">計算最佳配點</button>
+        <p class="note">魁儡的計算採「先魁儡再慈悲」，避免 DEX 超過 99 時浪費。最佳配點只優化 INT / DEX / LUK，STR / AGI / VIT 先保留 1。</p>
       </aside>
 
       <section class="panel card">
@@ -528,7 +650,7 @@
       <div class="panel card">
         <h3>製藥公式</h3>
         <p class="formula">成功率 = 知識藥水Lv * 1<br>+ 配藥Lv * 3<br>+ JobLv * 0.2<br>+ DEX * 0.1<br>+ LUK * 0.1<br>+ INT * 0.05<br>- 5</p>
-        <p class="note">`-5` 是抵抗藥水係數。黃色纖細藥水係數較低，前面估算是 `-8`。</p>
+        <p class="note">`-5` 是抵抗藥水係數。慈悲術依公開說明採天賜效果再加 floor(施放者 Job/10)。</p>
       </div>
 
       <div class="panel card">
@@ -560,8 +682,18 @@
       </div>
     </section>
 
-    <p class="footer">資料來源：FTH / ROZDB 抵抗藥水材料頁、RO樂園巴哈製藥公式討論、露天截圖市價。這是期望值工具，不代表實際成交價或自打材料時間成本。</p>
+    <p class="footer">資料來源：FTH / ROZDB 抵抗藥水材料頁、RO樂園巴哈製藥公式討論、iRO Wiki 煉金 Job 加成與慈悲術說明、露天截圖市價。這是期望值工具，不代表實際成交價或自打材料時間成本。</p>
   </main>
+
+  <div class="modal-backdrop" id="bestBuildModal" role="dialog" aria-modal="true" aria-labelledby="bestBuildTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="bestBuildTitle">最佳製藥配點</h2>
+        <button class="icon-button" id="closeBestBuild" type="button" aria-label="關閉">×</button>
+      </div>
+      <div class="modal-body" id="bestBuildResult"></div>
+    </div>
+  </div>
 
   <script>
     const potions = [
@@ -572,12 +704,21 @@
     ];
 
     const ids = [
-      "jobLv", "learningPotion", "pharmacy", "bardDex", "baseInt", "baseDex", "baseLuk",
-      "rateOverride", "jobBonus", "marionette", "blessing", "gloria"
+      "baseLv", "jobLv", "learningPotion", "pharmacy", "bardDex", "clementiaJob",
+      "baseInt", "baseDex", "baseLuk", "rateOverride", "jobBonus", "marionette", "blessing", "gloria"
     ];
 
     const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
     const rows = document.getElementById("potionRows");
+    const bestBuildModal = document.getElementById("bestBuildModal");
+    const bestBuildResult = document.getElementById("bestBuildResult");
+    const bestBuildButton = document.getElementById("bestBuildButton");
+    const closeBestBuild = document.getElementById("closeBestBuild");
+    const alchemistJobBonuses = {
+      int: [1, 9, 17, 23, 24, 29, 38],
+      dex: [2, 3, 8, 13, 19, 21, 25, 28, 32],
+      luk: []
+    };
 
     function numberValue(input, fallback) {
       const value = Number(input.value);
@@ -596,44 +737,128 @@
       return value.toFixed(2).replace(/\.00$/, "") + "%";
     }
 
+    function zeny(value) {
+      const sign = value > 0 ? "+" : value < 0 ? "-" : "";
+      return sign + Math.abs(Math.round(value)).toLocaleString("zh-TW") + "z";
+    }
+
+    function statCostTo(target) {
+      let cost = 0;
+      for (let current = 1; current < target; current++) {
+        cost += Math.floor((current - 1) / 10) + 2;
+      }
+      return cost;
+    }
+
+    const statCosts = Array.from({ length: 100 }, (_, stat) => stat === 0 ? 0 : statCostTo(stat));
+
+    function totalStatPoints(baseLv) {
+      let points = 48;
+      for (let lv = 2; lv <= baseLv; lv++) {
+        points += Math.floor(lv / 5) + 3;
+      }
+      return points;
+    }
+
+    function countJobBonus(jobLv, thresholds) {
+      return thresholds.filter(level => jobLv >= level).length;
+    }
+
+    function getInputs() {
+      const alchemistJob = clamp(numberValue(el.jobLv, 50), 1, 70);
+      return {
+        baseLv: clamp(numberValue(el.baseLv, 54), 1, 150),
+        jobLv: alchemistJob,
+        learning: clamp(numberValue(el.learningPotion, 10), 0, 10),
+        pharmacy: clamp(numberValue(el.pharmacy, 10), 0, 10),
+        bardDex: clamp(numberValue(el.bardDex, 60), 0, 99),
+        clementiaJob: clamp(numberValue(el.clementiaJob, 70), 1, 70),
+        useJobBonus: el.jobBonus.checked,
+        useMarionette: el.marionette.checked,
+        useBlessing: el.blessing.checked,
+        useGloria: el.gloria.checked
+      };
+    }
+
+    function getFinalStats(baseStats, options = getInputs()) {
+      let int = baseStats.int;
+      let dex = baseStats.dex;
+      let luk = baseStats.luk;
+
+      const jobInt = options.useJobBonus ? countJobBonus(options.jobLv, alchemistJobBonuses.int) : 0;
+      const jobDex = options.useJobBonus ? countJobBonus(options.jobLv, alchemistJobBonuses.dex) : 0;
+      const jobLuk = options.useJobBonus ? countJobBonus(options.jobLv, alchemistJobBonuses.luk) : 0;
+      int += jobInt;
+      dex += jobDex;
+      luk += jobLuk;
+
+      const beforeMarionetteDex = dex;
+      let marionetteDex = 0;
+      if (options.useMarionette) {
+        marionetteDex = Math.min(Math.floor(options.bardDex / 2), Math.max(0, 99 - dex));
+        dex += marionetteDex;
+      }
+
+      const blessing = options.useBlessing ? 10 + Math.floor(options.clementiaJob / 10) : 0;
+      if (blessing) {
+        int += blessing;
+        dex += blessing;
+      }
+
+      const gloria = options.useGloria ? 30 : 0;
+      luk += gloria;
+
+      return { int, dex, luk, jobInt, jobDex, jobLuk, beforeMarionetteDex, marionetteDex, blessing, gloria };
+    }
+
+    function brewingRate(baseStats, options = getInputs()) {
+      const finalStats = getFinalStats(baseStats, options);
+      const rate = options.learning + options.pharmacy * 3 + options.jobLv * 0.2
+        + finalStats.dex * 0.1 + finalStats.luk * 0.1 + finalStats.int * 0.05 - 5;
+      return {
+        rate: clamp(rate, 0, 100),
+        rawRate: rate,
+        finalStats
+      };
+    }
+
     function calculateRate() {
       const override = Number(el.rateOverride.value);
       if (Number.isFinite(override) && el.rateOverride.value.trim() !== "") {
         return clamp(override, 0, 100);
       }
 
-      const jobLv = clamp(numberValue(el.jobLv, 50), 1, 50);
-      const learning = clamp(numberValue(el.learningPotion, 10), 0, 10);
-      const pharmacy = clamp(numberValue(el.pharmacy, 10), 0, 10);
-      const bardDex = clamp(numberValue(el.bardDex, 60), 0, 99);
-      let int = clamp(numberValue(el.baseInt, 20), 1, 99);
-      let dex = clamp(numberValue(el.baseDex, 51), 1, 99);
-      let luk = clamp(numberValue(el.baseLuk, 56), 1, 99);
+      return brewingRate({
+        int: clamp(numberValue(el.baseInt, 20), 1, 99),
+        dex: clamp(numberValue(el.baseDex, 51), 1, 99),
+        luk: clamp(numberValue(el.baseLuk, 56), 1, 99)
+      }).rate;
+    }
 
-      if (el.jobBonus.checked) {
-        int += 7;
-        dex += 9;
+    function findBestBuild() {
+      const options = getInputs();
+      const availablePoints = totalStatPoints(options.baseLv);
+      let best = null;
+
+      for (let int = 1; int <= 99; int++) {
+        for (let dex = 1; dex <= 99; dex++) {
+          const partialCost = statCosts[int] + statCosts[dex];
+          if (partialCost + statCosts[1] > availablePoints) continue;
+
+          for (let luk = 1; luk <= 99; luk++) {
+            const cost = partialCost + statCosts[luk];
+            if (cost > availablePoints) continue;
+
+            const result = brewingRate({ int, dex, luk }, options);
+            const score = result.rawRate * 100000 - cost;
+            if (!best || score > best.score) {
+              best = { int, dex, luk, cost, options, availablePoints, ...result, score };
+            }
+          }
+        }
       }
 
-      if (el.marionette.checked) {
-        const marionetteDex = Math.floor(bardDex / 2);
-        dex += Math.min(marionetteDex, Math.max(0, 99 - dex));
-      }
-
-      if (el.blessing.checked) {
-        int += 10;
-        dex += 10;
-      }
-
-      if (el.gloria.checked) {
-        luk += 30;
-      }
-
-      return clamp(
-        learning * 1 + pharmacy * 3 + jobLv * 0.2 + dex * 0.1 + luk * 0.1 + int * 0.05 - 5,
-        0,
-        100
-      );
+      return best;
     }
 
     function render() {
@@ -665,8 +890,76 @@
       }
     }
 
+    function renderBestBuild() {
+      const best = findBestBuild();
+      const current = brewingRate({
+        int: clamp(numberValue(el.baseInt, 20), 1, 99),
+        dex: clamp(numberValue(el.baseDex, 51), 1, 99),
+        luk: clamp(numberValue(el.baseLuk, 56), 1, 99)
+      }, best.options);
+      const chance = Math.max(best.rate / 100, 0.0001);
+      const currentChance = Math.max(current.rate / 100, 0.0001);
+      const rowsHtml = potions.map(potion => {
+        const bestAvg = potion.cost / chance;
+        const currentAvg = potion.cost / currentChance;
+        return `
+          <tr>
+            <td><strong>${potion.name}</strong></td>
+            <td>${fmt(bestAvg)}</td>
+            <td>${zeny(potion.market - bestAvg)}</td>
+            <td>${zeny(currentAvg - bestAvg)}</td>
+          </tr>
+        `;
+      }).join("");
+
+      bestBuildResult.innerHTML = `
+        <div class="result-grid">
+          <div class="result-box"><span>最佳配點</span><strong>INT ${best.int}<br>DEX ${best.dex}<br>LUK ${best.luk}</strong></div>
+          <div class="result-box"><span>抵抗藥水成功率</span><strong>${pct(best.rate)}</strong></div>
+          <div class="result-box"><span>可用 / 已用點數</span><strong>${best.availablePoints}<br>${best.cost}</strong></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>項目</th><th>INT</th><th>DEX</th><th>LUK</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>基本配點</td><td>${best.int}</td><td>${best.dex}</td><td>${best.luk}</td></tr>
+              <tr><td>煉金 Job 加成</td><td>${best.finalStats.jobInt}</td><td>${best.finalStats.jobDex}</td><td>${best.finalStats.jobLuk}</td></tr>
+              <tr><td>魁儡 / 慈悲 / 幸運</td><td>${best.finalStats.blessing}</td><td>${best.finalStats.marionetteDex + best.finalStats.blessing}</td><td>${best.finalStats.gloria}</td></tr>
+              <tr><td>最終製藥能力</td><td><strong>${best.finalStats.int}</strong></td><td><strong>${best.finalStats.dex}</strong></td><td><strong>${best.finalStats.luk}</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>藥水</th><th>最佳平均成本</th><th>對市價期望差額</th><th>比目前配點省</th></tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </div>
+        <p class="note">計算條件：Base ${best.options.baseLv} / Job ${best.options.jobLv}，慈悲術 Job ${best.options.clementiaJob}，詩人 DEX ${best.options.bardDex}。最佳化只分配 INT / DEX / LUK，其餘三圍保留 1；若你還要保留練功 STR/AGI/VIT，請把「成功率覆寫」填入實測或手動調整配點。</p>
+      `;
+      bestBuildModal.classList.add("is-open");
+      closeBestBuild.focus();
+    }
+
+    function closeModal() {
+      bestBuildModal.classList.remove("is-open");
+      bestBuildButton.focus();
+    }
+
     ids.forEach(id => el[id].addEventListener("input", render));
     ids.forEach(id => el[id].addEventListener("change", render));
+    bestBuildButton.addEventListener("click", renderBestBuild);
+    closeBestBuild.addEventListener("click", closeModal);
+    bestBuildModal.addEventListener("click", event => {
+      if (event.target === bestBuildModal) closeModal();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && bestBuildModal.classList.contains("is-open")) closeModal();
+    });
     render();
   </script>
 </body>
