@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園毒藥水製作機率與刺客 DEX、LUK 配點規劃工具。">
+  <title>毒藥水製作機率 | RO樂園工具</title>
+  <style>
+    :root { --ink:#18231f; --muted:#66736b; --paper:#f7f5ef; --white:#fff; --line:#d8dfd8; --green:#237149; --green-dark:#164c34; --green-soft:#e7f2e9; --gold:#a77818; --gold-soft:#f8efd5; --coral:#b94d3e; --shadow:0 16px 42px rgba(18,35,25,.10); --radius:8px; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; line-height:1.6; }
+    button,input { font:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    a { color:inherit; }
+    .topbar { position:absolute; inset:0 0 auto; z-index:2; display:flex; align-items:center; justify-content:space-between; width:min(1120px,calc(100% - 32px)); margin:auto; padding:18px 0; color:#fff; }
+    .brand { font-weight:900; letter-spacing:0; }
+    .home-link { padding:7px 11px; border:1px solid rgba(255,255,255,.62); border-radius:6px; background:rgba(15,25,19,.68); text-decoration:none; font-size:13px; font-weight:800; }
+    .page-head { position:relative; min-height:300px; display:grid; align-items:end; overflow:hidden; color:#fff; background:#193d2b; isolation:isolate; }
+    .page-head::before { content:""; position:absolute; inset:0; z-index:-2; background:#173f2b; }
+    .head-inner { width:min(1120px,calc(100% - 32px)); margin:auto; padding:100px 0 38px; }
+    .eyebrow { margin:0 0 7px; color:#ffe7a2; font-size:13px; font-weight:900; letter-spacing:0; }
+    h1 { max-width:760px; margin:0; font-size:clamp(30px,5vw,51px); line-height:1.14; letter-spacing:0; }
+    .intro { max-width:690px; margin:14px 0 0; color:rgba(255,255,255,.9); font-size:16px; }
+    main { width:min(1120px,calc(100% - 32px)); margin:0 auto; padding:32px 0 68px; }
+    .formula { display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; margin-bottom:24px; padding:16px 18px; border:1px solid #d7e4d9; border-left:4px solid var(--green); background:#fbfdfb; box-shadow:0 6px 20px rgba(18,35,25,.05); }
+    .formula strong { font-size:18px; }
+    .formula span { color:var(--muted); font-size:14px; }
+    .workspace { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr); gap:24px; align-items:start; }
+    .panel { border:1px solid var(--line); border-radius:var(--radius); background:var(--white); box-shadow:var(--shadow); }
+    .panel-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:22px 24px 16px; border-bottom:1px solid var(--line); }
+    h2 { margin:0; font-size:21px; line-height:1.28; letter-spacing:0; }
+    .panel-head p { margin:5px 0 0; color:var(--muted); font-size:14px; }
+    .form-body { padding:20px 24px 24px; }
+    .field-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    label { display:grid; gap:6px; color:#34443a; font-size:14px; font-weight:800; }
+    input[type="number"] { width:100%; min-height:43px; padding:8px 10px; border:1px solid #bcc9bf; border-radius:5px; color:var(--ink); background:#fff; outline:none; }
+    input[type="number"]:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(35,113,73,.14); }
+    .field-note { margin:-1px 0 0; color:var(--muted); font-size:12px; font-weight:500; line-height:1.45; }
+    .section-label { margin:23px 0 11px; color:var(--green-dark); font-size:13px; font-weight:900; }
+    .support-list { display:grid; gap:9px; }
+    .support { display:grid; grid-template-columns:auto minmax(0,1fr) 86px; align-items:center; gap:10px; padding:10px 11px; border:1px solid var(--line); border-radius:6px; background:#fcfdfb; }
+    .support input[type="checkbox"] { width:17px; height:17px; accent-color:var(--green); }
+    .support strong { display:block; font-size:14px; }
+    .support span { display:block; color:var(--muted); font-size:12px; }
+    .support input[type="number"] { min-height:36px; padding:5px 7px; }
+    .mini-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .calculation-note { margin:16px 0 0; padding:10px 12px; border-left:3px solid #d9b24d; background:var(--gold-soft); color:#5e4c1f; font-size:13px; }
+    .results { position:sticky; top:20px; overflow:hidden; }
+    .result-hero { padding:24px; color:#fff; background:var(--green-dark); }
+    .result-kicker { margin:0; color:#c9edd1; font-size:13px; font-weight:900; }
+    .chance { display:flex; align-items:baseline; gap:7px; margin:4px 0 0; font-size:47px; font-weight:900; line-height:1; letter-spacing:0; }
+    .chance small { color:#c9edd1; font-size:16px; font-weight:800; }
+    .status { margin:10px 0 0; color:#e7f6eb; font-size:14px; }
+    .success-order { margin-top:16px; padding:13px; border:1px solid rgba(255,237,174,.54); border-radius:6px; background:rgba(255,243,195,.12); }
+    .success-order strong { display:block; color:#ffe9a8; font-size:13px; }
+    .success-order ol { display:grid; grid-template-columns:1fr; gap:6px; margin:9px 0 0; padding:0; list-style:none; }
+    .success-order li { display:flex; align-items:flex-start; gap:8px; color:#f6fbf7; font-size:12px; font-weight:800; line-height:1.38; }
+    .success-order li::before { content:counter(step); display:grid; flex:0 0 18px; width:18px; height:18px; place-items:center; border-radius:50%; color:#385629; background:#ffe9a8; font-size:11px; font-weight:900; }
+    .success-order ol { counter-reset:step; }
+    .success-order li { counter-increment:step; }
+    .stats { display:grid; grid-template-columns:repeat(2,1fr); border-bottom:1px solid var(--line); }
+    .stat { padding:17px 20px; }
+    .stat + .stat { border-left:1px solid var(--line); }
+    .stat span { display:block; color:var(--muted); font-size:12px; font-weight:800; }
+    .stat strong { display:block; margin-top:3px; font-size:28px; line-height:1.05; }
+    .breakdown { padding:17px 20px 20px; }
+    .breakdown h3,.optimizer h3 { margin:0 0 9px; color:var(--green-dark); font-size:14px; }
+    .breakdown p { margin:0; color:#526058; font-size:13px; }
+    .breakdown p + p { margin-top:5px; }
+    .optimizer { margin-top:24px; padding:24px; }
+    .optimizer .field-grid { grid-template-columns:1fr 1fr; }
+    .button-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:17px; }
+    button { min-height:42px; padding:9px 14px; border:1px solid transparent; border-radius:6px; cursor:pointer; font-weight:900; }
+    .primary { color:#fff; background:var(--green); box-shadow:0 7px 16px rgba(35,113,73,.22); }
+    .secondary { border-color:#bdc9c0; color:var(--green-dark); background:#fff; }
+    button:hover { filter:brightness(.96); }
+    .plan-result { display:none; margin-top:18px; padding:16px; border:1px solid #cfe2d3; border-radius:6px; background:var(--green-soft); }
+    .plan-result.visible { display:block; }
+    .plan-result strong { color:var(--green-dark); }
+    .plan-result p { margin:5px 0 0; font-size:14px; }
+    .plan-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+    .plan-stat { padding:10px; border:1px solid #c4d8c8; border-radius:5px; background:#fff; text-align:center; }
+    .plan-stat span { display:block; color:var(--muted); font-size:12px; font-weight:800; }
+    .plan-stat b { display:block; margin-top:2px; font-size:22px; line-height:1; }
+    .source-panel { margin-top:24px; padding:20px 24px; }
+    .source-panel h2 { font-size:17px; }
+    .source-panel p { margin:8px 0 0; color:var(--muted); font-size:13px; }
+    .source-panel a { color:var(--green-dark); font-weight:800; }
+    @media (max-width:800px) { .workspace { grid-template-columns:1fr; } .results { position:static; grid-row:1; } .page-head { min-height:278px; } }
+    @media (max-width:500px) { .topbar,.head-inner,main { width:min(100% - 24px,1120px); } .panel-head,.form-body,.optimizer { padding-left:16px; padding-right:16px; } .field-grid,.mini-grid { grid-template-columns:1fr; } .support { grid-template-columns:auto minmax(0,1fr); } .support input[type="number"] { grid-column:2; } .plan-stats { grid-template-columns:1fr 1fr; } .formula { padding:14px; } }
+  </style>
+</head>
+<body>
+  <header class="page-head">
+    <div class="topbar"><span class="brand">RO樂園工具</span><a class="home-link" href="index.html">回工具首頁</a></div>
+    <div class="head-inner">
+      <p class="eyebrow">ASSASSIN CRAFTING PLANNER</p>
+      <h1>毒藥水製作機率</h1>
+      <p class="intro">把刺客的 DEX、LUK、配裝與隊友 Buff 一起帶入，快速驗算毒藥水是否已達 100% 成功率；也能用等級反推新角色該怎麼配點。</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="formula" aria-label="製作公式">
+      <img src="assets/poison-bottle-calculator/poison-bottle.png" alt="毒藥水" width="32" height="32">
+      <strong>成功率 = 20 + DEX / 2.5 + LUK / 5</strong>
+      <span>依樂園採用的經典型公式計算；小數無條件捨去，實際成功率最高為 100%。</span>
+    </section>
+
+    <div class="workspace">
+      <section class="panel">
+        <div class="panel-head">
+          <div><h2>目前角色與隊友 Buff</h2><p>輸入刺客的裸素質；裝備、料理與職業加成請放在下方額外加成。</p></div>
+        </div>
+        <div class="form-body">
+          <div class="field-grid">
+            <label>刺客裸 DEX<input id="baseDex" type="number" min="1" max="99" value="63" inputmode="numeric"></label>
+            <label>刺客裸 LUK<input id="baseLuk" type="number" min="1" max="99" value="64" inputmode="numeric"></label>
+          </div>
+
+          <p class="section-label">隊友支援</p>
+          <div class="support-list">
+            <label class="support"><input id="mercyEnabled" type="checkbox" checked><span><strong>慈悲術（主教 Job 70）</strong><span>預設 DEX +17，可依樂園實測自行調整。</span></span><input id="mercyDex" type="number" min="0" max="99" value="17" aria-label="慈悲術 DEX 加成"></label>
+            <label class="support"><input id="puppetEnabled" type="checkbox" checked><span><strong>傀儡控制（詩人 Base DEX）</strong><span>詩人 Base DEX 60，實測製藥配置已確認可施放。</span></span><input id="bardDex" type="number" min="0" max="99" value="60" aria-label="詩人基本 DEX"></label>
+            <label class="support"><input id="gloriaEnabled" type="checkbox" checked><span><strong>幸運之頌歌</strong><span>額外 LUK +30；製作前最後施放。</span></span><input id="gloriaLuk" type="number" min="0" max="99" value="30" aria-label="幸運之頌歌 LUK 加成"></label>
+          </div>
+
+          <p class="section-label">刺客額外加成</p>
+          <div class="mini-grid">
+            <label>DEX（裝備、料理、職業加成）<input id="extraDex" type="number" min="0" max="199" value="34" inputmode="numeric"></label>
+            <label>LUK（裝備、料理、職業加成）<input id="extraLuk" type="number" min="0" max="199" value="20" inputmode="numeric"></label>
+          </div>
+          <p class="calculation-note">已記錄的實測預設：<strong>DEX 63 + 81、LUK 64 + 50</strong>，公式值為 100%。傀儡控制的加成在施放時決定，施放當下目標的素質總和不能超過 99。</p>
+        </div>
+      </section>
+
+      <aside>
+        <section class="panel results" aria-live="polite">
+          <div class="result-hero"><p class="result-kicker">實際成功率</p><div class="chance"><span id="chanceValue">0</span><small>%</small></div><p class="status" id="chanceStatus">請輸入素質</p><div class="success-order"><strong>毒藥水製作固定順序</strong><ol><li>刺客脫下全部裝備，身上沒有任何狀態。</li><li>詩人對刺客施放傀儡控制。</li><li>刺客穿回裝備並吃料理。</li><li>主教施放慈悲術。</li><li>主教施放幸運之頌歌後，立刻開始製作。</li></ol></div></div>
+          <div class="stats"><div class="stat"><span>計算後 DEX</span><strong id="finalDex">0</strong></div><div class="stat"><span>計算後 LUK</span><strong id="finalLuk">0</strong></div></div>
+          <div class="breakdown"><h3>本次拆解</h3><p id="dexBreakdown"></p><p id="lukBreakdown"></p><p id="formulaBreakdown"></p></div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel optimizer">
+      <h2>依等級找最佳配點</h2>
+      <p>以新角色為前提，先找出達到目標成功率所需的最低 DEX/LUK 素質點，其餘點數可留給 STR、AGI、VIT 等用途。上方的裝備與隊友 Buff 會一併納入。</p>
+      <div class="field-grid">
+        <label>刺客 Base Lv<input id="planLevel" type="number" min="1" max="110" value="70" inputmode="numeric"><span class="field-note" id="pointPoolNote">可分配素質點會自動計算。</span></label>
+        <label>目標成功率（%）<input id="targetChance" type="number" min="1" max="100" value="100" inputmode="numeric"><span class="field-note">目標超過 100% 時以 100% 尋找。</span></label>
+      </div>
+      <div class="button-row"><button class="primary" id="findPlan" type="button">找最佳配點</button><button class="secondary" id="applySupport" type="button">填入慈悲術 Job 70 + 詩人 DEX 60</button></div>
+      <div class="plan-result" id="planResult"></div>
+    </section>
+
+    <section class="panel source-panel">
+      <h2>公式與使用備註</h2>
+      <p>公式採 <a href="https://www.ptt.cc/bbs/RO/M.1377153883.A.110.html" target="_blank" rel="noreferrer">毒藥水製作公式整理</a>；傀儡控制以 <a href="https://irowiki.org/wiki/Marionette_Control" target="_blank" rel="noreferrer">Marionette Control</a> 的「施放者基本素質一半、目標素質 99 上限」規則帶入。毒藥水道具資料可參考 <a href="https://www.divine-pride.net/database/item/678/vnRO" target="_blank" rel="noreferrer">Divine Pride</a>。樂園若有自訂技能數值，支援欄位均可直接改數字後重新驗算。</p>
+    </section>
+  </main>
+
+  <script>
+    const byId = (id) => document.getElementById(id);
+    const fields = ["baseDex", "baseLuk", "mercyEnabled", "mercyDex", "puppetEnabled", "bardDex", "gloriaEnabled", "gloriaLuk", "extraDex", "extraLuk"];
+    const number = (id, fallback = 0) => {
+      const value = Number(byId(id).value);
+      return Number.isFinite(value) ? value : fallback;
+    };
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+    function calculate(baseDex = number("baseDex", 1), baseLuk = number("baseLuk", 1)) {
+      const dex = clamp(Math.floor(baseDex), 1, 99);
+      const luk = clamp(Math.floor(baseLuk), 1, 99);
+      const mercy = byId("mercyEnabled").checked ? Math.max(0, number("mercyDex")) : 0;
+      const puppetRawDex = byId("puppetEnabled").checked ? Math.floor(Math.max(0, number("bardDex")) / 2) : 0;
+      const puppetDex = Math.max(0, Math.min(puppetRawDex, 99 - dex));
+      const gloria = byId("gloriaEnabled").checked ? Math.max(0, number("gloriaLuk")) : 0;
+      const extraDex = Math.max(0, number("extraDex"));
+      const extraLuk = Math.max(0, number("extraLuk"));
+      const finalDex = dex + puppetDex + mercy + extraDex;
+      const finalLuk = luk + gloria + extraLuk;
+      const raw = 20 + finalDex / 2.5 + finalLuk / 5;
+      return { dex, luk, mercy, puppetRawDex, puppetDex, gloria, extraDex, extraLuk, finalDex, finalLuk, raw, formulaChance: Math.floor(raw), actualChance: Math.min(100, Math.floor(raw)) };
+    }
+
+    function renderCalculation() {
+      const result = calculate();
+      byId("chanceValue").textContent = result.actualChance;
+      byId("finalDex").textContent = result.finalDex;
+      byId("finalLuk").textContent = result.finalLuk;
+      byId("chanceStatus").textContent = result.formulaChance >= 100 ? "已達毒藥水 100% 成功率" : `距離 100% 還差 ${100 - result.formulaChance}%`;
+      byId("dexBreakdown").textContent = `DEX：裸 ${result.dex} + 傀儡 ${result.puppetDex}${result.puppetDex < result.puppetRawDex ? "（受 99 上限）" : ""} + 慈悲 ${result.mercy} + 額外 ${result.extraDex} = ${result.finalDex}`;
+      byId("lukBreakdown").textContent = `LUK：裸 ${result.luk} + 幸運之頌歌 ${result.gloria} + 額外 ${result.extraLuk} = ${result.finalLuk}`;
+      byId("formulaBreakdown").textContent = `20 + ${result.finalDex} / 2.5 + ${result.finalLuk} / 5 = ${result.raw.toFixed(1)}，無條件捨去為 ${result.formulaChance}%`;
+    }
+
+    function statusPointsAtLevel(level) {
+      let points = 48;
+      const normalized = clamp(Math.floor(level), 1, 110);
+      for (let current = 1; current < normalized; current += 1) {
+        points += current < 100 ? Math.floor(current / 5) + 3 : Math.floor(current / 10) + 13;
+      }
+      return points;
+    }
+
+    function statCost(value) {
+      let cost = 0;
+      for (let stat = 2; stat <= value; stat += 1) cost += Math.floor((stat - 2) / 10) + 2;
+      return cost;
+    }
+
+    function updatePointNote() {
+      const level = clamp(Math.floor(number("planLevel", 1)), 1, 110);
+      byId("pointPoolNote").textContent = `Lv.${level} 新角色可分配 ${statusPointsAtLevel(level)} 點（含建立角色 48 點）。`;
+    }
+
+    function chooseBetter(current, candidate, mode) {
+      if (!current) return candidate;
+      if (mode === "minimum") {
+        if (candidate.cost !== current.cost) return candidate.cost < current.cost ? candidate : current;
+        if (candidate.dex !== current.dex) return candidate.dex > current.dex ? candidate : current;
+        return candidate.luk < current.luk ? candidate : current;
+      }
+      if (candidate.result.formulaChance !== current.result.formulaChance) return candidate.result.formulaChance > current.result.formulaChance ? candidate : current;
+      if (candidate.cost !== current.cost) return candidate.cost < current.cost ? candidate : current;
+      return candidate.dex > current.dex ? candidate : current;
+    }
+
+    function findPlan() {
+      const level = clamp(Math.floor(number("planLevel", 1)), 1, 110);
+      const target = clamp(Math.floor(number("targetChance", 100)), 1, 100);
+      const pool = statusPointsAtLevel(level);
+      let minimum = null;
+      let maximum = null;
+      for (let dex = 1; dex <= 99; dex += 1) {
+        const dexCost = statCost(dex);
+        if (dexCost > pool) continue;
+        for (let luk = 1; luk <= 99; luk += 1) {
+          const cost = dexCost + statCost(luk);
+          if (cost > pool) continue;
+          const candidate = { dex, luk, cost, result: calculate(dex, luk) };
+          maximum = chooseBetter(maximum, candidate, "maximum");
+          if (candidate.result.formulaChance >= target) minimum = chooseBetter(minimum, candidate, "minimum");
+        }
+      }
+      const output = byId("planResult");
+      const selected = minimum || maximum;
+      const remaining = pool - selected.cost;
+      const title = minimum ? `Lv.${level} 可達到 ${target}%：建議保留其餘點數給其他素質。` : `Lv.${level} 無法在指定條件下達到 ${target}%，以下為可達最高值。`;
+      output.innerHTML = `<strong>${title}</strong><div class="plan-stats"><div class="plan-stat"><span>建議裸 DEX</span><b>${selected.dex}</b></div><div class="plan-stat"><span>建議裸 LUK</span><b>${selected.luk}</b></div><div class="plan-stat"><span>製作成功率</span><b>${selected.result.actualChance}%</b></div></div><p>DEX/LUK 共使用 ${selected.cost} / ${pool} 素質點，尚餘 ${remaining} 點。帶入目前 Buff 後為 DEX ${selected.result.finalDex}、LUK ${selected.result.finalLuk}，公式值 ${selected.result.formulaChance}%${selected.result.formulaChance > 100 ? "（實際以 100% 計）" : ""}。</p>`;
+      output.classList.add("visible");
+    }
+
+    fields.forEach((id) => byId(id).addEventListener("input", renderCalculation));
+    fields.filter((id) => id.endsWith("Enabled")).forEach((id) => byId(id).addEventListener("change", renderCalculation));
+    byId("planLevel").addEventListener("input", updatePointNote);
+    byId("findPlan").addEventListener("click", findPlan);
+    byId("applySupport").addEventListener("click", () => {
+      byId("mercyEnabled").checked = true;
+      byId("mercyDex").value = 17;
+      byId("bardDex").value = 60;
+      renderCalculation();
+    });
+    updatePointNote();
+    renderCalculation();
+  </script>
+</body>
+</html>
