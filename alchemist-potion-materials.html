@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園煉金製藥完整材料、製作品分類與推估成功率表。">
+  <title>RO樂園煉金製藥材料與成功率表</title>
+  <link rel="stylesheet" href="assets/alchemist-potion/alchemist-tools.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="site-header">
+      <a class="brand" href="alchemist-potion-cost.html">
+        <span class="brand-mark" aria-hidden="true">鍊</span>
+        <span>
+          <strong>RO樂園煉金製藥工具</strong>
+          <small>材料與成功率表</small>
+        </span>
+      </a>
+      <nav class="tool-nav" aria-label="煉金製藥工具導覽">
+        <a href="alchemist-potion-cost.html">工具入口</a>
+        <a href="alchemist-potion-materials.html" aria-current="page">材料與機率</a>
+        <a href="alchemist-potion-calculator.html">成本計算機</a>
+      </nav>
+    </header>
+
+    <section class="intro-band" aria-labelledby="page-title">
+      <p class="eyebrow">RECIPE DATABASE</p>
+      <h1 id="page-title">製藥材料與成功率</h1>
+      <p>每次配藥固定消耗藥缽×1，並需攜帶對應製作說明書。成功時一般取得成品×1。</p>
+    </section>
+
+    <section class="section" aria-labelledby="formula-title">
+      <div class="section-head">
+        <div>
+          <h2 id="formula-title">玩家推估公式</h2>
+          <p class="section-note">官方尚未公開樂園完整製藥公式，以下數值用於規劃，不代表保證成功率。</p>
+        </div>
+      </div>
+      <div class="formula-panel">
+        <div class="formula-box">
+          <code>成功率% = 知識藥水Lv×1 + 配藥Lv×3 + JobLv×0.2 + DEX×0.1 + LUK×0.1 + INT×0.05 + 物品修正</code>
+          <p class="section-note">DEX、LUK、INT採製作當下總素質，包含裝備、料理、天賜、幸運之頌歌與++。</p>
+        </div>
+        <div class="example-box">
+          <span>本表範例基礎值</span>
+          <strong>71.05%</strong>
+          <small>知識10、配藥10、Job50、DEX99、LUK99、INT25，尚未加各品項修正。</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="recipe-title">
+      <div class="section-head">
+        <div>
+          <h2 id="recipe-title">完整配方</h2>
+          <p class="section-note"><span id="visibleCount">20</span>項符合目前篩選。</p>
+        </div>
+      </div>
+
+      <div class="filter-bar" role="search">
+        <label>搜尋製作品或材料
+          <input id="recipeSearch" type="search" placeholder="例如：酒精、魔女之星砂、抵抗藥">
+        </label>
+        <label>製作品分類
+          <select id="categoryFilter">
+            <option value="">全部分類</option>
+            <option value="一般藥水">一般藥水</option>
+            <option value="纖細藥水">纖細藥水</option>
+            <option value="特殊瓶">特殊瓶</option>
+            <option value="護貝藥">護貝藥</option>
+            <option value="屬性藥水">屬性藥水</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>分類</th>
+              <th>製作品</th>
+              <th>每次材料（另加藥缽×1）</th>
+              <th>物品修正</th>
+              <th>範例成功率</th>
+            </tr>
+          </thead>
+          <tbody id="recipeRows">
+            <tr data-category="一般藥水"><td><span class="category-tag">一般藥水</span></td><td>紅色藥水</td><td>紅色藥草×1、空藥瓶×1</td><td class="rate-positive">+20%</td><td>91.05%</td></tr>
+            <tr data-category="一般藥水"><td><span class="category-tag">一般藥水</span></td><td>黃色藥水</td><td>黃色藥草×1、空藥瓶×1</td><td class="rate-positive">+20%</td><td>91.05%</td></tr>
+            <tr data-category="一般藥水"><td><span class="category-tag">一般藥水</span></td><td>白色藥水</td><td>白色藥草×1、空藥瓶×1</td><td class="rate-positive">+20%</td><td>91.05%</td></tr>
+            <tr data-category="一般藥水"><td><span class="category-tag">一般藥水</span></td><td>藍色藥水</td><td>藍色藥草×1、雪勒結晶×1、空藥瓶×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="一般藥水"><td><span class="category-tag">一般藥水</span></td><td>曼特療傷藥</td><td>曼特花×1、酒精×1、空瓶×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="一般藥水"><td><span class="category-tag">一般藥水</span></td><td>蘆薈汁液</td><td>蘆薈×1、蜂蜜×1、空瓶×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="一般藥水"><td><span class="category-tag">一般藥水</span></td><td>艾普理歐／艾普利歐（需生命倫理）</td><td>生化試管×1、天地樹露水×1、生命的種子×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="特殊瓶"><td><span class="category-tag">特殊瓶</span></td><td>酒精</td><td>植物梗×5、毒魔菇芽孢×5、空瓶×1、空試管×1</td><td class="rate-negative">-10%</td><td>61.05%</td></tr>
+            <tr data-category="特殊瓶"><td><span class="category-tag">特殊瓶</span></td><td>火煙瓶</td><td>透明之布×1、酒精×1、空瓶×1</td><td>0%</td><td>71.05%</td></tr>
+            <tr data-category="特殊瓶"><td><span class="category-tag">特殊瓶</span></td><td>鹽酸瓶</td><td>不死心臟×1、空瓶×1</td><td>0%</td><td>71.05%</td></tr>
+            <tr data-category="特殊瓶"><td><span class="category-tag">特殊瓶</span></td><td>植物瓶</td><td>噬人樹花×2、空瓶×1</td><td>0%</td><td>71.05%</td></tr>
+            <tr data-category="特殊瓶"><td><span class="category-tag">特殊瓶</span></td><td>鏈鎚瓶</td><td>腦管×1、血管×1、空瓶×1</td><td>0%</td><td>71.05%</td></tr>
+            <tr data-category="護貝藥"><td><span class="category-tag">護貝藥</span></td><td>護貝藥</td><td>酒精×1、茲諾可之牙×1、人魚心臟×1、空瓶×1</td><td class="rate-negative">-10%</td><td>61.05%</td></tr>
+            <tr data-category="纖細藥水"><td><span class="category-tag">纖細藥水</span></td><td>紅色纖細藥水</td><td>紅色藥水×1、仙人掌刺×1、空試管×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="纖細藥水"><td><span class="category-tag">纖細藥水</span></td><td>黃色纖細藥水</td><td>黃色藥水×1、鼠鬚×1、空試管×1</td><td class="rate-negative">-8%</td><td>63.05%</td></tr>
+            <tr data-category="纖細藥水"><td><span class="category-tag">纖細藥水</span></td><td>白色纖細藥水</td><td>白色藥水×1、魔女之星砂×1、空試管×1</td><td class="rate-negative">-10%</td><td>61.05%</td></tr>
+            <tr data-category="屬性藥水"><td><span class="category-tag">屬性藥水</span></td><td>火抵抗藥</td><td>傘蜥頸×2、紅色魔力礦石×1、空藥瓶×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="屬性藥水"><td><span class="category-tag">屬性藥水</span></td><td>水抵抗藥</td><td>人魚心臟×3、藍色魔力礦石×1、空藥瓶×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="屬性藥水"><td><span class="category-tag">屬性藥水</span></td><td>地抵抗藥</td><td>巨大傑勒比結晶×2、黃色魔力礦石×1、空藥瓶×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+            <tr data-category="屬性藥水"><td><span class="category-tag">屬性藥水</span></td><td>風抵抗藥</td><td>蛾蝶蟲翅膀粉末×3、藍色魔力礦石×1、空藥瓶×1</td><td class="rate-negative">-5%</td><td>66.05%</td></tr>
+          </tbody>
+        </table>
+        <p class="empty-state" id="emptyState" hidden>找不到符合的製作品或材料。</p>
+      </div>
+    </section>
+
+    <p class="source-footer">資料來源：<a href="https://forum.gamer.com.tw/C.php?bsn=83142&gothis=4502&page=1&snA=1327" target="_blank" rel="noreferrer">RO樂園製藥材料整理</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=1462" target="_blank" rel="noreferrer">樂園玩家成功率研究</a>。名稱與設定仍以遊戲內為準。</p>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById("recipeSearch");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const rows = [...document.querySelectorAll("#recipeRows tr")];
+    const visibleCount = document.getElementById("visibleCount");
+    const emptyState = document.getElementById("emptyState");
+
+    function normalize(value) {
+      return String(value).normalize("NFKC").toLowerCase().replace(/\s+/g, "");
+    }
+
+    function applyFilters() {
+      const query = normalize(searchInput.value);
+      const category = categoryFilter.value;
+      let count = 0;
+
+      rows.forEach(row => {
+        const matchesQuery = !query || normalize(row.textContent).includes(query);
+        const matchesCategory = !category || row.dataset.category === category;
+        const visible = matchesQuery && matchesCategory;
+        row.hidden = !visible;
+        if (visible) count += 1;
+      });
+
+      visibleCount.textContent = count;
+      emptyState.hidden = count !== 0;
+    }
+
+    searchInput.addEventListener("input", applyFilters);
+    categoryFilter.addEventListener("change", applyFilters);
+  </script>
+</body>
+</html>
