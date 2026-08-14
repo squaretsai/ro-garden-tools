@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>毀葛・奧丁與深淵湖水｜裝備與附魔整理</title>
+  <style>
+    :root {
+      --bg:#10151d; --panel:#182230; --panel-2:#202d3d; --line:#314257;
+      --ink:#edf4ff; --muted:#a7b7ca; --gold:#ffd270; --aqua:#69d9d3;
+      --red:#ff8d8d; --violet:#bba2ff; --green:#96e4a7; --shadow:0 18px 44px #05080d80;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:radial-gradient(circle at 88% 0,#233c52 0,transparent 30rem),var(--bg); color:var(--ink); font:15px/1.65 system-ui,-apple-system,"Microsoft JhengHei","Noto Sans TC",sans-serif; }
+    a { color:#9ee9e5; }
+    .layout { display:grid; grid-template-columns:250px minmax(0,1fr); min-height:100vh; }
+    aside { position:sticky; top:0; height:100vh; padding:28px 20px; border-right:1px solid var(--line); background:#111924e8; backdrop-filter:blur(18px); }
+    .brand { display:flex; gap:10px; align-items:center; padding:0 8px 25px; font-weight:800; letter-spacing:.04em; }
+    .brand-mark { display:grid; place-items:center; width:35px; aspect-ratio:1; border:1px solid #637b98; border-radius:10px; color:var(--gold); background:#25384d; }
+    nav a { display:block; padding:10px 12px; border-radius:9px; color:var(--muted); text-decoration:none; }
+    nav a:hover { color:var(--ink); background:#253448; }
+    .side-note { position:absolute; bottom:24px; left:28px; right:24px; color:#8295ab; font-size:12px; }
+    main { width:min(1220px,100%); padding:40px clamp(20px,5vw,70px) 80px; margin:auto; }
+    .eyebrow { color:var(--aqua); font-weight:800; letter-spacing:.14em; font-size:12px; text-transform:uppercase; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:820px; margin:.2rem 0 .6rem; font-size:clamp(32px,5.8vw,65px); line-height:1.08; letter-spacing:-.04em; }
+    h2 { margin:0; font-size:clamp(25px,3vw,38px); letter-spacing:-.03em; }
+    h3 { font-size:17px; margin-bottom:8px; }
+    .lead { max-width:750px; color:#c5d1e1; font-size:17px; }
+    .badges { display:flex; gap:8px; flex-wrap:wrap; margin:20px 0 30px; }
+    .badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:5px 10px; font-size:12px; font-weight:750; }
+    .live { background:#153e3c; color:#91f2dc; } .future { background:#3c315b; color:#cfbefd; } .ref { background:#3d3020; color:#f9d78b; } .warn { background:#4d252b; color:#ffc0c6; }
+    .hero { position:relative; overflow:hidden; min-height:310px; padding:45px clamp(24px,5vw,60px); border:1px solid #3b526b; border-radius:22px; background:linear-gradient(105deg,#132235f4 0%,#172a3ad9 55%,#1218208c 100%),url("https://eu-mds.4game.com/images/patchnoteimages/original/fbd599a3-5a2f-4fdb-a069-c47e740bf14d.i4g") center/cover; box-shadow:var(--shadow); }
+    .hero .date { color:#91a5bb; font-size:13px; }
+    .disclaimer { margin:22px 0; padding:15px 18px; border-left:4px solid var(--gold); border-radius:0 10px 10px 0; background:#251f16; color:#f2dfb4; }
+    .section { margin-top:75px; scroll-margin-top:24px; }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:18px; margin-bottom:18px; }
+    .section-head > p { margin:0; max-width:620px; color:var(--muted); }
+    .visual-grid { display:grid; grid-template-columns:1.35fr .65fr; gap:18px; margin:22px 0; }
+    .map-image { min-height:255px; object-fit:cover; width:100%; border:1px solid var(--line); border-radius:15px; background:#243042; }
+    .map-caption { display:grid; place-content:center; padding:26px; border:1px solid var(--line); border-radius:15px; background:linear-gradient(145deg,#213044,#17212e); }
+    .map-caption strong { color:var(--gold); font-size:24px; }
+    .region-list { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .region { padding:17px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+    .region .num { color:var(--gold); font-weight:850; font-size:12px; }
+    .region p { margin-bottom:0; color:var(--muted); font-size:13px; }
+    .toolbar { display:flex; justify-content:space-between; gap:14px; align-items:center; margin:26px 0 16px; }
+    input { width:min(390px,100%); padding:11px 13px; border:1px solid #4b617a; border-radius:10px; outline:0; color:var(--ink); background:#111a25; font:inherit; }
+    input:focus { border-color:var(--aqua); box-shadow:0 0 0 3px #69d9d322; }
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; }
+    .gear-card,.upgrade-card { position:relative; overflow:hidden; padding:19px; border:1px solid var(--line); border-radius:15px; background:linear-gradient(145deg,var(--panel-2),var(--panel)); }
+    .gear-card::before,.upgrade-card::before { content:""; position:absolute; inset:0 auto 0 0; width:4px; background:var(--accent,var(--aqua)); }
+    .gear-card p,.upgrade-card p { margin-bottom:0; color:var(--muted); font-size:13px; }
+    .gear-card ul,.upgrade-card ul { padding-left:18px; margin:8px 0 0; color:#d5dfec; font-size:13px; }
+    .gear-card li+li,.upgrade-card li+li { margin-top:5px; }
+    .tag { display:inline-block; margin-bottom:9px; color:var(--accent,var(--aqua)); font-size:11px; font-weight:850; letter-spacing:.1em; }
+    .red { --accent:#ff9b83; } .green { --accent:#9ee998; } .blue { --accent:#8acbff; } .purple { --accent:#c8a9ff; } .gold { --accent:#ffd270; }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+    table { width:100%; min-width:740px; border-collapse:collapse; }
+    th,td { padding:13px 15px; text-align:left; vertical-align:top; border-bottom:1px solid #2d3d50; }
+    th { position:sticky; top:0; z-index:1; color:#b8f1eb; background:#243649; font-size:13px; }
+    td { color:#d5deea; font-size:13px; }
+    tr:last-child td { border-bottom:0; }
+    td:first-child { color:#fff; font-weight:800; }
+    .flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:11px; align-items:center; padding:18px; border:1px solid var(--line); border-radius:15px; background:#17212e; }
+    .flow-step { padding:14px; border-radius:10px; text-align:center; background:#26374b; font-weight:750; }
+    .arrow { color:var(--gold); font-size:25px; }
+    details { margin-top:14px; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+    summary { cursor:pointer; padding:14px 16px; font-weight:750; }
+    details > div { padding:0 16px 16px; color:var(--muted); }
+    .source-list { display:grid; gap:10px; margin:18px 0 0; }
+    .source { padding:13px 15px; border-radius:11px; background:#17212e; border:1px solid var(--line); color:var(--muted); font-size:13px; }
+    .source strong { color:#eaf2ff; }
+    .muted { color:var(--muted); }
+    .foot { margin-top:65px; color:#8fa2b8; font-size:12px; }
+    mark { padding:1px 5px; border-radius:4px; color:#1b160b; background:var(--gold); }
+    @media (max-width:820px) {
+      .layout { display:block; } aside { position:relative; height:auto; padding:17px; border-right:0; border-bottom:1px solid var(--line); } nav { display:flex; overflow:auto; gap:3px; } nav a { white-space:nowrap; } .brand { padding-bottom:12px; } .side-note { display:none; }
+      main { padding-top:30px; } .visual-grid { grid-template-columns:1fr; } .region-list { grid-template-columns:1fr; } .flow { grid-template-columns:1fr; } .arrow { transform:rotate(90deg); text-align:center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand"><span class="brand-mark">RO</span><span>毀葛資料簿</span></div>
+      <nav>
+        <a href="#overview">總覽</a>
+        <a href="#hugel">毀葛・兌換與附魔</a>
+        <a href="#odin">奧丁神殿・天使區</a>
+        <a href="#abyss">深淵湖水・龍區</a>
+        <a href="#sources">資料來源與註記</a>
+      </nav>
+      <p class="side-note">以「地區」分段。可用裝備名稱、職業或屬性搜尋下方卡片。</p>
+    </aside>
+    <main>
+      <header class="hero" id="overview">
+        <div class="eyebrow">Ragnarok Online Zero · Hugel reference</div>
+        <h1>奧丁毀葛裝備<br>與深淵湖水預告</h1>
+        <p class="lead">把近期毀葛的頭飾升級／附魔機制、深淵湖水的龍甲預告，以及未確認地區的 kRO Zero 歷史武器資料拆開整理。</p>
+        <div class="badges">
+          <span class="badge live">● 毀葛：近期改版重點</span>
+          <span class="badge future">◌ 深淵湖水：下一波／預告參考</span>
+          <span class="badge ref">◆ KROZ 社群資料交叉整理</span>
+        </div>
+        <div class="date">整理日期：2026-08-14　｜　版本、名稱與數值仍以台服正式公告為準</div>
+      </header>
+
+      <div class="disclaimer">
+        <strong>先講結論：</strong>毀葛是三個區域的入口與日常兌換中心；你回報的幸運／靈巧外袍屬於本次奧丁新增內容，但樂園版的完整物品與附魔詞條表尚未被公開資料庫收錄。深淵湖水的龍裝與那批職業武器，都是 kRO Zero 歷史資料；後者的掉落地區甚至未被原文確認，不能硬分到奧丁或深淵湖水。
+      </div>
+
+      <section class="section">
+        <div class="section-head">
+          <div><div class="eyebrow">Area map</div><h2>毀葛後續的三個地區</h2></div>
+          <p>裝備不要混著看：毀葛本身管日常、票券與附魔；奧丁是天使區；深淵湖水是龍區。</p>
+        </div>
+        <div class="visual-grid">
+          <img class="map-image" src="https://file5s.ratemyserver.net/maps_xl/odin_tem01.gif" referrerpolicy="no-referrer" alt="奧丁神殿地圖">
+          <div class="map-caption"><span class="eyebrow">Region routing</span><strong>毀葛 → 奧丁／深淵</strong><p class="muted">現有資料提到三塊：深淵湖水（龍）、奧丁神殿（天使）、以及 99 級的奧丁副本。以下依這個脈絡整理。</p></div>
+        </div>
+        <div class="region-list">
+          <article class="region"><div class="num">01 · HUGEL</div><h3>毀葛中心</h3><p>每日任務取得毀葛硬幣；10 枚可換裝備強化券。頭飾升級與附魔都在這裡看。</p></article>
+          <article class="region"><div class="num">02 · ODIN</div><h3>奧丁神殿・天使區</h3><p>85 級區域裝備脈絡之一，與「神官／天使套」相連；目前可核對的公開單件數值不足。</p></article>
+          <article class="region"><div class="num">03 · ABYSS</div><h3>深淵湖水・龍區</h3><p>歷史資料推測有龍甲四件套、龍鱗防具與飾品；職業武器另列，原文未確認其掉落地區。</p></article>
+        </div>
+      </section>
+
+      <section class="section" id="hugel">
+        <div class="section-head">
+          <div><div class="eyebrow">01 · Hugel</div><h2>毀葛：日常、頭飾升級、附魔</h2></div>
+          <p>先把這區當成「舊頭飾的高級化」與「硬幣附魔」中心；升級前先確認原裝備、精煉與票券數。</p>
+        </div>
+        <div class="flow">
+          <div class="flow-step">每日任務<br><small class="muted">取得毀葛硬幣</small></div><div class="arrow">→</div>
+          <div class="flow-step">10 枚硬幣<br><small class="muted">兌裝備強化券</small></div><div class="arrow">→</div>
+          <div class="flow-step">+7 指定頭飾<br><small class="muted">升級／附魔</small></div>
+        </div>
+
+        <div class="toolbar">
+          <h3>指定頭飾升級：數值與條件</h3>
+          <input id="filter" type="search" placeholder="搜尋：艾莉絲、MATK、惡魔、暴擊⋯">
+        </div>
+        <div class="card-grid" id="upgrade-cards">
+          <article class="upgrade-card red" data-search="紅色艾爾帕蘭鐘塔帽 無形 hp hit">
+            <span class="tag">UPPER · 150 強化券</span><h3>紅色艾爾帕蘭鐘塔帽</h3><p>前提：原帽 <b>+7</b>。</p><ul><li>對無形種族傷害 +5%</li><li>每精煉 +1：MHP +50</li><li>+7：HIT +20</li><li>+9：MHP +5%、MHP +750</li></ul>
+          </article>
+          <article class="upgrade-card gold" data-search="卡利格斯騎士團帽 暴擊 CRI ASPD">
+            <span class="tag">UPPER · 150 強化券</span><h3>卡利格斯騎士團帽</h3><p>前提：原帽 <b>+7</b>。</p><ul><li>CRI +3、暴擊傷害 +5%</li><li>+7：CRI +7</li><li>+9：ASPD +1、暴擊傷害 +7%</li></ul>
+          </article>
+          <article class="upgrade-card purple" data-search="時尚艾莉絲假髮 治療 變動詠唱 VCT HP SP">
+            <span class="tag">UPPER · 150 強化券</span><h3>時尚艾莉絲假髮</h3><p>前提：原假髮 <b>+7</b>。</p><ul><li>治療量 +5%、變動詠唱 -3%</li><li>每精煉 +1：治療量 +1%</li><li>+7：MHP +200、MSP +75</li><li>+9：變動詠唱 -5%</li></ul>
+          </article>
+          <article class="upgrade-card red" data-search="骷髏兜帽 惡魔 不死 ATK HIT HP">
+            <span class="tag">UPPER · 150 強化券</span><h3>骷髏兜帽</h3><p>前提：原兜帽 <b>+7</b>。</p><ul><li>MHP +250、對惡魔種族傷害 +5%</li><li>每精煉 +1：ATK +7</li><li>+7：HIT +15</li><li>+9：對不死種族傷害 +5%</li></ul>
+          </article>
+          <article class="upgrade-card blue" data-search="巫女南瓜帽 MATK INT 變動詠唱 HP SP">
+            <span class="tag">UPPER · 150 強化券</span><h3>巫女南瓜帽</h3><p>前提：原帽 <b>+7</b>。</p><ul><li>MATK +5%、INT +5</li><li>每精煉 +1：MATK +7</li><li>+7：MHP +300、MSP +100</li><li>+9：變動詠唱 -10%</li></ul>
+          </article>
+          <article class="upgrade-card green" data-search="黑色圍巾 藏鏡人之帽 ATK HIT 暴擊">
+            <span class="tag">LOWER · 150 強化券</span><h3>黑色圍巾</h3><p>前提：原圍巾 <b>+7</b>。</p><ul><li>AGI +1、HIT +1</li><li>與藏鏡人之帽同時裝備：ATK +30</li><li>每 2 精煉：HIT +1</li><li>+10：暴擊傷害 +7%</li></ul>
+          </article>
+          <article class="upgrade-card gold" data-search="粗魯面具 落基假面 闇屬性 完全迴避 ATK MATK">
+            <span class="tag">MIDDLE / LOWER · 300 強化券</span><h3>粗魯面具（落基假面）</h3><p>前提：原面具 <b>+7</b>。</p><ul><li>闇屬性傷害抗性 +2%</li><li>完全迴避 +3</li><li>ATK +20、MATK +20</li></ul>
+          </article>
+        </div>
+
+        <details open>
+          <summary>頭飾附魔規則（毀葛硬幣）</summary>
+          <div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>部位</th><th>花費／成功率</th><th>格數與可選方向</th><th>風險／補救</th></tr></thead>
+                <tbody>
+                  <tr><td>頭上</td><td>25 毀葛硬幣／50%</td><td>2 格；第一格為基本素質，第二格可走基本素質或鬥志、魔力、尖銳、名弓、致命等傷害向附魔。</td><td>公開整理未列出失敗即毀；仍建議以實際 NPC 提示為準。</td></tr>
+                  <tr><td>頭中、頭下</td><td>50 毀葛硬幣／70%</td><td>1 格；基本素質向。</td><td><b>失敗會使裝備消失</b>；使用「傑斯塔」可使成功率 100%。</td></tr>
+                  <tr><td>重洗</td><td>R 毀葛硬幣</td><td>依部位重新附魔。</td><td>先看你要保留的格位與現有詞條。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:14px 0 0">目前可核對到的是附魔類別與流程，<b>各階級詞條的精確數字未見可靠公開表</b>；因此本頁不把外服推測值當作台服定值。若你拍 NPC 詞條清單，我可以再把每一階的期望值／成本一起補成計算表。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="odin-legacy" hidden>
+        <div class="section-head">
+          <div><div class="eyebrow">02 · Odin Temple</div><h2>奧丁神殿：天使／神官套的定位</h2></div>
+          <p>這段保留「確定已知」與「目前不能確定」的邊界，避免把深淵湖水的龍套誤認成奧丁神殿掉落。</p>
+        </div>
+        <div class="visual-grid">
+          <img class="map-image" src="https://truth.bahamut.com.tw/s01/202102/a67a4216e85f56e6731766f107303368.JPG" referrerpolicy="no-referrer" alt="奧丁神殿入口畫面">
+          <div class="map-caption"><span class="eyebrow">Known scope</span><strong>85 級區域裝備線</strong><p class="muted">公開 KROZ 整理指出，毀葛區域有「龍甲」與「神官／天使」兩條 85 級套裝線；奧丁神殿屬天使區，深淵湖水屬龍區。</p></div>
+        </div>
+        <div class="card-grid">
+          <article class="gear-card purple" data-search="奧丁神殿 天使 神官 85 套裝"><span class="tag">CONFIRMED</span><h3>已可確認的脈絡</h3><ul><li>奧丁神殿是「天使」區域。</li><li>存在與龍甲並列的神官／天使 85 級套裝線。</li><li>另有 99 級奧丁副本被列為同一組後續內容。</li></ul></article>
+          <article class="gear-card gold" data-search="奧丁 套裝 數值 未公告"><span class="tag">DO NOT GUESS</span><h3>單件數值：待正式表</h3><p>本次可查公開資料沒有足以逐件核實天使／神官套的名稱、基礎能力、精煉門檻與套裝效果。這裡先不填未證實數字；等台服公告或遊戲內 NPC 清單出現，再補完整表。</p></article>
+          <article class="gear-card blue" data-search="奧丁 毀葛 硬幣 強化券 頭飾"><span class="tag">PRACTICAL</span><h3>先做什麼最不會白花</h3><p>先累積硬幣與強化券、把你要升級的指定頭飾精煉到 +7；中下附魔因為失敗會消失，不建議把主力唯一件直接賭 70%。</p></article>
+        </div>
+      </section>
+
+      <section class="section" id="odin">
+        <div class="section-head">
+          <div><div class="eyebrow">02 · Odin Temple · current names / KROZ reference</div><h2>奧丁神殿：神官外袍與附魔</h2></div>
+          <p>幸運外袍、靈巧外袍等名稱是你回報的本次已開放內容；下表的數值僅作 kRO Zero 歷史對照，尚未取得樂園版逐字物品說明，不能直接當成現行掉落／效果表。</p>
+        </div>
+        <div class="visual-grid">
+          <img class="map-image" src="https://truth.bahamut.com.tw/s01/202102/a67a4216e85f56e6731766f107303368.JPG" referrerpolicy="no-referrer" alt="奧丁神殿入口畫面">
+          <div class="map-caption"><span class="eyebrow">Verification status</span><strong>現行名稱已知，效果待逐項核對</strong><p class="muted">公開樂園資料庫尚未查到幸運外袍／靈巧外袍的條目；因此掉落來源、精煉門檻、套裝條件與附魔效果都先不列為已驗證。</p></div>
+        </div>
+        <div class="toolbar"><h3>六屬性神官外袍：kRO Zero 歷史對照</h3><span class="badge future">待樂園逐字核對</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>外袍</th><th>本體與精煉</th><th>外袍＋斗篷＋靴三件套</th><th>三件精煉總和 +27</th></tr></thead>
+            <tbody>
+              <tr><td>力量外袍</td><td>MHP +800、DEF +30、MDEF +8；每 +2 暴傷 +2%；每 +3 STR +2；+9 ATK +40。</td><td>STR +4、MHP +300、MSP +100、HP 自回 +25%、SP 自回 +15%。</td><td>ASPD +10%、固詠 -15%、ATK +7%。</td></tr>
+              <tr><td>敏捷外袍</td><td>MHP +700、DEF +30、MDEF +8；每 +2 ASPD +1%；每 +3 AGI +2；+9 HIT +15。</td><td>AGI +4、MHP +300、MSP +100、HP 自回 +25%、SP 自回 +15%。</td><td>ASPD +10%、固詠 -15%、暴擊傷害 +15%。</td></tr>
+              <tr><td>體質外袍</td><td>MHP +900、DEF +30、MDEF +8；每 +2 DEF +4／MDEF +1；每 +3 VIT +2；+9 MHP +10%。</td><td>VIT +4、MHP +300、MSP +100、HP 自回 +25%、SP 自回 +15%。</td><td>ASPD +10%、固詠 -15%、受全屬性傷害 -6%。</td></tr>
+              <tr><td>靈巧外袍</td><td>MHP +700、DEF +30、MDEF +8；每 +2 遠距物理傷害 +1%；每 +3 DEX +2；+9 FLEE +20。</td><td>DEX +4、MHP +300、MSP +100、HP 自回 +25%、SP 自回 +15%。</td><td>ASPD +10%、固詠 -15%、CRI +9。</td></tr>
+              <tr><td>智慧外袍</td><td>MHP +700、DEF +30、MDEF +8；每 +2 變詠 -1%；每 +3 INT +2；+9 MATK +40、治療量 +15%。</td><td>INT +4、MHP +300、MSP +100、HP 自回 +25%、SP 自回 +15%。</td><td>變詠 -10%、固詠 -15%、MATK +7%、治療量 +10%。</td></tr>
+              <tr><td>幸運外袍</td><td>MHP +800、DEF +30、MDEF +8；每 +2 暴傷 +2%；每 +3 LUK +2；+9 CRI +6。</td><td>LUK +4、MHP +300、MSP +100、HP 自回 +25%、SP 自回 +15%。</td><td>ASPD +10%、固詠 -15%、暴擊傷害 +15%。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-grid" style="margin-top:14px">
+          <article class="gear-card blue" data-search="主教斗篷 披肩 天使 惡魔 變詠"><span class="tag">KROZ REFERENCE</span><h3>主教斗篷 [1]</h3><ul><li>治療性技能／道具效果 +15%</li><li>每 +2：受天使／惡魔物理 -2%、魔法 -1%</li><li>每 +3：FLEE +6</li><li>+9：MSP +300、固詠 -5%</li></ul></article>
+          <article class="gear-card green" data-search="主教長靴 鞋子 HIT ASPD 變詠 完全迴避"><span class="tag">KROZ REFERENCE</span><h3>主教長靴 [1]</h3><ul><li>MHP +100、MSP +30</li><li>每 +2：HIT +2</li><li>每 +3：變詠 -2%、ASPD +2%</li><li>+9：物／魔攻時機率觸發，2 秒完全迴避 +20</li></ul></article>
+          <article class="gear-card purple" data-search="神官戒指 SP 回復 全能力"><span class="tag">KROZ REFERENCE</span><h3>神官戒指</h3><ul><li>All Stat +1；可精煉但<em>不計入</em>三件 +27。</li><li>與任一神官外袍＋主教斗篷＋主教長靴同裝：物／魔攻時機率觸發，3 秒每秒回復 SP 40。</li><li>這是歷史對照，並非樂園現行數值的斷言。</li></ul></article>
+        </div>
+        <details open>
+          <summary>外袍附魔：尚無樂園版可驗證詞條表</summary>
+          <div>
+            <p><b>答案是：可能有，但我目前不能負責任地寫出效果。</b>公開樂園資料庫查不到幸運外袍、靈巧外袍或對應胸針的現行物品說明；前一版的胸針種類、搭配、材料與流程都來自外服／一般台服參考，已不再當作樂園資料。</p>
+            <p>要補成可用表，至少需要遊戲內任一項的物品說明或附魔 NPC 視窗，才能逐一確認：胸針名稱、素質／技能加成、需不需要同屬性外袍、格數、材料與重置規則。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="abyss">
+        <div class="section-head">
+          <div><div class="eyebrow">03 · Abyss Lake · upcoming</div><h2>深淵湖水：龍甲四件套與掉落裝</h2></div>
+          <p>下列為下一波內容的公開參考數值。龍甲是「衣服＋龍鱗披肩＋龍鱗鞋＋龍戒指」四件套，強項會在全套精煉總和 +27 時完整打開。</p>
+        </div>
+        <img class="map-image" style="height:300px" src="https://rune-nifelheim.com/db/maps/big/abyss_03.gif" referrerpolicy="no-referrer" alt="深淵湖水地圖">
+
+        <div class="toolbar"><h3>龍甲四件套：紅／綠／藍</h3><span class="badge future">預告參考</span></div>
+        <div class="card-grid">
+          <article class="gear-card red" data-search="紅龍甲 STR ATK 龍之威力">
+            <span class="tag">RED DRAGON ARMOR</span><h3>紅龍甲・物理力量</h3>
+            <ul><li>基礎：STR +2、MHP +600、MSP +40、DEF +40、MDEF +4</li><li>+7：STR +2　｜　+9：ATK +30</li><li>套裝：MHP +300、MSP +30、CRI +3；純 STR 每 15，ATK +8</li><li>全套精煉總和 +27：攻速 +10%、固詠 -10%、可觸發龍之威力</li><li><b>龍之威力</b>：受物／魔攻時機率觸發，7 秒 ATK +3%；純 STR 90 提高機率且 ATK 額外 +4%</li></ul>
+          </article>
+          <article class="gear-card green" data-search="綠龍甲 AGI 攻速 龍之急速">
+            <span class="tag">GREEN DRAGON ARMOR</span><h3>綠龍甲・敏捷攻速</h3>
+            <ul><li>基礎：AGI +2、MHP +500、MSP +50、DEF +40、MDEF +4</li><li>+7：AGI +2　｜　+9：攻速 +7%</li><li>套裝：MHP +300、MSP +30、暴擊傷害 +7%；純 AGI 每 15，HIT +3</li><li>全套精煉總和 +27：攻速 +10%、固詠 -10%、可觸發龍之急速</li><li><b>龍之急速</b>：受物／魔攻時機率觸發，7 秒攻速 +3%；純 AGI 90 提高機率且攻速額外 +3%</li></ul>
+          </article>
+          <article class="gear-card blue" data-search="藍龍甲 INT MATK LUK CRI">
+            <span class="tag">BLUE DRAGON ARMOR</span><h3>藍龍甲・魔攻／暴擊</h3>
+            <ul><li>基礎：INT +2、MHP +400、MSP +60、DEF +40、MDEF +4</li><li>+7：INT +2　｜　+9：MATK +30</li><li>公開整理另列：受物／魔攻時機率觸發，7 秒 CRI +6；純 LUK 90 提高發動機率，暴擊傷害 +10%</li><li>全套精煉總和 +27 的全域門檻同樣為：攻速 +10%、固詠 -10%、對應觸發效果。</li></ul>
+          </article>
+        </div>
+
+        <div class="toolbar"><h3>龍套的共用部件</h3></div>
+        <div class="card-grid">
+          <article class="gear-card green" data-search="龍鱗鞋 MSP 固定詠唱 FLEE"><span class="tag">FOOTGEAR</span><h3>龍鱗鞋</h3><ul><li>MSP +150、變動詠唱 -5</li><li>+7：FLEE +20</li><li>+9：固定詠唱 -5</li></ul></article>
+          <article class="gear-card blue" data-search="龍鱗披肩 治療 龍族 抗性"><span class="tag">GARMENT</span><h3>龍鱗披肩</h3><ul><li>DEF +20、MDEF +2、治療量／藥水恢復量 +15%</li><li>+7：受龍族物理／魔法傷害 -5%</li><li>+9：受物／魔攻時，機率每秒回復 HP 300，持續 3 秒</li></ul></article>
+          <article class="gear-card gold" data-search="龍戒指 全屬性"><span class="tag">ACCESSORY</span><h3>龍戒指</h3><ul><li>All Stat +1</li><li>與對應龍甲、披肩、鞋共同構成四件套。</li></ul></article>
+          <article class="gear-card purple" data-search="龍布 MDEF 龍族抗性"><span class="tag">ARMOR</span><h3>龍布</h3><ul><li>MDEF +5、受龍族傷害 -5%</li><li>每精煉 +2：MDEF +1、受龍族傷害再 -1%</li></ul></article>
+          <article class="gear-card gold" data-search="古龍頭盔 龍族抗性"><span class="tag">HEADGEAR</span><h3>古龍頭盔</h3><ul><li>受龍族傷害 -5%</li><li>每精煉 +2：受龍族傷害再 -1%</li></ul></article>
+        </div>
+
+        <div class="toolbar"><h3>kRO Zero 歷史職業武器（掉落地區未確認）</h3><span class="badge ref">非深淵湖水確定掉落</span></div>
+        <p class="muted">這批是 2018 年翻譯文的「武器類」清單；原文只列效果，明說入手方法與附魔未知。因此它們不是「奧丁同區其他掉落」的已證實名單，也不能直接說是深淵湖水掉落。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>裝備</th><th>基礎</th><th>+7</th><th>+9</th></tr></thead>
+            <tbody>
+              <tr><td>退魔錘 [2]（服事）</td><td>鈍器 ATK 150、MATK +135、MATK +5%</td><td>治癒 +15%；十字驅魔攻擊 +10%</td><td>十字驅魔攻擊 +15%</td></tr>
+              <tr><td>染血之弓 [2]（弓箭／流氓）</td><td>弓 ATK 170、遠距傷害 +5%</td><td>二連矢 +15%</td><td>箭雨 +15%</td></tr>
+              <tr><td>玻璃長矛 [2]（劍士）</td><td>雙手矛 ATK 190、ATK +5%</td><td>連刺攻擊 +15%</td><td>騎乘攻擊 +15%</td></tr>
+              <tr><td>靈魂樂鞭 [2]（舞孃）</td><td>鞭 ATK 130、遠距傷害 +5%</td><td>纏箭投擲 +10%</td><td>纏箭投擲 +15%</td></tr>
+              <tr><td>鑽孔拳刃 [2]（刺客）</td><td>拳刃 ATK 160、ATK +5%</td><td>音速投擲 +15%</td><td>無影之牙 +15%</td></tr>
+              <tr><td>復仇者 [2]（商人）</td><td>雙手斧 ATK 190、ATK +5%、CRI +5</td><td>攻速 +10%</td><td>暴擊傷害 +10%</td></tr>
+              <tr><td>元素箭寶石之書 [2]（法師）</td><td>書 ATK 120、MATK +135、MATK +5%</td><td>火／冰箭、雷擊 +10%</td><td>同上再 +10%</td></tr>
+              <tr><td>巴基利短劍 [2]（盜賊／流氓）</td><td>短劍 ATK 130、ATK +5%</td><td>潛擊 +15%</td><td>背刺 +15%</td></tr>
+              <tr><td>恐懼製造者 [2]（忍者）</td><td>短劍 ATK 130、ATK +5%</td><td>飛鏢投擲／霧裡劈砍 +10%</td><td>同上 +15%</td></tr>
+              <tr><td>海螺 [2]（吟遊詩人）</td><td>樂器 ATK 130、遠距傷害 +5%</td><td>樂器攻擊 +10%</td><td>樂器攻擊 +15%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="toolbar"><h3>深淵湖水飾品與職業防具</h3></div>
+        <div class="card-grid">
+          <article class="gear-card red" data-search="雙頭龍戒指 連環全身掌 猛龍誇強 ATK ASPD"><span class="tag">ACCESSORY · L / R</span><h3>雙頭龍戒指</h3><ul><li>左：連環全身掌、猛龍誇強傷害 +3%；+9 再 +2%</li><li>右：ATK +5、攻速 +5%；+9 ATK +7、攻速再 +3%</li></ul></article>
+          <article class="gear-card blue" data-search="古代非力卡頭飾 INT MSP 治療"><span class="tag">HEADGEAR</span><h3>古代非力卡頭飾</h3><ul><li>MDEF +10、INT +2、MSP +50</li><li>施放治癒術時低機率：15 秒治療量 +15%；精煉提高發動率</li><li>配手鍊：自然 SP 回復 +20%；配戒指：SP 消耗 -5%</li></ul></article>
+          <article class="gear-card purple" data-search="古代非力卡戒指 INT MSP SP消耗"><span class="tag">RIGHT ACCESSORY</span><h3>古代非力卡戒指</h3><ul><li>INT +1、MSP +3%</li><li>+7：MSP +1%　｜　+9：MSP +2%</li><li>SP 消耗 -2%</li></ul></article>
+          <article class="gear-card purple" data-search="古代非力卡手鍊 VIT MSP SP回復"><span class="tag">LEFT ACCESSORY</span><h3>古代非力卡手鍊</h3><ul><li>VIT +1、MSP +3%</li><li>+7：MSP +1%　｜　+9：MSP +2%</li><li>自然 SP 回復 +20%</li></ul></article>
+          <article class="gear-card red" data-search="特殊忍者服 忍者 HP SP ATK 風魔"><span class="tag">NINJA ARMOR</span><h3>特殊忍者服</h3><ul><li>忍者專用、MHP +500、MSP +50</li><li>+7：ATK +50　｜　+9：ATK +25</li><li>與狐腕同裝：風魔手裡劍傷害 +10%</li></ul></article>
+          <article class="gear-card red" data-search="忍者鱗甲 忍者 HP SP ATK DEF 十字斬"><span class="tag">NINJA ARMOR</span><h3>忍者鱗甲</h3><ul><li>忍者專用、MHP +600、MSP +40</li><li>+7：ATK +50　｜　+9：DEF +100</li><li>與狼腕同裝：十字斬冷卻時間 -0.5 秒</li></ul></article>
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <div class="section-head"><div><div class="eyebrow">Verification</div><h2>資料來源與使用提醒</h2></div></div>
+        <div class="source-list">
+          <div class="source"><strong>奧丁外袍：</strong>幸運／靈巧外袍等名稱依玩家回報列為已開放；神官外袍、斗篷、長靴、戒指的數字取自 <a href="https://www.pttweb.cc/bbs/RO/M.1542269774.A.772" target="_blank" rel="noreferrer">2018 年的 kRO Zero 裝備整理</a>，僅供歷史對照，非樂園現行定值。樂園版附魔 NPC、材料、詞條與掉落來源尚未找到可靠公開表，因此本頁不列數字。</div>
+          <div class="source"><strong>龍裝與職業武器：</strong><a href="https://www.pttweb.cc/bbs/RO/M.1542269774.A.772" target="_blank" rel="noreferrer">2018 年 kRO Zero 裝備整理</a>把龍系防具推測為深淵湖水最深層的新道具；同文的職業武器只列效果，並明說入手方法、附魔未知。因此這頁將職業武器改為獨立「未確認掉落地區」資料，不再歸屬奧丁或深淵湖水。</div>
+          <div class="source"><strong>圖片：</strong>奧丁地圖取自 <a href="https://file5s.ratemyserver.net/maps_xl/odin_tem01.gif" target="_blank" rel="noreferrer">RateMyServer</a>；深淵湖水地圖取自 <a href="https://rune-nifelheim.com/db/maps/big/abyss_03.gif" target="_blank" rel="noreferrer">Rune Nifelheim</a>；頁首為 RO 歐服公告圖片。圖片僅作地區辨識。</div>
+          <div class="source"><strong>判讀原則：</strong>「近期改版」與「下一波」在不同伺服器的上線順序、NPC 用字、裝備名稱或數字都可能不同。本頁將可查的社群 KROZ 參考值與台服尚待證實的內容分開；進遊戲前請以官方公告、NPC 交易窗為最終依據。</div>
+        </div>
+      </section>
+      <footer class="foot">做給查資料用的單一 HTML。輸入欄可篩選「毀葛頭飾」與「深淵湖水卡片」；手機版側欄會縮成上方橫向導覽。</footer>
+    </main>
+  </div>
+  <script>
+    const input = document.querySelector('#filter');
+    const cards = document.querySelectorAll('[data-search]');
+    input.addEventListener('input', () => {
+      const query = input.value.trim().toLowerCase();
+      cards.forEach(card => {
+        const content = (card.dataset.search + ' ' + card.textContent).toLowerCase();
+        card.style.display = !query || content.includes(query) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
