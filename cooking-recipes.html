@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園料理材料、食材商人價格與怪物來源整理。">
+  <title>樂園料理材料庫 | RO樂園工具</title>
+  <style>
+    :root { --ink:#1b2621; --muted:#66736b; --paper:#f4f2eb; --white:#fffefa; --line:#d7ddd3; --leaf:#24714b; --leaf-dark:#154a32; --gold:#ab751b; --gold-soft:#fff2cf; --blue:#275d7d; --blue-soft:#eaf4f8; --radius:8px; --shadow:0 12px 32px rgba(25,48,35,.10); }
+    * { box-sizing:border-box; }
+    body { margin:0; min-width:320px; color:var(--ink); background:var(--paper); font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; line-height:1.55; }
+    button,input,select { font:inherit; } a { color:inherit; } button { cursor:pointer; }
+    .hero { color:#fff; background:#194a34; }
+    .hero-inner,main { width:min(1180px,calc(100% - 32px)); margin:0 auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:17px 0 0; font-size:14px; font-weight:900; }
+    .home { padding:7px 11px; border:1px solid rgba(255,255,255,.62); border-radius:6px; background:rgba(0,0,0,.16); color:#fff; text-decoration:none; }
+    .hero-content { display:grid; grid-template-columns:minmax(0,1fr) 190px; gap:24px; align-items:end; padding:50px 0 36px; }
+    .eyebrow { margin:0 0 7px; color:#ffe09a; font-size:13px; font-weight:900; }
+    h1 { margin:0; font-size:clamp(32px,5vw,52px); line-height:1.12; letter-spacing:0; }
+    .intro { max-width:770px; margin:13px 0 0; color:#e2f1e8; font-size:16px; }
+    .book { justify-self:end; display:grid; width:150px; height:128px; place-items:center; border:1px solid rgba(255,225,157,.55); border-radius:8px; background:#255f43; box-shadow:inset 0 0 0 8px rgba(255,255,255,.06); }
+    .book img { width:76px; height:76px; object-fit:contain; image-rendering:auto; }
+    main { padding:25px 0 62px; }
+    .notice { display:grid; grid-template-columns:auto minmax(0,1fr); gap:13px; align-items:start; padding:16px 18px; border:1px solid #ead296; border-left:4px solid var(--gold); border-radius:8px; background:var(--gold-soft); }
+    .notice b { color:#77510a; } .notice p { margin:2px 0 0; color:#675a38; font-size:14px; }
+    .toolbar { position:sticky; top:0; z-index:3; display:grid; grid-template-columns:minmax(220px,1.35fr) repeat(3,minmax(130px,.55fr)) auto; gap:10px; align-items:end; margin:18px 0; padding:15px; border:1px solid var(--line); border-radius:8px; background:rgba(255,254,250,.96); box-shadow:0 8px 22px rgba(25,48,35,.08); }
+    label { display:grid; gap:5px; color:#46564b; font-size:12px; font-weight:900; } input,select { width:100%; min-height:39px; padding:7px 9px; border:1px solid #becbc0; border-radius:5px; color:var(--ink); background:#fff; outline:none; } input:focus,select:focus { border-color:var(--leaf); box-shadow:0 0 0 3px rgba(36,113,75,.13); }
+    .merchant-toggle { display:flex; min-height:39px; align-items:center; gap:8px; padding:0 8px; border:1px solid #becbc0; border-radius:5px; background:#fff; color:#46564b; font-size:13px; font-weight:800; white-space:nowrap; } .merchant-toggle input { width:16px; min-height:16px; accent-color:var(--leaf); }
+    .result-count { align-self:center; color:var(--muted); font-size:13px; font-weight:800; white-space:nowrap; }
+    .legend { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 18px; color:var(--muted); font-size:13px; }.legend b { color:var(--ink); }
+    .tag { display:inline-flex; align-items:center; min-height:22px; padding:2px 7px; border:1px solid transparent; border-radius:4px; font-size:11px; font-weight:900; line-height:1.25; white-space:nowrap; }.tag-food { border-color:#e5c76d; color:#76500a; background:#fff5d5; }.tag-price { border-color:#bfd6c5; color:#245d37; background:#edf7ef; }.tag-vendor { border-color:#c3d5e2; color:#1c5878; background:var(--blue-soft); }.tag-drop { border-color:#d6d9d5; color:#526158; background:#f6f7f4; }.tag-unconfirmed { border-color:#e1c4a8; color:#87552c; background:#fff3e8; }
+    .stat-sections { display:grid; gap:12px; margin-top:21px; }.stat-section { overflow:hidden; border:1px solid var(--line); border-radius:8px; background:var(--white); box-shadow:var(--shadow); }.stat-section > summary,.recipe > summary { list-style:none; cursor:pointer; }.stat-section > summary::-webkit-details-marker,.recipe > summary::-webkit-details-marker { display:none; }.stat-summary { display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; gap:12px; align-items:center; min-height:66px; padding:12px 16px; }.stat-section[open] .stat-summary { border-bottom:1px solid var(--line); background:#f7fbf8; }.stat-icon { display:grid; width:37px; height:37px; place-items:center; border:1px solid #bcd8c5; border-radius:6px; color:var(--leaf-dark); background:#edf8f0; font-size:12px; font-weight:900; }.stat-copy strong { display:block; color:var(--leaf-dark); font-size:19px; line-height:1.2; }.stat-copy span { display:block; margin-top:2px; color:var(--muted); font-size:12px; }.stat-count { color:var(--muted); font-size:13px; font-weight:800; }.chevron { color:var(--leaf); font-size:22px; font-weight:900; transition:transform 150ms ease; }.stat-section[open] .chevron,.recipe[open] .recipe-chevron { transform:rotate(90deg); }.recipe-list { display:grid; gap:9px; padding:12px; }.recipe { overflow:hidden; border:1px solid #dbe3dc; border-radius:7px; background:#fffefa; }.recipe > summary { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:10px; align-items:center; min-height:53px; padding:10px 12px; }.recipe > summary:hover { background:#f6fbf7; }.recipe-name { color:var(--ink); font-size:15px; font-weight:900; }.bonus { min-width:55px; padding:4px 6px; border:1px solid #bcd8c5; border-radius:5px; color:var(--leaf-dark); background:#edf8f0; text-align:center; font-size:12px; font-weight:900; }.recipe-chevron { color:var(--leaf); font-size:18px; font-weight:900; transition:transform 150ms ease; }.materials { margin:0; padding:0; border-top:1px solid #e4e9e3; list-style:none; }.material { display:grid; grid-template-columns:minmax(110px,.7fr) minmax(0,1fr) 108px; gap:8px; align-items:center; padding:10px 16px; border-top:1px solid #edf0eb; }.material:first-child { border-top:0; }.material-name { font-size:14px; font-weight:900; }.material-meta { display:flex; flex-wrap:wrap; gap:5px; align-items:center; }.source { color:var(--muted); font-size:12px; }.cost-field { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:5px; color:var(--muted); font-size:11px; font-weight:800; }.cost-input { min-width:0; min-height:32px; padding:4px 5px; text-align:right; }.cost-total { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 16px; border-top:1px solid #d9e4da; background:#eff8f1; }.cost-total span,.cost-total small { display:block; }.cost-total span { color:var(--leaf-dark); font-size:13px; font-weight:900; }.cost-total small { margin-top:2px; color:var(--muted); font-size:11px; }.cost-total strong { color:var(--leaf-dark); font-size:19px; white-space:nowrap; }.empty { display:none; padding:48px 18px; border:1px dashed #b9c5ba; border-radius:8px; color:var(--muted); text-align:center; }.empty.visible { display:block; }
+    .guide-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:16px; margin-top:31px; }.guide { padding:20px; border:1px solid var(--line); border-radius:8px; background:#fffefa; box-shadow:var(--shadow); }.guide h2 { margin:0; color:var(--leaf-dark); font-size:19px; }.guide p { margin:8px 0 0; color:var(--muted); font-size:14px; }.book-list { display:grid; gap:8px; margin:14px 0 0; }.book-row { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-top:1px solid #e7ebe5; font-size:14px; }.book-row:first-child { border-top:0; }.book-row b { color:var(--leaf-dark); }.book-row span { color:var(--muted); text-align:right; }.source-links { margin:12px 0 0; padding-left:18px; color:var(--muted); font-size:13px; }.source-links li + li { margin-top:6px; }.source-links a { color:var(--leaf-dark); font-weight:900; }
+    footer { padding:28px 0 0; color:var(--muted); font-size:12px; text-align:center; }
+    @media (max-width:850px) { .toolbar { grid-template-columns:repeat(2,minmax(0,1fr)); }.result-count { grid-column:2; }.guide-grid { grid-template-columns:1fr; }.book { width:120px; height:110px; } }
+    @media (max-width:540px) { .hero-inner,main { width:min(100% - 24px,1180px); }.hero-content { grid-template-columns:1fr; padding:35px 0 28px; }.book { display:none; }.toolbar { position:static; grid-template-columns:1fr; }.result-count { grid-column:auto; }.material { grid-template-columns:1fr; gap:5px; padding:10px 13px; }.cost-field { grid-template-columns:70px 1fr; max-width:180px; }.cost-total { align-items:flex-start; flex-direction:column; gap:7px; }.recipe-head { padding:14px 13px 11px; }.notice { padding:14px; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="topbar"><span>RO樂園工具</span><a class="home" href="index.html">回工具首頁</a></div>
+      <div class="hero-content">
+        <div><p class="eyebrow">PARK COOKING REFERENCE</p><h1>樂園料理材料庫</h1><p class="intro">用料理等級、能力或材料名稱查配方。黃色標籤是食材商人可直接買的材料；綠色標籤是低買 Lv.10 價格，展開料理後可輸入你的實際成本。</p></div>
+        <div class="book" aria-hidden="true"><img src="assets/cooking-recipes/cookbook.png" alt=""></div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="notice"><b>樂園版本註記</b><p>本頁收錄目前可確認的 Lv.1～7 料理。每項材料以樂園材料表的 1 個計；所有料理另需對應料理書與「各式廚具／組合專用工具」。Lv.8～10 料理書目前未找到樂園的確認取得來源，故不列入可製作清單。</p></section>
+    <section class="toolbar" aria-label="料理篩選">
+      <label>搜尋料理或材料<input id="search" type="search" placeholder="例如：紅辣椒、DEX、刷刷肉"></label>
+      <label>料理等級<select id="level"><option value="all">全部等級</option><option value="1">Lv.1</option><option value="2">Lv.2</option><option value="3">Lv.3</option><option value="4">Lv.4</option><option value="5">Lv.5</option><option value="6">Lv.6</option><option value="7">Lv.7</option></select></label>
+      <label>能力加成<select id="stat"><option value="all">全部能力</option><option value="STR">STR</option><option value="AGI">AGI</option><option value="VIT">VIT</option><option value="INT">INT</option><option value="DEX">DEX</option><option value="LUK">LUK</option></select></label>
+      <label>材料來源<span class="merchant-toggle"><input id="merchant" type="checkbox">只看食材商人材料</span></label>
+      <span class="result-count" id="count" aria-live="polite"></span>
+    </section>
+    <p class="legend"><b>標籤說明</b><span class="tag tag-food">食材商人</span><span class="tag tag-price">低買 Lv.10 價格</span><span class="tag tag-vendor">其他商人</span><span class="tag tag-drop">打怪／任務</span><span class="tag tag-unconfirmed">自行估價</span></p>
+    <div id="recipe-root"></div><p class="empty" id="empty">沒有符合這組條件的料理。試著清除搜尋或取消「只看食材商人材料」。</p>
+    <section class="guide-grid">
+      <article class="guide"><h2>料理書與使用方式</h2><p>料理書用來選擇配方；材料備齊後，使用食材商人販售的組合專用工具製作。綜合料理則需同級的六種能力料理各一份。</p><div class="book-list"><div class="book-row"><b>Lv.1～5 料理書</b><span>食材商人販售</span></div><div class="book-row"><b>Lv.6 料理書</b><span>獸人女戰士、諾可伊（史二）掉落</span></div><div class="book-row"><b>Lv.7 料理書</b><span>闇黑祭司掉落</span></div><div class="book-row"><b>Lv.8～10 料理書</b><span>目前未確認樂園取得來源</span></div></div></article>
+      <article class="guide"><h2>價格與成本試算</h2><p>商店材料的顯示價格已換算為低買 Lv.10（-24%）後的整數價格。料理需要消耗的「各式廚具」也會自動列入，每次以 380 Zeny 計；打怪素材預設為 0，可依你的實際市價直接覆寫。</p><ul class="source-links"><li><a href="https://forum.gamer.com.tw/G2.php?bsn=83142&lorder=1&parent=200&sn=201" target="_blank" rel="noreferrer">樂園料理材料整理</a></li><li><a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=1074" target="_blank" rel="noreferrer">樂園料理配方與食材商人標記</a></li><li><a href="https://w.atwiki.jp/saint_elmo/pages/52.html" target="_blank" rel="noreferrer">料理材料商人價格對照</a></li></ul></article>
+    </section>
+    <footer>RO樂園料理資料整理。伺服器更新或 NPC 價格調整時，請以遊戲內顯示為準。</footer>
+  </main>
+  <script>
+    const npcPrices={"各式廚具":380,"食用油":380,"穀物":152,"純調味料":532,"辣調味料":532,"甜調味料":532,"辣醬":532,"紅辣椒":12,"蝦子":380,"紅色香料":760,"黃色香料":760,"好吃的魚":190,"鍋子":152,"麵包":114,"食用香菇":30,"紅色藥水":38,"牛奶":19,"白色盤子":760,"肉":38,"蕃薯":11,"紅蘿蔔":11,"蘋果":11,"香蕉":11,"寵物飼料":760,"瑪絲黛拉果實":6460};
+    const F=name=>[name,"食材商人","food",npcPrices[name]??null];
+    const D=(name,source)=>[name,source,"drop",null];
+    const V=(name,source)=>[name,source,"vendor",npcPrices[name]??null];
+    const cookingTool=["各式廚具","食材商人","food",npcPrices["各式廚具"]];
+    const customCosts=new Map();
+    const recipes=[
+      [1,"STR","蚱蜢熱炒",[D("蝗蟲後腿","搖滾蝗蟲"),F("食用油","500 Zeny")]],
+      [1,"INT","葡汁藥草茶",[D("葡萄","波波利"),V("紅色藥水","藥水商人")]],
+      [1,"DEX","蜂蜜葡萄汁",[D("葡萄","波波利"),V("紅色藥水","藥水商人")]],
+      [1,"AGI","青蛙蛋湯",[F("穀物","200 Zeny"),D("青蛙蛋","羅達蛙")]],
+      [1,"VIT","蒸蟹之螯",[D("鉗子","螃蟹"),D("綠色藥草","綠草"),V("紅色藥水","藥水商人")]],
+      [1,"LUK","猴子尾巴熱炒",[D("猴子尾巴","溜溜猴"),F("食用油","500 Zeny")]],
+      [2,"STR","涼拌水蹼",[D("黏糊糊的蹼","羅達蛙"),D("綠色藥草","綠草"),D("黃色藥草","黃草"),F("純調味料","700 Zeny")]],
+      [2,"INT","滿葉的紅茶",[D("藍色藥草","藍草"),D("黃色藥草","黃草"),D("紅色藥草","紅草")]],
+      [2,"DEX","巧克力慕斯蛋糕",[D("可可","溜溜猴"),D("小蛋糕","邪惡禮盒"),V("牛奶","小雞／牛奶商人"),V("白色盤子","大嘴鳥蛋／禮物商人")]],
+      [2,"AGI","滑潤潤的麵條",[F("穀物","200 Zeny"),F("純調味料","700 Zeny"),D("南瓜頭","傑克"),V("紅蘿蔔","瘋兔／水果商人")]],
+      [2,"VIT","海產物料理",[D("蛤蜊肉","貝殼魔靈"),D("鰓刺","馬克"),D("背鰭","馬克"),F("好吃的魚","250 Zeny")]],
+      [2,"LUK","混合果汁",[D("蘋果汁","波利之王／果汁任務"),D("紅蘿蔔汁","果汁任務"),D("葡萄汁","果汁任務"),D("柳橙汁","土波利")]],
+      [3,"STR","爆炸牛排",[V("肉","禿鷹／肉品商人"),D("破舊平底鍋","魔鍋蛋"),D("綠色藥草","綠草"),F("紅辣椒"),F("辣調味料","700 Zeny")]],
+      [3,"INT","藥草蜂蜜茶",[D("蜂蜜","大腳熊"),D("白色藥草","白草"),F("黃色香料","1,000 Zeny")]],
+      [3,"DEX","水果刨冰",[V("蘋果","波利／水果商人"),V("香蕉","溜溜猴／水果商人"),D("柳橙","禿鷹"),D("草莓","青蛇"),F("黃色香料","1,000 Zeny")]],
+      [3,"AGI","觸鬚起士湯",[D("觸鬚","海葵"),D("起士","轉轉蛋"),D("美味蕃薯","狸貓"),F("甜調味料","700 Zeny")]],
+      [3,"VIT","蛤蜊湯",[D("蛤蜊肉","貝殼魔靈"),D("海螺","卡那多斯"),D("蜂蜜","大腳熊"),F("甜調味料","700 Zeny")]],
+      [3,"LUK","拔絲地瓜",[V("蕃薯","樹精／蔬菜商人"),D("美味蕃薯","狸貓"),D("魔物番薯","鬼火"),F("甜調味料","700 Zeny")]],
+      [4,"STR","藥草淹製排骨",[V("肉","禿鷹／肉品商人"),D("紅色藥草","紅草"),D("黃色藥草","黃草"),D("綠色藥草","綠草"),F("甜調味料","700 Zeny"),D("檸檬","人魚士兵")]],
+      [4,"INT","夢羅克水果酒",[D("草莓","青蛇"),D("檸檬","人魚士兵"),D("柳橙","禿鷹"),D("酒精","黑菇／紅菇"),D("葡萄","波波利")]],
+      [4,"DEX","奶油三明治",[F("麵包","150 Zeny"),V("牛奶","小雞／牛奶商人"),D("起士","轉轉蛋"),D("黃色藥草","黃草"),V("肉","禿鷹／肉品商人")]],
+      [4,"AGI","薑餅城辣涼麵",[F("穀物","200 Zeny"),F("辣醬"),D("冰塊一角","水靈龜"),V("紅蘿蔔","瘋兔／水果商人"),D("南瓜頭","傑克")]],
+      [4,"VIT","涼拌海蜇皮",[D("觸鬚","海葵"),D("白色藥草","白草"),D("柔軟草葉","苗娃佩瑞絲"),D("破舊平底鍋","魔鍋蛋"),D("墨汁","烏賊")]],
+      [4,"LUK","人魚料理",[D("人魚嘴巴","人魚士兵"),D("變身葉子","狸貓"),D("白色藥草","白草"),F("好吃的魚","250 Zeny"),F("甜調味料","700 Zeny")]],
+      [5,"STR","薑餅城太太的煎餅",[V("蕃薯","樹精／蔬菜商人"),D("蜂蜜","大腳熊"),F("食用油","500 Zeny"),V("紅蘿蔔","瘋兔／水果商人"),F("穀物","200 Zeny")]],
+      [5,"INT","瑪絲黛拉酒",[V("瑪絲黛拉果實","七彩大嘴鳥／水果商人"),D("藍色藥水","夢魘"),D("酒精","黑菇／紅菇"),D("檸檬","人魚士兵"),F("黃色香料","1,000 Zeny")]],
+      [5,"DEX","綠色沙拉",[D("西納雷葉子","綠變色龍"),D("蘆薈葉子","綠變色龍"),D("尖銳葉子","森林妖姬"),D("巨大葉子","森林妖姬"),F("甜調味料","700 Zeny"),F("黃色香料","1,000 Zeny")]],
+      [5,"AGI","蝙蝠翅膀蒸南瓜",[D("紅色蝙蝠翅膀","紅蝙蝠"),D("南瓜頭","傑克"),F("鍋子","200 Zeny"),D("西納雷葉子","綠變色龍"),D("紅色藥草","紅草")]],
+      [5,"VIT","甜辣煎餃",[D("餃子","殭屍"),D("黃色藥草","黃草"),F("辣醬"),F("紅色香料","1,000 Zeny"),D("綠色藥草","綠草")]],
+      [5,"LUK","蠍子熱炒",[D("蠍子尾巴","蠍子"),D("昆蟲後腳","艾吉歐蜈蚣"),D("巨大葉子","森林妖姬"),D("破舊平底鍋","魔鍋蛋"),F("食用油","500 Zeny")]],
+      [6,"STR","閃亮的刷刷肉",[V("肉","禿鷹／肉品商人"),D("蜂蜜","大腳熊"),D("黃色藥草","黃草"),V("瑪絲黛拉果實","七彩大嘴鳥／水果商人"),D("發亮鱗片","黑蛇")]],
+      [6,"INT","紅色香菇水果酒",[F("食用香菇","40 Zeny"),D("葡萄汁","果汁任務"),D("香菇芽孢","魔菇"),D("酒精","黑菇／紅菇"),F("紅色香料","1,000 Zeny")]],
+      [6,"DEX","蜜桃蛋糕",[D("石榴桃","伍坦彈弓手"),D("小蛋糕","邪惡禮盒"),D("起士","轉轉蛋"),V("牛奶","小雞／牛奶商人"),D("濃縮柳橙汁","土波利"),F("甜調味料","700 Zeny")]],
+      [6,"AGI","紅辣椒蝦湯",[F("紅辣椒"),F("蝦子"),F("甜調味料","700 Zeny"),D("檸檬","古鐘魔（鐘塔 2F）／人魚士兵")]],
+      [6,"VIT","非常苦的補藥",[D("褐色樹根","森林妖姬"),D("噬人樹根","邪惡向日葵"),D("香菇芽孢","魔菇"),F("食用香菇","40 Zeny"),D("蜂蜜","大腳熊")]],
+      [6,"LUK","開運湯",[D("爬蟲類舌頭","傘蜥"),D("細長舌頭","瑞比歐"),D("三葉幸運草","瘋兔"),D("魔女之星沙","朽魔"),D("蘆薈","綠草")]],
+      [7,"STR","乳豬 BBQ",[V("肉","禿鷹／肉品商人"),D("火種","火焰妖"),D("煤礦","邪骸礦工"),F("辣醬"),D("瑪哪樹枝","將軍魔碑"),D("白色藥草","白草")]],
+      [7,"INT","特製蜂膠藥草茶",[D("蜂膠","黑蟻"),D("蜂蜜","大腳熊"),D("白色藥草","白草"),D("西納雷葉子","綠變色龍"),F("黃色香料","1,000 Zeny")]],
+      [7,"DEX","靈魂出竅麵包",[F("麵包","150 Zeny"),V("瑪絲黛拉果實","七彩大嘴鳥／水果商人"),F("甜調味料","700 Zeny"),D("曼特花","紅草"),D("返魂符","殭屍"),D("青澀蘋果","波利")]],
+      [7,"AGI","鱷魚烤肉蔬菜蒸",[D("虎蜥皮","虎蜥人"),D("南瓜頭","傑克"),V("紅蘿蔔","瘋兔／水果商人"),D("蘆薈葉子","綠變色龍"),D("黃色藥草","黃草"),F("黃色香料","1,000 Zeny")]],
+      [7,"VIT","特製山珍海味",[D("魚尾","劍魚"),D("蘆薈葉子","綠變色龍"),D("野豬毛","野豬"),F("好吃的魚","250 Zeny"),V("寵物飼料","寵物商人"),F("甜調味料","700 Zeny")]],
+      [7,"LUK","燒烤肉串",[D("鱗片皮膚","蛇女伊絲"),D("鰓刺","馬克"),D("柔軟草葉","苗娃佩瑞絲"),V("肉","禿鷹／肉品商人"),F("食用香菇","40 Zeny"),D("海產物料理","Lv.2 料理")]]
+    ];
+    const root=document.querySelector('#recipe-root'), empty=document.querySelector('#empty'), count=document.querySelector('#count');
+    const tag=(text,kind)=>`<span class="tag tag-${kind}">${text}</span>`;
+    const zeny=value=>`${Math.floor(value).toLocaleString()} Zeny`;
+    const costOf=([name,,,price])=>customCosts.has(name)?customCosts.get(name):(price??0);
+    const material=([name,source,kind,price],recipeIndex)=>`<li class="material"><span class="material-name">${name} ×1</span><span class="material-meta">${kind==='food'?tag('食材商人','food'):kind==='vendor'?tag('其他商人','vendor'):tag('打怪／任務','drop')}<span class="source">${source}</span>${price===null?tag('自行估價','unconfirmed'):tag(`低買 Lv.10 ${zeny(price)}`,'price')}</span><label class="cost-field">單價<input class="cost-input" type="number" min="0" step="1" inputmode="numeric" value="${costOf([name,source,kind,price])}" data-material="${name}" data-recipe="${recipeIndex}" aria-label="${name} 單價"></label></li>`;
+    const recipeTotal=recipe=>[cookingTool,...recipe[3]].reduce((sum,item)=>sum+costOf(item),0);
+    const render=()=>{
+      const q=document.querySelector('#search').value.trim().toLowerCase(), level=document.querySelector('#level').value, stat=document.querySelector('#stat').value, food=document.querySelector('#merchant').checked;
+      const shown=recipes.map((recipe,index)=>({recipe,index})).filter(({recipe:r})=>{ const text=(r[2]+r[1]+r[3].flat().join(' ')).toLowerCase(); return (level==='all'||r[0]===+level)&&(stat==='all'||r[1]===stat)&&(!q||text.includes(q))&&(!food||r[3].some(m=>m[2]==='food')); });
+      const statOrder=['STR','AGI','VIT','INT','DEX','LUK'];
+      const groups=statOrder.map(s=>[s,shown.filter(({recipe:r})=>r[1]===s).sort((a,b)=>a.recipe[0]-b.recipe[0])]).filter(([,rs])=>rs.length);
+      const autoOpen=q||level!=='all'||stat!=='all';
+      root.innerHTML=`<section class="stat-sections">${groups.map(([s,rs])=>`<details class="stat-section" ${autoOpen?'open':''}><summary class="stat-summary"><span class="stat-icon">${s}</span><span class="stat-copy"><strong>${s} 加成料理</strong><span>展開後可選擇 ${s} +1 ～ +7 配方</span></span><span class="stat-count">${rs.length} 道</span><span class="chevron" aria-hidden="true">›</span></summary><div class="recipe-list">${rs.map(({recipe:r,index})=>`<details class="recipe"><summary><span class="recipe-name">${r[2]}</span><span class="bonus">${s} +${r[0]}</span><span class="recipe-chevron" aria-hidden="true">›</span></summary><ul class="materials">${[cookingTool,...r[3]].map(item=>material(item,index)).join('')}</ul><div class="cost-total"><span><span>單份製作成本</span><small>含各式廚具 ×1；可修改每項材料單價</small></span><strong data-total="${index}">${zeny(recipeTotal(r))}</strong></div></details>`).join('')}</div></details>`).join('')}</section>`;
+      count.textContent=`顯示 ${shown.length} / ${recipes.length} 道料理`; empty.classList.toggle('visible',shown.length===0);
+    };
+    root.addEventListener('input',event=>{ const input=event.target.closest('.cost-input'); if(!input)return; const value=Math.max(0,Number(input.value)||0); customCosts.set(input.dataset.material,value); root.querySelectorAll('.cost-input').forEach(peer=>{if(peer!==input&&peer.dataset.material===input.dataset.material)peer.value=value;}); root.querySelectorAll('[data-total]').forEach(total=>total.textContent=zeny(recipeTotal(recipes[Number(total.dataset.total)]))); });
+    document.querySelectorAll('#search,#level,#stat,#merchant').forEach(el=>el.addEventListener(el.type==='search'?'input':'change',render)); render();
+  </script>
+</body>
+</html>
