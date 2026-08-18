@@ -83,19 +83,21 @@
               <th>道具</th>
               <th>基礎回復量</th>
               <th>基礎平均</th>
+              <th>重量</th>
+              <th>平均回復／重量</th>
               <th>備註</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>HP</td><td>紅色藥水</td><td>HP 45～65</td><td>HP 55</td><td>一般藥水</td></tr>
-            <tr><td>HP</td><td>黃色藥水</td><td>HP 175～235</td><td>HP 205</td><td>一般藥水</td></tr>
-            <tr><td>HP</td><td>白色藥水</td><td>HP 325～405</td><td>HP 365</td><td>一般藥水</td></tr>
-            <tr><td>HP</td><td>紅色纖細藥水</td><td>HP 45～65</td><td>HP 55</td><td>與紅水相同回復量、較輕</td></tr>
-            <tr><td>HP</td><td>黃色纖細藥水</td><td>HP 175～235</td><td>HP 205</td><td>與黃水相同回復量、較輕</td></tr>
-            <tr><td>HP</td><td>白色纖細藥水</td><td>HP 325～405</td><td>HP 365</td><td>與白水相同回復量、較輕</td></tr>
-            <tr><td>SP</td><td>藍色藥水</td><td>SP 40～60</td><td>SP 50</td><td>一般藥水</td></tr>
-            <tr><td>SP</td><td>起司</td><td>SP 10～15</td><td>SP 12.5</td><td>常用輕量回魔補品</td></tr>
-            <tr><td>SP</td><td>草莓</td><td>SP 5～10</td><td>SP 7.5</td><td>常用回魔補品</td></tr>
+            <tr><td>HP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/501.png" alt="">紅色藥水</span></td><td>HP 45～65</td><td>HP 55</td><td>7</td><td>7.86 HP／重</td><td>一般藥水</td></tr>
+            <tr><td>HP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/503.png" alt="">黃色藥水</span></td><td>HP 175～235</td><td>HP 205</td><td>13</td><td>15.77 HP／重</td><td>一般藥水</td></tr>
+            <tr><td>HP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/504.png" alt="">白色藥水</span></td><td>HP 325～405</td><td>HP 365</td><td>15</td><td>24.33 HP／重</td><td>一般藥水</td></tr>
+            <tr><td>HP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/545.png" alt="">紅色纖細藥水</span></td><td>HP 45～65</td><td>HP 55</td><td>2</td><td>27.50 HP／重</td><td>與紅水相同回復量、較輕</td></tr>
+            <tr><td>HP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/546.png" alt="">黃色纖細藥水</span></td><td>HP 175～235</td><td>HP 205</td><td>3</td><td>68.33 HP／重</td><td>與黃水相同回復量、較輕</td></tr>
+            <tr><td>HP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/547.png" alt="">白色纖細藥水</span></td><td>HP 325～405</td><td>HP 365</td><td>5</td><td>73.00 HP／重</td><td>與白水相同回復量、較輕</td></tr>
+            <tr><td>SP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/505.png" alt="">藍色藥水</span></td><td>SP 40～60</td><td>SP 50</td><td>15</td><td>3.33 SP／重</td><td>一般藥水</td></tr>
+            <tr><td>SP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/548.png" alt="">起司</span></td><td>SP 10～15</td><td>SP 12.5</td><td>5</td><td>2.50 SP／重</td><td>常用輕量回魔補品</td></tr>
+            <tr><td>SP</td><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/578.png" alt="">草莓</span></td><td>SP 5～10</td><td>SP 7.5</td><td>2</td><td>3.75 SP／重</td><td>常用回魔補品</td></tr>
           </tbody>
         </table>
         <p class="recovery-note">實際回復量會再受角色能力與加成影響：HP 補品會受 VIT、快速回復與藥水／治癒加成影響；SP 補品會受 INT 與相關加成影響。本表僅列不含加成的基礎值。</p>
@@ -142,6 +144,36 @@
           <tbody id="recipeRows"></tbody>
         </table>
         <p class="empty-state" id="emptyState" hidden>找不到符合的製作品或材料。</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="shop-title">
+      <div class="section-head">
+        <div>
+          <h2 id="shop-title">商店價格查詢</h2>
+          <p class="section-note">只列出上表中可直接向 NPC 購買的道具；低買 Lv.10 依店價 -24% 計算。</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="shop-table">
+          <thead>
+            <tr>
+              <th>道具</th>
+              <th>販售 NPC 類型</th>
+              <th>標準店價</th>
+              <th>低買 Lv.10</th>
+              <th>備註</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/501.png" alt="">紅色藥水</span></td><td>道具商人</td><td>50 Zeny</td><td>38 Zeny</td><td>HP 補品</td></tr>
+            <tr><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/503.png" alt="">黃色藥水</span></td><td>道具商人</td><td>550 Zeny</td><td>418 Zeny</td><td>HP 補品</td></tr>
+            <tr><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/504.png" alt="">白色藥水</span></td><td>道具商人</td><td>1,200 Zeny</td><td>912 Zeny</td><td>HP 補品</td></tr>
+            <tr><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/505.png" alt="">藍色藥水</span></td><td>道具商人</td><td>5,000 Zeny</td><td>3,800 Zeny</td><td>SP 補品</td></tr>
+            <tr><td><span class="item-name"><img class="item-icon" src="https://static.divine-pride.net/images/items/item/548.png" alt="">起司</span></td><td>補給／食材商人</td><td>2,800 Zeny</td><td>2,128 Zeny</td><td>SP 補品</td></tr>
+          </tbody>
+        </table>
+        <p class="recovery-note">纖細藥水與草莓不列入本表，因為它們不是一般 NPC 商店可直接購買的品項。商店庫存與售價若因樂園更新調整，請以遊戲內顯示為準。</p>
       </div>
     </section>
 
