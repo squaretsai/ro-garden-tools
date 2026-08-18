@@ -368,10 +368,10 @@ td:nth-last-child(-n+2), th:nth-last-child(-n+2) { text-align: right; white-spac
 .recovery-table td:nth-child(4),
 .recovery-table td:nth-child(5),
 .recovery-table td:nth-child(6),
-.shop-table th:nth-child(3),
 .shop-table th:nth-child(4),
-.shop-table td:nth-child(3),
-.shop-table td:nth-child(4) { text-align: right; white-space: nowrap; }
+.shop-table th:nth-child(5),
+.shop-table td:nth-child(4),
+.shop-table td:nth-child(5) { text-align: right; white-space: nowrap; }
 .item-name { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; white-space: nowrap; }
 .item-icon { width: 24px; height: 24px; object-fit: contain; image-rendering: auto; }
 .recovery-note { margin: 0; padding: 12px; color: var(--muted); font-size: 12px; line-height: 1.65; }
