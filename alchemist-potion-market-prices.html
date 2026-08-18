@@ -35,7 +35,7 @@
       <div class="section-head">
         <div>
           <h2 id="market-title">官方露天商店查詢</h2>
-          <p class="section-note">安裝市價橋接擴充功能後，按一次「查最新市價」就會在本列寫入官方露天的最低、次低販售價與更新日期；下次開啟本頁仍會保留最後一次結果。</p>
+          <p class="section-note">安裝市價橋接擴充功能後，按一次「查最新市價」就會在本列寫入官方露天的最低、次低販售價，以及最高、次高收購價與更新日期；下次開啟本頁仍會保留最後一次結果。</p>
         </div>
       </div>
       <div class="market-notice">
@@ -49,6 +49,8 @@
               <th>使用於配方</th>
               <th>最低售價</th>
               <th>次低售價</th>
+              <th>最高收購價</th>
+              <th>次高收購價</th>
               <th>最後更新</th>
               <th>查價</th>
               <th>取得／備註</th>
@@ -136,8 +138,8 @@
       return Number.isFinite(value) ? `${Math.round(value).toLocaleString("zh-TW")} Zeny` : "—";
     }
 
-    function priceCell(value, unavailable) {
-      if (unavailable) return `<span class="market-value is-empty">暫無人出售</span>`;
+    function priceCell(value, unavailable, emptyLabel) {
+      if (unavailable) return `<span class="market-value is-empty">${emptyLabel}</span>`;
       return `<span class="market-value ${Number.isFinite(value) ? "" : "is-empty"}">${formatPrice(value)}</span>`;
     }
 
@@ -155,8 +157,10 @@
         return `<tr>
           <td>${itemLabel(item)}</td>
           <td class="material-use">${safe(item.use)}</td>
-          <td>${priceCell(prices.lowest, prices.unavailable)}</td>
-          <td>${priceCell(prices.second, prices.unavailable)}</td>
+          <td>${priceCell(prices.lowest, prices.sellingUnavailable || prices.unavailable, "暫無人出售")}</td>
+          <td>${priceCell(prices.second, prices.sellingUnavailable || prices.unavailable, "暫無人出售")}</td>
+          <td>${priceCell(prices.buyingHighest, prices.buyingUnavailable || prices.unavailable, "暫無人收購")}</td>
+          <td>${priceCell(prices.buyingSecond, prices.buyingUnavailable || prices.unavailable, "暫無人收購")}</td>
           <td><span class="market-date">${formatDate(prices.checkedAt)}</span></td>
           <td><button class="market-action" type="button" data-query="${safe(item.name)}" data-official-name="${safe(item.officialName || item.name)}" ${isPending ? "disabled" : ""}>${isPending ? "查詢中…" : "查最新市價"}</button></td>
           <td>${safe(item.note)}</td>
@@ -208,11 +212,19 @@
       window.clearTimeout(pendingTimers.get(message.name));
       pendingTimers.delete(message.name);
       if (message.ok) {
-        savedPrices[message.name] = { lowest: message.lowest, second: message.second, unavailable: Boolean(message.unavailable), checkedAt: message.checkedAt };
+        savedPrices[message.name] = {
+          lowest: message.lowest,
+          second: message.second,
+          buyingHighest: message.buyingHighest,
+          buyingSecond: message.buyingSecond,
+          sellingUnavailable: Boolean(message.sellingUnavailable || message.unavailable),
+          buyingUnavailable: Boolean(message.buyingUnavailable || message.unavailable),
+          checkedAt: message.checkedAt
+        };
         localStorage.setItem(storageKey, JSON.stringify(savedPrices));
-        status.textContent = message.unavailable
-          ? `「${message.name}」已更新：暫無人出售。`
-          : `「${message.name}」已更新：最低 ${formatPrice(message.lowest)}、次低 ${formatPrice(message.second)}。`;
+        const sellingStatus = message.sellingUnavailable || message.unavailable ? "暫無人出售" : `最低 ${formatPrice(message.lowest)}、次低 ${formatPrice(message.second)}`;
+        const buyingStatus = message.buyingUnavailable || message.unavailable ? "暫無人收購" : `最高收購 ${formatPrice(message.buyingHighest)}、次高 ${formatPrice(message.buyingSecond)}`;
+        status.textContent = `「${message.name}」已更新：${sellingStatus}；${buyingStatus}。`;
       } else {
         status.textContent = message.error || `「${message.name}」查詢失敗，請先確認官方頁已登入並完成驗證。`;
       }

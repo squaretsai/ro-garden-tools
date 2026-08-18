@@ -45,7 +45,7 @@ function finishJob(result) {
   const job = activeJob;
   activeJob = null;
   if (result.requiresAttention && officialTabId != null) chrome.tabs.update(officialTabId, { active: true }).catch(() => {});
-  deliver(job.siteTabId, { type: "result", name: job.name, ok: result.ok, lowest: result.lowest, second: result.second, unavailable: result.unavailable, checkedAt: result.checkedAt, error: result.error });
+  deliver(job.siteTabId, { type: "result", name: job.name, ok: result.ok, lowest: result.lowest, second: result.second, buyingHighest: result.buyingHighest, buyingSecond: result.buyingSecond, sellingUnavailable: result.sellingUnavailable, buyingUnavailable: result.buyingUnavailable, unavailable: result.unavailable, checkedAt: result.checkedAt, error: result.error });
   setTimeout(processQueue, 150);
 }
 

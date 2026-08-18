@@ -417,10 +417,12 @@ td:nth-last-child(-n+2), th:nth-last-child(-n+2) { text-align: right; white-spac
 .market-table th:nth-child(4),
 .market-table th:nth-child(5),
 .market-table th:nth-child(6),
+.market-table th:nth-child(7),
 .market-table td:nth-child(3),
 .market-table td:nth-child(4),
 .market-table td:nth-child(5),
-.market-table td:nth-child(6) { text-align: right; white-space: nowrap; }
+.market-table td:nth-child(6),
+.market-table td:nth-child(7) { text-align: right; white-space: nowrap; }
 .market-table th:last-child,
 .market-table td:last-child { text-align: left; white-space: normal; }
 
