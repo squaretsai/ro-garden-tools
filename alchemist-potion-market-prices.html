@@ -35,11 +35,11 @@
       <div class="section-head">
         <div>
           <h2 id="market-title">官方露天商店查詢</h2>
-          <p class="section-note">點「查官方市價」後，材料名稱會先複製，再開啟 RO樂園官方查價頁；貼上並按查詢即可看到售價列表，最上方兩筆就是最低與次低售價。</p>
+          <p class="section-note">點「同頁查官方市價」後，材料名稱會複製，RO樂園官方查價頁會直接載入本頁下方；貼上並按查詢即可看到售價列表。</p>
         </div>
       </div>
       <div class="market-notice">
-        <strong>即時價格限制：</strong>官方網站要求登入、人機驗證與同站驗證碼，且不提供可讓本工具跨站讀取的公開資料介面。因此本頁不能自動擷取價格；下方欄位可在官方頁看完後自行記下最低、次低價，資料只存於這台裝置的瀏覽器。
+        <strong>即時價格限制：</strong>官方網站要求登入、人機驗證與同站驗證碼，且不提供可讓本工具跨站讀取的公開資料介面。因此本頁不能自動擷取並回填價格；但可以直接在下方同頁操作官方查價。看完後，將最低、次低價記在本表，資料只存於這台裝置的瀏覽器。
       </div>
       <div class="table-wrap" style="margin-top:14px">
         <table class="market-table">
@@ -57,6 +57,11 @@
         </table>
       </div>
       <p class="market-status" id="marketStatus" role="status" aria-live="polite"></p>
+      <div class="official-panel" id="officialPanel" hidden>
+        <h3>官方露天商店查價</h3>
+        <p id="officialHint">請在下方官方頁的搜尋欄貼上已複製的素材名稱，然後按「查詢」。</p>
+        <iframe class="official-frame" id="officialFrame" title="RO樂園官方露天商店查價" loading="lazy"></iframe>
+      </div>
     </section>
 
     <p class="source-footer">官方查價：<a href="https://event.gnjoy.com.tw/RoZ/RoZ_ShopSearch" target="_blank" rel="noreferrer">RO仙境傳說 Online：樂園｜露天商店查詢平台</a>。官方結果為稅前價格，實際設定與供應狀況仍以遊戲內與官方頁面為準。</p>
@@ -103,9 +108,21 @@
       return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
     }
 
+    function materialSymbol(name) {
+      if (/藥草|曼特花|蘆薈|植物梗|噬人樹花/.test(name)) return "🌿";
+      if (/蜂蜜/.test(name)) return "🍯";
+      if (/酒精|魔力礦石/.test(name)) return "🧪";
+      if (/空瓶/.test(name)) return "🫙";
+      if (/芽孢|星砂|巨大傑勒比結晶/.test(name)) return "✨";
+      if (/心臟|腦管|血管|頸|牙/.test(name)) return "🦴";
+      if (/布|翅膀|鼠鬚/.test(name)) return "🪽";
+      if (/仙人掌刺/.test(name)) return "🌵";
+      return "📦";
+    }
+
     function itemLabel(item) {
-      const icon = item.icon ? `<img class="item-icon" src="https://static.divine-pride.net/images/items/item/${item.icon}.png" alt="" onerror="this.remove()">` : "";
-      return `<span class="item-name">${icon}${safe(item.name)}</span>`;
+      const image = item.icon ? `<img src="https://static.divine-pride.net/images/items/item/${item.icon}.png" alt="" onerror="this.remove()">` : "";
+      return `<span class="item-name"><span class="material-icon" aria-hidden="true">${materialSymbol(item.name)}${image}</span>${safe(item.name)}</span>`;
     }
 
     function render() {
@@ -116,7 +133,7 @@
           <td class="material-use">${safe(item.use)}</td>
           <td><label class="sr-only" for="lowest-${index}">${safe(item.name)}最低售價</label><input class="market-price-input" id="lowest-${index}" data-name="${safe(item.name)}" data-price="lowest" type="number" min="0" step="1" inputmode="numeric" placeholder="Zeny" value="${Number.isFinite(prices.lowest) ? prices.lowest : ""}"></td>
           <td><label class="sr-only" for="second-${index}">${safe(item.name)}次低售價</label><input class="market-price-input" id="second-${index}" data-name="${safe(item.name)}" data-price="second" type="number" min="0" step="1" inputmode="numeric" placeholder="Zeny" value="${Number.isFinite(prices.second) ? prices.second : ""}"></td>
-          <td><button class="market-action" type="button" data-query="${safe(item.name)}">查官方市價</button></td>
+          <td><button class="market-action" type="button" data-query="${safe(item.name)}">同頁查官方市價</button></td>
           <td>${safe(item.note)}</td>
         </tr>`;
       }).join("");
@@ -131,12 +148,18 @@
       const button = event.target.closest("[data-query]");
       if (!button) return;
       const name = button.dataset.query;
+      const panel = document.getElementById("officialPanel");
+      const frame = document.getElementById("officialFrame");
+      const hint = document.getElementById("officialHint");
       button.disabled = true;
+      panel.hidden = false;
+      hint.textContent = `已選擇「${name}」。請在下方官方頁的搜尋欄貼上名稱，然後按「查詢」。`;
+      if (!frame.src) frame.src = officialSearchUrl;
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
       const copied = await copyName(name);
-      window.open(officialSearchUrl, "_blank", "noopener");
       status.textContent = copied
-        ? `已複製「${name}」，官方查價頁已開啟；貼上後按查詢，即可把最低與次低售價填回本列。`
-        : `官方查價頁已開啟；請搜尋「${name}」，再將最低與次低售價填回本列。`;
+        ? `已複製「${name}」，已載入下方官方查價頁。`
+        : `已載入下方官方查價頁；請搜尋「${name}」。`;
       button.disabled = false;
     });
 

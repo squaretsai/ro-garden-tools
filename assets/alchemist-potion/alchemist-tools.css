@@ -442,6 +442,28 @@ td:nth-last-child(-n+2), th:nth-last-child(-n+2) { text-align: right; white-spac
 .market-status { margin: 10px 0 0; min-height: 20px; color: var(--teal); font-size: 13px; font-weight: 800; }
 .material-use { color: var(--muted); line-height: 1.55; }
 
+.material-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  overflow: hidden;
+  border: 1px solid #d6ded9;
+  border-radius: 5px;
+  background: #f3f7f5;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.material-icon img { position: absolute; inset: 1px; width: 22px; height: 22px; object-fit: contain; }
+.official-panel { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); box-shadow: var(--shadow); }
+.official-panel[hidden] { display: none; }
+.official-panel h3 { margin: 0; font-size: 17px; }
+.official-panel p { margin: 6px 0 12px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.official-frame { width: 100%; height: min(760px, 78vh); border: 1px solid var(--line); border-radius: 5px; background: #fff; }
+
 @media (max-width: 760px) {
   .shell { width: min(100% - 20px, 1160px); padding-top: 16px; }
   .site-header { align-items: flex-start; flex-direction: column; }
