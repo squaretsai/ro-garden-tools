@@ -287,8 +287,12 @@
       const index = Number(input.dataset.costIndex);
       if (input.value.trim() === "" || !Number.isFinite(cost) || cost < 0) estimatedCosts.delete(index);
       else estimatedCosts.set(index, cost);
-      renderRecipes();
-      document.getElementById(`cost-${index}`)?.focus();
+      const recipe = recipes[index];
+      const { rate: currentBaseRate } = getBaseRate();
+      const successRate = Math.min(100, Math.max(0, currentBaseRate + recipe.modifier));
+      const expectedCost = Number.isFinite(cost) && cost >= 0 && successRate > 0 ? formatCost(cost / (successRate / 100)) : "—";
+      const expectedCell = input.closest("tr")?.querySelector(".expected-cost");
+      if (expectedCell) expectedCell.textContent = expectedCost;
     });
     document.getElementById("resetStats").addEventListener("click", () => {
       Object.entries(defaults).forEach(([id, value]) => { statInputs[id].value = value; });
