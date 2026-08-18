@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園煉金製藥中不能直接向 NPC 購買的素材清單與官方露天商店查價捷徑。">
+  <title>RO樂園煉金非商店素材市價查詢</title>
+  <link rel="stylesheet" href="assets/alchemist-potion/alchemist-tools.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="site-header">
+      <a class="brand" href="alchemist-potion-cost.html">
+        <span class="brand-mark" aria-hidden="true">鍊</span>
+        <span>
+          <strong>RO樂園煉金製藥工具</strong>
+          <small>非商店素材市價</small>
+        </span>
+      </a>
+      <nav class="tool-nav" aria-label="煉金製藥工具導覽">
+        <a href="alchemist-potion-cost.html">工具入口</a>
+        <a href="alchemist-potion-materials.html">材料與機率</a>
+        <a href="alchemist-potion-market-prices.html" aria-current="page">市價查詢</a>
+        <a href="alchemist-potion-calculator.html">成本計算機</a>
+      </nav>
+    </header>
+
+    <section class="intro-band" aria-labelledby="page-title">
+      <p class="eyebrow">MARKET LOOKUP</p>
+      <h1 id="page-title">非商店素材市價</h1>
+      <p>收錄 20 項製藥配方中不能直接向 NPC 買到的 26 種素材，包含中間成品酒精與只能用藍色魔力礦石兌換的紅、黃礦石。</p>
+    </section>
+
+    <section class="section" aria-labelledby="market-title">
+      <div class="section-head">
+        <div>
+          <h2 id="market-title">官方露天商店查詢</h2>
+          <p class="section-note">點「查官方市價」後，材料名稱會先複製，再開啟 RO樂園官方查價頁；貼上並按查詢即可看到售價列表，最上方兩筆就是最低與次低售價。</p>
+        </div>
+      </div>
+      <div class="market-notice">
+        <strong>即時價格限制：</strong>官方網站要求登入、人機驗證與同站驗證碼，且不提供可讓本工具跨站讀取的公開資料介面。因此本頁不能自動擷取價格；下方欄位可在官方頁看完後自行記下最低、次低價，資料只存於這台裝置的瀏覽器。
+      </div>
+      <div class="table-wrap" style="margin-top:14px">
+        <table class="market-table">
+          <thead>
+            <tr>
+              <th>素材</th>
+              <th>使用於配方</th>
+              <th>最低售價</th>
+              <th>次低售價</th>
+              <th>查價</th>
+              <th>取得／備註</th>
+            </tr>
+          </thead>
+          <tbody id="marketRows"></tbody>
+        </table>
+      </div>
+      <p class="market-status" id="marketStatus" role="status" aria-live="polite"></p>
+    </section>
+
+    <p class="source-footer">官方查價：<a href="https://event.gnjoy.com.tw/RoZ/RoZ_ShopSearch" target="_blank" rel="noreferrer">RO仙境傳說 Online：樂園｜露天商店查詢平台</a>。官方結果為稅前價格，實際設定與供應狀況仍以遊戲內與官方頁面為準。</p>
+  </main>
+
+  <script>
+    const officialSearchUrl = "https://event.gnjoy.com.tw/RoZ/RoZ_ShopSearch";
+    const materials = [
+      { name: "紅色藥草", icon: 507, use: "紅色藥水×1", note: "魔物掉落／採集" },
+      { name: "黃色藥草", icon: 508, use: "黃色藥水×1", note: "魔物掉落／採集" },
+      { name: "白色藥草", icon: 509, use: "白色藥水×1", note: "魔物掉落／採集" },
+      { name: "藍色藥草", icon: 510, use: "藍色藥水×1", note: "魔物掉落／採集" },
+      { name: "曼特花", use: "曼特療傷藥×1", note: "魔物掉落" },
+      { name: "酒精", icon: 970, use: "曼特療傷藥、火煙瓶、護貝藥各×1", note: "由製藥取得，也可向玩家購買" },
+      { name: "空瓶", use: "曼特療傷藥、蘆薈汁液、酒精、火煙瓶、鹽酸瓶、植物瓶、鏈鎚瓶、護貝藥各×1", note: "不同於空藥瓶；主要由魔物取得" },
+      { name: "蘆薈", use: "蘆薈汁液×1", note: "魔物掉落／採集" },
+      { name: "蜂蜜", icon: 518, use: "蘆薈汁液×1", note: "魔物掉落" },
+      { name: "植物梗", use: "酒精×5", note: "魔物掉落" },
+      { name: "毒魔菇芽孢", use: "酒精×5", note: "魔物掉落" },
+      { name: "透明之布", use: "火煙瓶×1", note: "魔物掉落" },
+      { name: "不死心臟", use: "鹽酸瓶×1", note: "魔物掉落" },
+      { name: "噬人樹花", use: "植物瓶×2", note: "魔物掉落" },
+      { name: "腦管", use: "鏈鎚瓶×1", note: "魔物掉落" },
+      { name: "血管", use: "鏈鎚瓶×1", note: "魔物掉落" },
+      { name: "茲諾可之牙", use: "護貝藥×1", note: "魔物掉落" },
+      { name: "人魚心臟", use: "護貝藥×1、水抵抗藥×3", note: "魔物掉落" },
+      { name: "仙人掌刺", use: "紅色纖細藥水×1", note: "魔物掉落" },
+      { name: "鼠鬚", use: "黃色纖細藥水×1", note: "魔物掉落" },
+      { name: "魔女之星砂", use: "白色纖細藥水×1", note: "魔物掉落" },
+      { name: "傘蜥頸", use: "火抵抗藥×2", note: "魔物掉落" },
+      { name: "紅色魔力礦石", icon: 716, use: "火抵抗藥×1", note: "NPC 不直接販售；藍色魔力礦石×2 兌換" },
+      { name: "巨大傑勒比結晶", use: "地抵抗藥×2", note: "魔物掉落" },
+      { name: "黃色魔力礦石", icon: 715, use: "地抵抗藥×1", note: "NPC 不直接販售；藍色魔力礦石×4 兌換" },
+      { name: "蛾蝶蟲翅膀粉末", use: "風抵抗藥×3", note: "魔物掉落" }
+    ];
+
+    const rows = document.getElementById("marketRows");
+    const status = document.getElementById("marketStatus");
+    const storageKey = "roGardenMarketPriceNotes";
+    let savedPrices = {};
+    try { savedPrices = JSON.parse(localStorage.getItem(storageKey) || "{}"); } catch { savedPrices = {}; }
+
+    function safe(value) {
+      return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
+    }
+
+    function itemLabel(item) {
+      const icon = item.icon ? `<img class="item-icon" src="https://static.divine-pride.net/images/items/item/${item.icon}.png" alt="" onerror="this.remove()">` : "";
+      return `<span class="item-name">${icon}${safe(item.name)}</span>`;
+    }
+
+    function render() {
+      rows.innerHTML = materials.map((item, index) => {
+        const prices = savedPrices[item.name] || {};
+        return `<tr>
+          <td>${itemLabel(item)}</td>
+          <td class="material-use">${safe(item.use)}</td>
+          <td><label class="sr-only" for="lowest-${index}">${safe(item.name)}最低售價</label><input class="market-price-input" id="lowest-${index}" data-name="${safe(item.name)}" data-price="lowest" type="number" min="0" step="1" inputmode="numeric" placeholder="Zeny" value="${Number.isFinite(prices.lowest) ? prices.lowest : ""}"></td>
+          <td><label class="sr-only" for="second-${index}">${safe(item.name)}次低售價</label><input class="market-price-input" id="second-${index}" data-name="${safe(item.name)}" data-price="second" type="number" min="0" step="1" inputmode="numeric" placeholder="Zeny" value="${Number.isFinite(prices.second) ? prices.second : ""}"></td>
+          <td><button class="market-action" type="button" data-query="${safe(item.name)}">查官方市價</button></td>
+          <td>${safe(item.note)}</td>
+        </tr>`;
+      }).join("");
+    }
+
+    async function copyName(name) {
+      if (!navigator.clipboard?.writeText) return false;
+      try { await navigator.clipboard.writeText(name); return true; } catch { return false; }
+    }
+
+    rows.addEventListener("click", async event => {
+      const button = event.target.closest("[data-query]");
+      if (!button) return;
+      const name = button.dataset.query;
+      button.disabled = true;
+      const copied = await copyName(name);
+      window.open(officialSearchUrl, "_blank", "noopener");
+      status.textContent = copied
+        ? `已複製「${name}」，官方查價頁已開啟；貼上後按查詢，即可把最低與次低售價填回本列。`
+        : `官方查價頁已開啟；請搜尋「${name}」，再將最低與次低售價填回本列。`;
+      button.disabled = false;
+    });
+
+    rows.addEventListener("input", event => {
+      const input = event.target.closest("[data-price][data-name]");
+      if (!input) return;
+      const name = input.dataset.name;
+      const value = Number(input.value);
+      savedPrices[name] ||= {};
+      if (input.value.trim() === "" || !Number.isFinite(value) || value < 0) delete savedPrices[name][input.dataset.price];
+      else savedPrices[name][input.dataset.price] = value;
+      localStorage.setItem(storageKey, JSON.stringify(savedPrices));
+    });
+
+    render();
+  </script>
+</body>
+</html>
