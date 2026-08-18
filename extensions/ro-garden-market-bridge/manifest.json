@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "RO樂園市價橋接",
+  "description": "將 RO樂園製藥素材表與官方露天商店查詢連接，讀取最低與次低販售價。",
+  "version": "1.0.0",
+  "permissions": ["tabs"],
+  "host_permissions": [
+    "https://squaretsai.github.io/ro-garden-tools/*",
+    "https://event.gnjoy.com.tw/RoZ/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://squaretsai.github.io/ro-garden-tools/*"],
+      "js": ["site-bridge.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://event.gnjoy.com.tw/RoZ/*"],
+      "js": ["official-bridge.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -35,11 +35,11 @@
       <div class="section-head">
         <div>
           <h2 id="market-title">官方露天商店查詢</h2>
-          <p class="section-note">點「同頁查官方市價」後，材料名稱會複製，RO樂園官方查價頁會直接載入本頁下方；貼上並按查詢即可看到售價列表。</p>
+          <p class="section-note">安裝市價橋接擴充功能後，按一次「查最新市價」就會在本列寫入官方露天的最低、次低販售價與更新日期；下次開啟本頁仍會保留最後一次結果。</p>
         </div>
       </div>
       <div class="market-notice">
-        <strong>即時價格限制：</strong>官方網站要求登入、人機驗證與同站驗證碼，且不提供可讓本工具跨站讀取的公開資料介面。因此本頁不能自動擷取並回填價格；但可以直接在下方同頁操作官方查價。看完後，將最低、次低價記在本表，資料只存於這台裝置的瀏覽器。
+        <strong>使用方式：</strong>擴充功能會在你的 Chrome 已登入官方露天後開啟官方查詢、讀取「販售」前兩筆價格並回填本表；遇到官方人機驗證時，請先在開啟的官方分頁完成驗證，再回到本頁重按一次。價格與日期儲存在此瀏覽器，不會上傳到其他地方。
       </div>
       <div class="table-wrap" style="margin-top:14px">
         <table class="market-table">
@@ -49,6 +49,7 @@
               <th>使用於配方</th>
               <th>最低售價</th>
               <th>次低售價</th>
+              <th>最後更新</th>
               <th>查價</th>
               <th>取得／備註</th>
             </tr>
@@ -57,18 +58,14 @@
         </table>
       </div>
       <p class="market-status" id="marketStatus" role="status" aria-live="polite"></p>
-      <div class="official-panel" id="officialPanel" hidden>
-        <h3>官方露天商店查價</h3>
-        <p id="officialHint">請在下方官方頁的搜尋欄貼上已複製的素材名稱，然後按「查詢」。</p>
-        <iframe class="official-frame" id="officialFrame" title="RO樂園官方露天商店查價" loading="lazy"></iframe>
-      </div>
+      <p class="extension-note">尚未安裝橋接擴充功能時，查價按鈕會提示安裝方式；安裝後重新整理本頁即可使用。</p>
     </section>
 
     <p class="source-footer">官方查價：<a href="https://event.gnjoy.com.tw/RoZ/RoZ_ShopSearch" target="_blank" rel="noreferrer">RO仙境傳說 Online：樂園｜露天商店查詢平台</a>。官方結果為稅前價格，實際設定與供應狀況仍以遊戲內與官方頁面為準。</p>
   </main>
 
   <script>
-    const officialSearchUrl = "https://event.gnjoy.com.tw/RoZ/RoZ_ShopSearch";
+    const bridgeChannel = "roGardenMarketBridge";
     const materials = [
       { name: "紅色藥草", icon: 507, use: "紅色藥水×1", note: "魔物掉落／採集" },
       { name: "黃色藥草", icon: 508, use: "黃色藥水×1", note: "魔物掉落／採集" },
@@ -102,6 +99,8 @@
     const status = document.getElementById("marketStatus");
     const storageKey = "roGardenMarketPriceNotes";
     let savedPrices = {};
+    const pending = new Set();
+    const pendingTimers = new Map();
     try { savedPrices = JSON.parse(localStorage.getItem(storageKey) || "{}"); } catch { savedPrices = {}; }
 
     function safe(value) {
@@ -125,53 +124,77 @@
       return `<span class="item-name"><span class="material-icon" aria-hidden="true">${materialSymbol(item.name)}${image}</span>${safe(item.name)}</span>`;
     }
 
+    function formatPrice(value) {
+      return Number.isFinite(value) ? `${Math.round(value).toLocaleString("zh-TW")} Zeny` : "—";
+    }
+
+    function formatDate(value) {
+      if (!value) return "尚未查詢";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "尚未查詢";
+      return new Intl.DateTimeFormat("zh-TW", { dateStyle: "short", timeStyle: "short" }).format(date);
+    }
+
     function render() {
       rows.innerHTML = materials.map((item, index) => {
         const prices = savedPrices[item.name] || {};
+        const isPending = pending.has(item.name);
         return `<tr>
           <td>${itemLabel(item)}</td>
           <td class="material-use">${safe(item.use)}</td>
-          <td><label class="sr-only" for="lowest-${index}">${safe(item.name)}最低售價</label><input class="market-price-input" id="lowest-${index}" data-name="${safe(item.name)}" data-price="lowest" type="number" min="0" step="1" inputmode="numeric" placeholder="Zeny" value="${Number.isFinite(prices.lowest) ? prices.lowest : ""}"></td>
-          <td><label class="sr-only" for="second-${index}">${safe(item.name)}次低售價</label><input class="market-price-input" id="second-${index}" data-name="${safe(item.name)}" data-price="second" type="number" min="0" step="1" inputmode="numeric" placeholder="Zeny" value="${Number.isFinite(prices.second) ? prices.second : ""}"></td>
-          <td><button class="market-action" type="button" data-query="${safe(item.name)}">同頁查官方市價</button></td>
+          <td><span class="market-value ${Number.isFinite(prices.lowest) ? "" : "is-empty"}">${formatPrice(prices.lowest)}</span></td>
+          <td><span class="market-value ${Number.isFinite(prices.second) ? "" : "is-empty"}">${formatPrice(prices.second)}</span></td>
+          <td><span class="market-date">${formatDate(prices.checkedAt)}</span></td>
+          <td><button class="market-action" type="button" data-query="${safe(item.name)}" ${isPending ? "disabled" : ""}>${isPending ? "查詢中…" : "查最新市價"}</button></td>
           <td>${safe(item.note)}</td>
         </tr>`;
       }).join("");
     }
 
-    async function copyName(name) {
-      if (!navigator.clipboard?.writeText) return false;
-      try { await navigator.clipboard.writeText(name); return true; } catch { return false; }
+    function sendBridgeMessage(type, detail) {
+      window.postMessage({ channel: bridgeChannel, type, ...detail }, window.location.origin);
     }
 
-    rows.addEventListener("click", async event => {
+    rows.addEventListener("click", event => {
       const button = event.target.closest("[data-query]");
       if (!button) return;
       const name = button.dataset.query;
-      const panel = document.getElementById("officialPanel");
-      const frame = document.getElementById("officialFrame");
-      const hint = document.getElementById("officialHint");
-      button.disabled = true;
-      panel.hidden = false;
-      hint.textContent = `已選擇「${name}」。請在下方官方頁的搜尋欄貼上名稱，然後按「查詢」。`;
-      if (!frame.src) frame.src = officialSearchUrl;
-      panel.scrollIntoView({ behavior: "smooth", block: "start" });
-      const copied = await copyName(name);
-      status.textContent = copied
-        ? `已複製「${name}」，已載入下方官方查價頁。`
-        : `已載入下方官方查價頁；請搜尋「${name}」。`;
-      button.disabled = false;
+      const requestId = crypto.randomUUID();
+      pending.add(name);
+      render();
+      status.textContent = `正在向官方露天查詢「${name}」…`;
+      sendBridgeMessage("lookup", { requestId, name, server: "529" });
+      pendingTimers.set(name, window.setTimeout(() => {
+        if (!pending.has(name)) return;
+        pending.delete(name);
+        pendingTimers.delete(name);
+        render();
+        status.textContent = "找不到市價橋接擴充功能。請先在 Chrome 載入擴充功能資料夾，然後重新整理本頁。";
+      }, 4000));
     });
 
-    rows.addEventListener("input", event => {
-      const input = event.target.closest("[data-price][data-name]");
-      if (!input) return;
-      const name = input.dataset.name;
-      const value = Number(input.value);
-      savedPrices[name] ||= {};
-      if (input.value.trim() === "" || !Number.isFinite(value) || value < 0) delete savedPrices[name][input.dataset.price];
-      else savedPrices[name][input.dataset.price] = value;
-      localStorage.setItem(storageKey, JSON.stringify(savedPrices));
+    window.addEventListener("message", event => {
+      if (event.source !== window || event.origin !== window.location.origin) return;
+      const message = event.data;
+      if (!message || message.channel !== bridgeChannel) return;
+      if (message.type === "accepted") {
+        window.clearTimeout(pendingTimers.get(message.name));
+        pendingTimers.delete(message.name);
+        status.textContent = `已開啟官方露天，正在查詢「${message.name}」…`;
+        return;
+      }
+      if (message.type !== "result") return;
+      pending.delete(message.name);
+      window.clearTimeout(pendingTimers.get(message.name));
+      pendingTimers.delete(message.name);
+      if (message.ok) {
+        savedPrices[message.name] = { lowest: message.lowest, second: message.second, checkedAt: message.checkedAt };
+        localStorage.setItem(storageKey, JSON.stringify(savedPrices));
+        status.textContent = `「${message.name}」已更新：最低 ${formatPrice(message.lowest)}、次低 ${formatPrice(message.second)}。`;
+      } else {
+        status.textContent = message.error || `「${message.name}」查詢失敗，請先確認官方頁已登入並完成驗證。`;
+      }
+      render();
     });
 
     render();
