@@ -136,6 +136,11 @@
       return Number.isFinite(value) ? `${Math.round(value).toLocaleString("zh-TW")} Zeny` : "—";
     }
 
+    function priceCell(value, unavailable) {
+      if (unavailable) return `<span class="market-value is-empty">暫無人出售</span>`;
+      return `<span class="market-value ${Number.isFinite(value) ? "" : "is-empty"}">${formatPrice(value)}</span>`;
+    }
+
     function formatDate(value) {
       if (!value) return "尚未查詢";
       const date = new Date(value);
@@ -150,8 +155,8 @@
         return `<tr>
           <td>${itemLabel(item)}</td>
           <td class="material-use">${safe(item.use)}</td>
-          <td><span class="market-value ${Number.isFinite(prices.lowest) ? "" : "is-empty"}">${formatPrice(prices.lowest)}</span></td>
-          <td><span class="market-value ${Number.isFinite(prices.second) ? "" : "is-empty"}">${formatPrice(prices.second)}</span></td>
+          <td>${priceCell(prices.lowest, prices.unavailable)}</td>
+          <td>${priceCell(prices.second, prices.unavailable)}</td>
           <td><span class="market-date">${formatDate(prices.checkedAt)}</span></td>
           <td><button class="market-action" type="button" data-query="${safe(item.name)}" ${isPending ? "disabled" : ""}>${isPending ? "查詢中…" : "查最新市價"}</button></td>
           <td>${safe(item.note)}</td>
@@ -187,7 +192,13 @@
       if (!message || message.channel !== bridgeChannel) return;
       if (message.type === "accepted") {
         window.clearTimeout(pendingTimers.get(message.name));
-        pendingTimers.delete(message.name);
+        pendingTimers.set(message.name, window.setTimeout(() => {
+          if (!pending.has(message.name)) return;
+          pending.delete(message.name);
+          pendingTimers.delete(message.name);
+          render();
+          status.textContent = `「${message.name}」查詢逾時，請稍後再試。`;
+        }, 90000));
         status.textContent = `已開啟官方露天，正在查詢「${message.name}」…`;
         return;
       }
@@ -196,9 +207,11 @@
       window.clearTimeout(pendingTimers.get(message.name));
       pendingTimers.delete(message.name);
       if (message.ok) {
-        savedPrices[message.name] = { lowest: message.lowest, second: message.second, checkedAt: message.checkedAt };
+        savedPrices[message.name] = { lowest: message.lowest, second: message.second, unavailable: Boolean(message.unavailable), checkedAt: message.checkedAt };
         localStorage.setItem(storageKey, JSON.stringify(savedPrices));
-        status.textContent = `「${message.name}」已更新：最低 ${formatPrice(message.lowest)}、次低 ${formatPrice(message.second)}。`;
+        status.textContent = message.unavailable
+          ? `「${message.name}」已更新：暫無人出售。`
+          : `「${message.name}」已更新：最低 ${formatPrice(message.lowest)}、次低 ${formatPrice(message.second)}。`;
       } else {
         status.textContent = message.error || `「${message.name}」查詢失敗，請先確認官方頁已登入並完成驗證。`;
       }

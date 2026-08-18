@@ -21,6 +21,11 @@ function pricesFromRows() {
     .sort((left, right) => left.price - right.price);
 }
 
+function isVisible(selector) {
+  const element = document.querySelector(selector);
+  return Boolean(element && getComputedStyle(element).display !== "none" && getComputedStyle(element).visibility !== "hidden");
+}
+
 async function performLookup(job) {
   const serverName = job.server === "629" ? "艾克瑟" : "西格倫";
   if (!selectOption("div_svr", serverName)) return { ok: false, error: `官方頁無法切換到「${serverName}」。` };
@@ -40,7 +45,8 @@ async function performLookup(job) {
     const prices = pricesFromRows();
     if (prices.length >= 1) return { ok: true, lowest: prices[0].price, second: prices[1]?.price ?? null, checkedAt: new Date().toISOString() };
     const text = document.body.innerText;
-    if (/請先登入|圖形驗證/.test(text)) return { ok: false, error: "請先在官方分頁登入或完成人機驗證，然後回本頁再按一次查詢。" };
+    if (/請先登入|圖形驗證/.test(text)) return { ok: false, requiresAttention: true, error: "請先在官方分頁登入或完成人機驗證，然後回本頁再按一次查詢。" };
+    if (isVisible("#PoringCry1")) return { ok: true, unavailable: true, lowest: null, second: null, checkedAt: new Date().toISOString() };
   }
   return { ok: false, error: "官方查詢逾時或找不到販售資料。" };
 }
