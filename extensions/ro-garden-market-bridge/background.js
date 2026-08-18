@@ -51,7 +51,7 @@ function finishJob(result) {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "lookup" && sender.tab?.id) {
-    const job = { requestId: message.requestId, name: message.name, server: message.server, siteTabId: sender.tab.id };
+    const job = { requestId: message.requestId, name: message.name, officialName: message.officialName || message.name, server: message.server, siteTabId: sender.tab.id };
     jobQueue.push(job);
     processQueue();
     sendResponse({ accepted: true });

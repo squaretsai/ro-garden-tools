@@ -11,13 +11,14 @@ function selectOption(triggerId, matchText) {
   return trigger.textContent.includes(matchText);
 }
 
-function pricesFromRows() {
+function pricesFromRows(expectedName) {
   return [...document.querySelectorAll("#_tbody tr")]
     .map(row => ({
       price: Number((row.querySelector(".price span")?.textContent || "").replace(/[^0-9]/g, "")),
-      kind: row.querySelector(".buySell span")?.textContent.trim()
+      kind: row.querySelector(".buySell span")?.textContent.trim(),
+      name: row.querySelector(".itemName")?.textContent.trim()
     }))
-    .filter(item => item.kind === "販售" && Number.isFinite(item.price) && item.price > 0)
+    .filter(item => item.name === expectedName && item.kind === "販售" && Number.isFinite(item.price) && item.price > 0)
     .sort((left, right) => left.price - right.price);
 }
 
@@ -35,14 +36,15 @@ async function performLookup(job) {
   const button = document.getElementById("searchBtn");
   if (!input || !button) return { ok: false, error: "官方查價頁版面已變更，請更新橋接擴充功能。" };
 
-  input.value = job.name;
+  const officialName = job.officialName || job.name;
+  input.value = `"${officialName}"`;
   input.dispatchEvent(new Event("input", { bubbles: true }));
   input.dispatchEvent(new Event("change", { bubbles: true }));
   button.click();
 
   for (let attempt = 0; attempt < 30; attempt += 1) {
     await sleep(700);
-    const prices = pricesFromRows();
+    const prices = pricesFromRows(officialName);
     if (prices.length >= 1) return { ok: true, lowest: prices[0].price, second: prices[1]?.price ?? null, checkedAt: new Date().toISOString() };
     const text = document.body.innerText;
     if (/請先登入|圖形驗證/.test(text)) return { ok: false, requiresAttention: true, error: "請先在官方分頁登入或完成人機驗證，然後回本頁再按一次查詢。" };
