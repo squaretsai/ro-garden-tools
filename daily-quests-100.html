@@ -1,0 +1,1734 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 Base Lv.100 每日任務整理</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ee;
+      --paper: #fffdf9;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --field: #ffffff;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(165, 40, 45, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(35, 108, 95, 0.09), transparent 38%),
+        var(--bg);
+      overflow-x: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand > div {
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: var(--radius);
+      background: #fff8ed;
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .nav-link {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(255, 253, 249, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .panel {
+      max-width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      min-width: 0;
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+
+    .hero h2 {
+      font-size: clamp(22px, 3.5vw, 32px);
+      line-height: 1.2;
+    }
+
+    .hero p {
+      max-width: 860px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+      overflow-wrap: anywhere;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .quick-nav {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .quick-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      color: #4e5662;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: normal;
+    }
+
+    .quick-nav small {
+      color: var(--accent-strong);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .region {
+      scroll-margin-top: 78px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .prereq-panel {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .prereq-panel h2 {
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.2;
+    }
+
+    .prereq-panel > p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .prereq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    details.prereq-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      overflow: hidden;
+    }
+
+    .prereq-card summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 0;
+      min-height: 52px;
+      padding: 12px 14px;
+      color: var(--accent-strong);
+      cursor: pointer;
+      font-weight: 900;
+      list-style: none;
+    }
+
+    .prereq-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .prereq-card summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(165, 40, 45, 0.24);
+      border-radius: var(--radius);
+      background: #fff2ee;
+    }
+
+    .prereq-card[open] summary::after {
+      content: "-";
+    }
+
+    .prereq-content {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+      padding: 0 14px 14px;
+      color: #353b45;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .prereq-content ol,
+    .prereq-content ul {
+      margin: 0;
+      padding-left: 21px;
+    }
+
+    .prereq-content li + li {
+      margin-top: 5px;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 26px;
+      padding: 4px 8px;
+      border: 1px solid rgba(35, 108, 95, 0.24);
+      border-radius: var(--radius);
+      background: #eef8f3;
+      color: var(--mint);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .source-chip.caution {
+      border-color: rgba(200, 146, 45, 0.32);
+      background: #fff6e3;
+      color: #76520d;
+    }
+
+    .region-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(165, 40, 45, 0.07), rgba(35, 108, 95, 0.06));
+    }
+
+    .region-title {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .region-title h2 {
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.2;
+    }
+
+    .region-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(35, 108, 95, 0.24);
+      border-radius: var(--radius);
+      background: #eef8f3;
+      color: var(--mint);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .region-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .requirement-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(165, 40, 45, 0.24);
+      border-radius: var(--radius);
+      background: #fff2ee;
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .requirement-badge.optional {
+      border-color: var(--line);
+      background: #f7f2ea;
+      color: var(--muted);
+    }
+
+    .region-body {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .prep {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .prep strong,
+    .note strong {
+      color: var(--accent-strong);
+    }
+
+    .prep p,
+    .note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--field);
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      color: #353b45;
+      background: #fbf4e8;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .map {
+      color: var(--mint);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .coord {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 26px;
+      padding: 3px 7px;
+      border: 1px solid rgba(35, 108, 95, 0.24);
+      border-radius: 4px;
+      margin-top: 3px;
+      color: var(--mint);
+      background: #eef8f3;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.35;
+      cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+    }
+
+    .coord:hover,
+    .coord:focus-visible {
+      border-color: var(--mint);
+      background: #e1f2eb;
+      outline: none;
+    }
+
+    .coord.copied {
+      border-color: rgba(200, 146, 45, 0.55);
+      color: #8a5d10;
+      background: #fff8e8;
+    }
+
+    .coord-note {
+      display: inline-block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .npc {
+      font-weight: 900;
+    }
+
+    .quest-list {
+      margin: 0;
+      padding-left: 19px;
+    }
+
+    .quest-list li + li {
+      margin-top: 4px;
+    }
+
+    .monster-elements {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 6px;
+    }
+
+    .monster-element {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 22px;
+      padding: 2px 6px;
+      border: 1px solid currentColor;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+
+    .monster-element strong {
+      font-size: 10px;
+    }
+
+    .monster-element[data-element="無"] { color: #69645e; background: #f7f5f2; }
+    .monster-element[data-element="水"] { color: #23699a; background: #eef8ff; }
+    .monster-element[data-element="地"] { color: #68762b; background: #f5f8e8; }
+    .monster-element[data-element="火"] { color: #b13d2e; background: #fff1ed; }
+    .monster-element[data-element="風"] { color: #28755c; background: #ecf8f2; }
+    .monster-element[data-element="毒"] { color: #7d3d82; background: #faf0fb; }
+    .monster-element[data-element="念"] { color: #9a4f73; background: #fff1f7; }
+    .monster-element[data-element="暗"] { color: #4f4c70; background: #f2f1fa; }
+    .monster-element[data-element="不死"] { color: #6b533f; background: #f7f0e9; }
+
+    .note {
+      padding: 13px 14px;
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius);
+      background: rgba(255, 250, 241, 0.78);
+    }
+
+    .source {
+      margin-top: 16px;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .source a {
+      color: var(--accent-strong);
+      font-weight: 900;
+    }
+
+    .checklist-launch {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: var(--radius);
+      color: #fff;
+      background: var(--accent-strong);
+      box-shadow: 0 12px 30px rgba(67, 24, 27, 0.28);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .checklist-launch:hover,
+    .checklist-launch:focus-visible {
+      background: var(--accent);
+      outline: 3px solid rgba(200, 146, 45, 0.45);
+      outline-offset: 2px;
+    }
+
+    .launch-mark {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+      border-radius: 50%;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .checklist-dialog {
+      width: min(560px, 100%);
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      margin: 0 0 0 auto;
+      padding: 0;
+      border: 0;
+      border-left: 1px solid var(--line);
+      color: var(--ink);
+      background: var(--paper);
+      box-shadow: -20px 0 54px rgba(38, 31, 28, 0.24);
+      overflow: hidden;
+    }
+
+    .checklist-dialog::backdrop {
+      background: rgba(28, 27, 32, 0.48);
+      backdrop-filter: blur(2px);
+    }
+
+    .checklist-shell {
+      display: grid;
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+      height: 100%;
+    }
+
+    .checklist-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fffaf1;
+    }
+
+    .checklist-head h2 {
+      font-size: 23px;
+      line-height: 1.2;
+    }
+
+    .checklist-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
+    .checklist-date {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .icon-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      font-size: 25px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .icon-button:hover,
+    .icon-button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-strong);
+      outline: none;
+    }
+
+    .checklist-progress {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .progress-box {
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8f5ef;
+    }
+
+    .progress-box span,
+    .progress-box strong {
+      display: block;
+    }
+
+    .progress-box span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .progress-box strong {
+      margin-top: 3px;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .progress-track {
+      height: 5px;
+      margin-top: 8px;
+      border-radius: 999px;
+      background: #e6e1d9;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--mint);
+      transition: width 180ms ease;
+    }
+
+    .progress-box.report .progress-fill {
+      background: var(--gold);
+    }
+
+    .checklist-controls {
+      display: grid;
+      gap: 10px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fffdf9;
+    }
+
+    .status-notice {
+      display: none;
+      padding: 10px 12px;
+      border-left: 4px solid var(--mint);
+      border-radius: var(--radius);
+      color: #21594f;
+      background: #eef8f4;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.5;
+    }
+
+    .status-notice.show {
+      display: block;
+    }
+
+    .checklist-filters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .filter-button {
+      min-height: 36px;
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .filter-button[aria-pressed="true"] {
+      border-color: var(--accent);
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .checklist-content {
+      min-height: 0;
+      padding: 4px 18px 20px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .check-group {
+      padding-top: 16px;
+    }
+
+    .check-group[hidden] {
+      display: none;
+    }
+
+    .check-group-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+      color: var(--accent-strong);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .check-group-count {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .check-task {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 64px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .check-task[hidden] {
+      display: none;
+    }
+
+    .check-task.done .task-name {
+      color: var(--muted);
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+
+    .task-npc {
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px 7px;
+      margin-bottom: 4px;
+    }
+
+    .task-kind {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--accent);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .task-location {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .task-target {
+      color: var(--accent-strong);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .task-name {
+      display: block;
+      margin-top: 3px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .task-checks {
+      display: grid;
+      grid-template-columns: repeat(2, 58px);
+      gap: 5px;
+    }
+
+    .task-check {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      min-height: 46px;
+      padding: 5px 3px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .task-check:has(input:checked) {
+      border-color: rgba(35, 108, 95, 0.45);
+      color: var(--mint);
+      background: #edf7f3;
+    }
+
+    .task-check.report:has(input:checked) {
+      border-color: rgba(200, 146, 45, 0.55);
+      color: #8a5d10;
+      background: #fff8e8;
+    }
+
+    .task-check input {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      accent-color: var(--mint);
+      cursor: pointer;
+    }
+
+    .task-check.report input {
+      accent-color: var(--gold);
+    }
+
+    .checklist-empty {
+      display: none;
+      padding: 30px 12px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .checklist-empty.show {
+      display: block;
+    }
+
+    .checklist-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--line);
+      background: #fffaf1;
+    }
+
+    .checklist-footer span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .reset-button {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(165, 40, 45, 0.35);
+      border-radius: var(--radius);
+      color: var(--accent-strong);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .reset-button:hover,
+    .reset-button:focus-visible {
+      border-color: var(--accent);
+      background: #fff2f1;
+      outline: none;
+    }
+
+    @media (max-width: 820px) {
+      .topbar,
+      .region-head {
+        align-items: flex-start;
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .prereq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .region-badges {
+        justify-content: flex-start;
+      }
+
+      .nav-link {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .shell {
+        width: min(1180px, calc(100% - 22px));
+        padding-top: 18px;
+      }
+
+      .hero,
+      .region-head,
+      .region-body {
+        padding: 16px;
+      }
+
+      .quick-nav {
+        position: static;
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .quick-nav a {
+        justify-content: center;
+      }
+
+      .checklist-launch {
+        right: 11px;
+        bottom: 11px;
+      }
+
+      .checklist-dialog {
+        width: 100%;
+        border-left: 0;
+      }
+
+      .checklist-head,
+      .checklist-progress,
+      .checklist-controls,
+      .checklist-footer {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .checklist-content {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .check-task {
+        grid-template-columns: minmax(0, 1fr) 112px;
+        gap: 8px;
+      }
+
+      .task-checks {
+        grid-template-columns: repeat(2, 53px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">100</div>
+        <div>
+          <h1>RO樂園 Base Lv.100 每日任務</h1>
+          <p class="subtitle">依地區整理前置任務、NPC 位置與每日內容</p>
+        </div>
+      </div>
+      <a class="nav-link" href="index.html">回首頁</a>
+    </header>
+
+    <section class="panel hero" aria-label="任務總覽">
+      <div>
+        <h2>100 等每日跑圖清單</h2>
+          <p>這頁把朱諾與毀葛周邊的 Base Lv.100+ 每日任務整理成一張可查表，分開標示接任務地點與實際打怪、抓怪或採集地圖，避免跑到 NPC 旁邊才發現怪在另一張圖。</p>
+      </div>
+      <div class="stats" aria-label="資料摘要">
+        <div class="stat"><span>地區</span><strong>3 區</strong></div>
+        <div class="stat"><span>每日任務</span><strong>21 個</strong></div>
+        <div class="stat"><span>資料日期</span><strong>2026-08-19</strong></div>
+      </div>
+    </section>
+
+    <nav class="quick-nav" aria-label="地區快速跳轉">
+      <a href="#juno">朱諾 <small>有前置</small></a>
+      <a href="#hugel-town">毀葛村內 <small>100+</small></a>
+      <a href="#odin-temple">奧丁神殿 <small>105+</small></a>
+    </nav>
+
+    <section class="panel prereq-panel" aria-label="前置任務解法">
+      <h2>前置任務解法</h2>
+      <p>這裡只放已查到 RO樂園官方公告、RO樂園板攻略或 RO補給站資料可對上的內容。沒有查到完整逐步流程的地區，會標成「待遊戲內確認」。</p>
+      <div class="prereq-grid">
+        <details class="prereq-card">
+          <summary>朱諾：前往方式</summary>
+          <div class="prereq-content">
+            <span class="source-chip">樂園官方公告</span>
+            <ol>
+              <li>Base Lv100 以上角色可處理朱諾周邊委託任務。</li>
+              <li>可從伊斯魯得搭乘飛空艇前往朱諾；也可由艾爾帕蘭北方路線步行前往秀發茲發德共和國區域。</li>
+              <li>首次跑每日時，建議先把國界檢查站與海伊洛學院附近任務一起接起來，再依地圖順路清怪與交材料。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="prereq-card">
+          <summary>諾可羅德洞穴：伊甸園成員</summary>
+          <div class="prereq-content">
+            <span class="source-chip caution">巴哈 / RO補給站資料；細節以遊戲內 NPC 為準</span>
+            <ol>
+              <li>「諾可羅德洞穴」任務需要先成為伊甸園成員。</li>
+              <li>每日內容包含七彩夢魘、七彩飛龍、七彩地龍與凝固的岩漿；建議先確認身上材料數量再接任務。</li>
+              <li>若博物館職員無法接取，先回伊甸園確認成員身分或依任務提示補前置。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="prereq-card">
+          <summary>毀葛 / 奧丁神殿：前置</summary>
+          <div class="prereq-content">
+            <span class="source-chip">Divine Pride 2026-08-11 任務導航資料</span>
+            <ol>
+              <li>官方公告已確認田園之都毀葛與奧丁神殿開放，並新增 Base Lv100 以上委託任務。</li>
+              <li>村內生活委託包含整修住宅、探索新食材、向完美的口味前進、毀葛之味；多數要先跑完對應的一次性劇情後，才會變成 04:00 重置的每日。</li>
+              <li>奧丁神殿討伐包含移除危險物體、從打電報的傢伙開始、淨化惡魔、在被迷惑之前；需要先完成前往奧丁神殿與相關對話線。</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="panel region" id="juno">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>朱諾</h2>
+          <p>任務環繞艾爾帕蘭、國界檢查站、海伊洛學院、諾可羅德洞穴、巴基力航空與城內司書區域，建議先把材料備好再出門。</p>
+        </div>
+        <div class="region-badges">
+          <span class="requirement-badge">有前置</span>
+          <span class="count-badge">13 個任務</span>
+        </div>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務（建議先確認）</strong>
+          <p>諾可羅德洞穴任務需要先成為伊甸園成員。首次跑朱諾每日時，建議把國界檢查站站長、海伊洛學院周邊 NPC 與材料任務一次接完，避免來回跑圖。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>接任務地圖 / 座標</th><th>NPC</th><th>任務內容</th><th>打怪 / 進行地圖</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">艾爾帕蘭</span><br><button class="coord" type="button" data-navi="/navi aldebaran 114/180" aria-label="複製艾爾帕蘭 114,180 導航">114, 180</button></td>
+                <td class="npc">中年女性</td>
+                <td><ul class="quest-list"><li>媽媽手便當：送便當到國界檢查站給警備兵 196,154，純對話。</li></ul></td>
+                <td><span class="map">國界檢查站</span><br><button class="coord" type="button" data-navi="/navi yuno_fild01 196/154" aria-label="複製國界檢查站警備兵 196,154 導航">警備兵 196,154</button></td>
+              </tr>
+              <tr>
+                <td><span class="map">國界檢查站</span><br><button class="coord" type="button" data-navi="/navi yuno_fild01 193/161" aria-label="複製國界檢查站 193,161 導航">193, 161</button></td>
+                <td class="npc">檢查站長蔡迦莉</td>
+                <td><ul class="quest-list"><li>國界檢查站的工作：螳螂 10 隻、邪惡向日葵 10 隻。</li></ul></td>
+                <td><span class="map">國界檢查站周邊</span><br><span class="coord-note">依任務導航</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">朱諾</span><br><button class="coord" type="button" data-navi="/navi yuno 308/80" aria-label="複製朱諾 308,80 導航">308, 80</button></td>
+                <td class="npc">弗雷里</td>
+                <td><ul class="quest-list"><li>搭建陣地：準備柳橙 3、黃玉碎片 1、砂團 10、黃晶沙 3，交給眼鏡蛇 99,241 後回報。</li></ul></td>
+                <td><span class="map">朱諾</span><br><button class="coord" type="button" data-navi="/navi yuno 99/241" aria-label="複製朱諾眼鏡蛇 99,241 導航">眼鏡蛇 99,241</button></td>
+              </tr>
+              <tr>
+                <td><span class="map">海伊洛學院</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 198/200" aria-label="複製海伊洛學院 198,200 導航">198, 200</button></td>
+                <td class="npc">學院警備兵</td>
+                <td><ul class="quest-list"><li>強化學院安全：鳥人哈比 15 隻；可與沙妖任務一起處理。</li></ul></td>
+                <td><span class="map">爾邁斯 瀑雷德</span><br><span class="coord-note">yuno_fild03 / yun_f03 系列</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">海伊洛學院</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 179/200" aria-label="複製海伊洛學院 179,200 導航">179, 200</button></td>
+                <td class="npc">海伊洛學院學生</td>
+                <td><ul class="quest-list"><li>完美的結尾：七彩大嘴鳥 20 隻、魔羌 20 隻；可與呼喚雨水的祈禱一起處理。</li></ul></td>
+                <td><span class="map">海伊洛學院外 / 爾邁斯峽谷</span><br><span class="coord-note">七彩大嘴鳥：yuno_fild08 / 魔羌：yuno_fild07</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">海伊洛學院</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 172/198" aria-label="複製海伊洛學院 172,198 導航">172, 198</button></td>
+                <td class="npc">貓咪手商人</td>
+                <td><ul class="quest-list"><li>突破性的業務項目：交付七彩大嘴鳥之羽 10、魔羌之毛皮 10。</li></ul></td>
+                <td><span class="map">海伊洛學院外 / 爾邁斯峽谷</span><br><span class="coord-note">同七彩大嘴鳥、魔羌地圖</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">海伊洛學院</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 171/164" aria-label="複製海伊洛學院 171,164 導航">171, 164</button></td>
+                <td class="npc">安傑洛</td>
+                <td><ul class="quest-list"><li>呼喚雨水的祈禱：魔羌 10 隻，並交付魔羌之角 10。</li></ul></td>
+                <td><span class="map">爾邁斯峽谷</span><br><span class="coord-note">yuno_fild07 / yun_f07 系列</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">海伊洛學院</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 146/186" aria-label="複製海伊洛學院 146,186 導航">146, 186</button></td>
+                <td class="npc">爾弗雷多</td>
+                <td><ul class="quest-list"><li>將此詩獻給冒險家：沙妖 30 隻；可與鳥人哈比任務一起處理。</li></ul></td>
+                <td><span class="map">啟 海伊洛 別墅</span><br><span class="coord-note">yuno_fild02 / yun_f02 系列</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">諾可羅德洞穴</span><br><button class="coord" type="button" data-navi="/navi mag_dun02 40/150" aria-label="複製諾可羅德洞穴 40,150 導航">40, 150</button></td>
+                <td class="npc">博物館職員</td>
+                <td><ul class="quest-list"><li>諾可羅德洞穴：準備凝固的岩漿 10；七彩夢魘 30 隻、七彩飛龍 30 隻、七彩地龍 30 隻後交付材料；需先成為伊甸園成員。</li></ul></td>
+                <td><span class="map">諾哥羅德 2 樓</span><br><span class="coord-note">mag_dun02 / mag_d02 系列</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">巴基力航空</span><br><button class="coord" type="button" data-navi="/navi yuno 255/208" aria-label="複製巴基力航空 255,208 導航">255, 208</button></td>
+                <td class="npc">搜查隊艾蜜莉</td>
+                <td><ul class="quest-list"><li>尋找遺失的東西-哈比的巢穴：至少準備噬人樹花 10、哈比的羽毛 30，在 5 個標記點各放樹花 1、羽毛 3；可能失敗。</li></ul></td>
+                <td><span class="map">哈比巢穴標記點</span><br><span class="coord-note">依任務導航 5 點互動</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">朱諾</span><br><button class="coord" type="button" data-navi="/navi yuno 308/170" aria-label="複製朱諾 308,170 導航">308, 170</button></td>
+                <td class="npc">土黎</td>
+                <td><ul class="quest-list"><li>司書圖書館員和護衛的工作：使用司書圖書館員的魔杖抓取落跑吧魔書 5 隻。</li></ul></td>
+                <td><span class="map">朱諾城內</span><br><span class="coord-note">抓落跑吧魔書</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>哈比與部分傳點附近容易暴走；七彩大嘴鳥、魔羌與沙妖任務可集中在學院外順路處理；抓魔書時畫面可能會被抓寵互動卡住。</p></div>
+      </div>
+    </section>
+
+    <section class="panel region" id="hugel-town">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>毀葛村內 / 原野</h2>
+          <p>多數是村內接任務、村外採集或室內互動。建議先準備材料，再照接任務點一路清。</p>
+        </div>
+        <div class="region-badges">
+          <span class="requirement-badge">有前置</span>
+          <span class="count-badge">4 個任務</span>
+        </div>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務（建議先完成）</strong>
+          <p>這組任務各自有一次性劇情線，完成後會進入 04:00 重置的每日。若 NPC 沒給每日，先依任務導航補完同名劇情。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>接任務地圖 / 座標</th><th>NPC</th><th>任務內容</th><th>打怪 / 進行地圖</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">毀葛</span><br><button class="coord" type="button" data-navi="/navi hugel 83/97" aria-label="複製毀葛 83,97 導航">hugel 83, 97</button></td>
+                <td class="npc">西伊岱</td>
+                <td><ul class="quest-list"><li>探索新食材：採集夢克絲香菇、夢克絲卵殼；採香菇時記得帶花。</li></ul></td>
+                <td><span class="map">毀葛原野 06</span><br><span class="coord-note">香菇</span> <button class="coord" type="button" data-navi="/navi hu_fild06 168/356" aria-label="複製香菇 168,356 導航">168,356</button> <button class="coord" type="button" data-navi="/navi hu_fild06 194/341" aria-label="複製香菇 194,341 導航">194,341</button> <button class="coord" type="button" data-navi="/navi hu_fild06 198/339" aria-label="複製香菇 198,339 導航">198,339</button> <button class="coord" type="button" data-navi="/navi hu_fild06 158/326" aria-label="複製香菇 158,326 導航">158,326</button> <button class="coord" type="button" data-navi="/navi hu_fild06 121/293" aria-label="複製香菇 121,293 導航">121,293</button><br><span class="coord-note">卵殼</span> <button class="coord" type="button" data-navi="/navi hu_fild06 164/224" aria-label="複製卵殼 164,224 導航">164,224</button> <button class="coord" type="button" data-navi="/navi hu_fild06 147/111" aria-label="複製卵殼 147,111 導航">147,111</button> <button class="coord" type="button" data-navi="/navi hu_fild06 235/243" aria-label="複製卵殼 235,243 導航">235,243</button></td>
+              </tr>
+              <tr>
+                <td><span class="map">毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hu_in01 15/372" aria-label="複製毀葛室內 15,372 導航">hu_in01 15, 372</button></td>
+                <td class="npc">西雷托</td>
+                <td><ul class="quest-list"><li>向完美的口味前進：美食評鑑跑腿，準備蘋果 5、短劍 1、綠色藥草 10，並捕捉小盜蟲 3 隻。</li></ul></td>
+                <td><span class="map">毀葛 / 毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hugel 87/139" aria-label="複製玫宛 87,139 導航">玫宛 87,139</button> <button class="coord" type="button" data-navi="/navi hugel 84/125" aria-label="複製拉尤麻 84,125 導航">拉尤麻 84,125</button> <button class="coord" type="button" data-navi="/navi hu_in01 40/381" aria-label="複製倉庫 40,381 導航">倉庫 40,381</button> <button class="coord" type="button" data-navi="/navi hugel 102/161" aria-label="複製艾樂詹 102,161 導航">艾樂詹 102,161</button></td>
+              </tr>
+              <tr>
+                <td><span class="map">毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hu_in01 246/300" aria-label="複製毀葛室內 246,300 導航">hu_in01 246, 300</button></td>
+                <td class="npc">傑特</td>
+                <td><ul class="quest-list"><li>毀葛之味：跑雞蛋、起司配送線；準備鉗子 5、穀物 3、檸檬 1、葡萄 3。</li></ul></td>
+                <td><span class="map">毀葛 / 毀葛原野 06</span><br><button class="coord" type="button" data-navi="/navi hu_fild06 209/217" aria-label="複製錫麗卡 209,217 導航">錫麗卡 209,217</button> <button class="coord" type="button" data-navi="/navi hugel 61/103" aria-label="複製柯蘿娜 61,103 導航">柯蘿娜 61,103</button></td>
+              </tr>
+              <tr>
+                <td><span class="map">毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hu_in01 289/249" aria-label="複製毀葛室內 289,249 導航">hu_in01 289, 249</button></td>
+                <td class="npc">玫西多雷</td>
+                <td><ul class="quest-list"><li>整修住宅：交付瑪哪樹枝 15。</li></ul></td>
+                <td><span class="map">材料任務</span><br><span class="coord-note">瑪哪樹枝可先備好；回舒茨曼住宅交付</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>這組排序依接任務位置：室外 `hugel` 優先，再跑 `hu_in01` 室內點。採集點很多，頁面列的是 Divine Pride 任務導航出現的座標。</p></div>
+      </div>
+    </section>
+
+    <section class="panel region" id="odin-temple">
+      <header class="region-head">
+        <div class="region-title">
+          <h2>奧丁神殿</h2>
+          <p>毀葛接任務，奧丁神殿打怪。這區怪物強度較高，建議整備後再一起清。</p>
+        </div>
+        <div class="region-badges">
+          <span class="requirement-badge">有前置</span>
+          <span class="count-badge">4 個任務</span>
+        </div>
+      </header>
+      <div class="region-body">
+        <div class="prep">
+          <strong>前置任務（建議先完成）</strong>
+          <p>主持牧師與莫勒巴德相關任務都會導向奧丁神殿。若每日沒有出現，先補完一次性調查、前往神殿與討伐引導。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>接任務地圖 / 座標</th><th>NPC</th><th>任務內容</th><th>打怪 / 進行地圖</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="map">毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hu_in01 152/177" aria-label="複製毀葛室內 152,177 導航">hu_in01 152, 177</button></td>
+                <td class="npc">主持牧師</td>
+                <td><ul class="quest-list"><li>移除危險物體：藍色、紫色、綠色等離子體各 5 隻。</li></ul></td>
+                <td><span class="map">奧丁神殿</span><br><button class="coord" type="button" data-navi="/navi odin_tem01 245/148" aria-label="複製奧丁神殿 245,148 導航">odin_tem01 245,148</button> <span class="coord-note">起，依導航找等離子體</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">毀葛</span><br><button class="coord" type="button" data-navi="/navi hugel 198/105" aria-label="複製毀葛 198,105 導航">hugel 198, 105</button></td>
+                <td class="npc">莫勒巴德</td>
+                <td><ul class="quest-list"><li>從打電報的傢伙開始：皮影魔 20 隻。</li></ul></td>
+                <td><span class="map">奧丁神殿</span><br><span class="coord-note">SKOGUL / 皮影魔</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">毀葛</span><br><button class="coord" type="button" data-navi="/navi hugel 198/105" aria-label="複製毀葛 198,105 導航">hugel 198, 105</button></td>
+                <td class="npc">莫勒巴德</td>
+                <td><ul class="quest-list"><li>淨化惡魔：彩色皮影魔 20 隻。</li></ul></td>
+                <td><span class="map">奧丁神殿</span><br><span class="coord-note">FRUS / 彩色皮影魔</span></td>
+              </tr>
+              <tr>
+                <td><span class="map">毀葛</span><br><button class="coord" type="button" data-navi="/navi hugel 198/105" aria-label="複製毀葛 198,105 導航">hugel 198, 105</button></td>
+                <td class="npc">莫勒巴德</td>
+                <td><ul class="quest-list"><li>在被迷惑之前：褐方體惡魔 5 隻、黑方體惡魔 5 隻。</li></ul></td>
+                <td><span class="map">奧丁神殿</span><br><span class="coord-note">SKEGGIOLD / SKEGGIOLD_</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><p><strong>備註：</strong>這組都是 04:00 重置。莫勒巴德三項都在毀葛 `198,105` 接，適合一次接完後進奧丁神殿。</p></div>
+      </div>
+    </section>
+
+    <section class="panel source" aria-label="來源">
+      <p>主要來源：<a href="https://ro-zero-site.pages.dev/data/quest-database.js?v=20260718-quest-integrated" target="_blank" rel="noreferrer">RO補給站任務資料檔</a>、<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3535" target="_blank" rel="noreferrer">巴哈 Base LV.100 每日任務-朱諾</a>、<a href="https://roz.gnjoy.com.tw/Notice/Notice_Info?id=218940" target="_blank" rel="noreferrer">樂園官方毀葛 / 奧丁開放公告</a>、<a href="https://www.gnjoy.com.tw/posts/guide/ROZ-Hugel-219006" target="_blank" rel="noreferrer">官方毀葛指南</a>、<a href="https://www.divine-pride.net/forum/index.php?/topic/11004-twroz-changelog-august-11-2026/" target="_blank" rel="noreferrer">Divine Pride 2026-08-11 任務導航資料</a>。任務地圖與座標已盡量分成「接任務」與「打怪 / 進行」兩欄；若遊戲內導航有調整，以遊戲內為準。</p>
+    </section>
+  </main>
+
+  <button class="checklist-launch" id="openChecklist" type="button" aria-haspopup="dialog" aria-controls="dailyChecklist">
+    <span class="launch-mark" aria-hidden="true">✓</span>
+    <span>每日清單 <span id="launchProgress">0/21</span></span>
+  </button>
+
+  <dialog class="checklist-dialog" id="dailyChecklist" aria-labelledby="checklistTitle">
+    <div class="checklist-shell">
+      <header class="checklist-head">
+        <div>
+          <h2 id="checklistTitle">100 等每日清單</h2>
+          <p class="checklist-date" id="checklistDate"></p>
+        </div>
+        <div class="checklist-head-actions">
+          <button class="reset-button" type="button" data-reset-checklist>清除勾選</button>
+          <button class="icon-button" id="closeChecklist" type="button" aria-label="關閉每日清單">×</button>
+        </div>
+      </header>
+
+      <section class="checklist-progress" aria-label="今日任務進度">
+        <div class="progress-box">
+          <span>已打完</span>
+          <strong id="huntedProgress">0 / 21</strong>
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="huntedBar"></div></div>
+        </div>
+        <div class="progress-box report">
+          <span>已回報</span>
+          <strong id="reportedProgress">0 / 21</strong>
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="reportedBar"></div></div>
+        </div>
+      </section>
+
+      <section class="checklist-controls">
+        <div class="status-notice" id="statusNotice" role="status"></div>
+        <div class="checklist-filters" aria-label="篩選任務">
+          <button class="filter-button" type="button" data-filter="all" aria-pressed="true">全部</button>
+          <button class="filter-button" type="button" data-filter="hunt" aria-pressed="false">未打完</button>
+          <button class="filter-button" type="button" data-filter="report" aria-pressed="false">待回報</button>
+        </div>
+      </section>
+
+      <div class="checklist-content" id="checklistContent">
+        <div id="checklistGroups"></div>
+        <div class="checklist-empty" id="checklistEmpty">這個分類目前沒有任務。</div>
+      </div>
+
+      <footer class="checklist-footer">
+        <span>紀錄保存在目前裝置，日期變更時自動建立新清單。</span>
+        <button class="reset-button" type="button" data-reset-checklist>清除全部勾選</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <script>
+    const DAILY_TASKS = [
+      {
+        id: "juno",
+        name: "朱諾",
+        tasks: [
+          ["juno-lunchbox-1", "中年女性", "媽媽手便當：送便當到國界檢查站給警備兵 196,154，純對話", "跑腿", "艾爾帕蘭 114, 180", "國界檢查站：警備兵 196,154"],
+          ["juno-checkpoint-1", "檢查站長蔡迦莉", "國界檢查站的工作：討伐螳螂 10 隻、邪惡向日葵 10 隻", "討伐", "國界檢查站 193, 161", "國界檢查站周邊：依任務導航"],
+          ["juno-camp-1", "弗雷里", "搭建陣地：準備柳橙 3、黃玉碎片 1、砂團 10、黃晶沙 3，交給眼鏡蛇後回報", "材料＋跑腿", "朱諾 308, 80", "朱諾：眼鏡蛇 99,241"],
+          ["juno-academy-guard-1", "學院警備兵", "強化學院安全：討伐鳥人哈比 15 隻", "討伐", "海伊洛學院 198, 200", "爾邁斯 瀑雷德：yuno_fild03 / yun_f03 系列"],
+          ["juno-student-1", "海伊洛學院學生", "完美的結尾：討伐七彩大嘴鳥 20 隻、魔羌 20 隻", "討伐", "海伊洛學院 179, 200", "七彩大嘴鳥：yuno_fild08；魔羌：yuno_fild07"],
+          ["juno-cat-hand-1", "貓咪手商人", "突破性的業務項目：交付七彩大嘴鳥之羽 10、魔羌之毛皮 10", "收集", "海伊洛學院 172, 198", "同七彩大嘴鳥、魔羌地圖"],
+          ["juno-angelo-1", "安傑洛", "呼喚雨水的祈禱：討伐魔羌 10 隻，並交付魔羌之角 10", "討伐＋收集", "海伊洛學院 171, 164", "爾邁斯峽谷：yuno_fild07 / yun_f07 系列"],
+          ["juno-alfredo-1", "爾弗雷多", "將此詩獻給冒險家：討伐沙妖 30 隻", "討伐", "海伊洛學院 146, 186", "啟 海伊洛 別墅：yuno_fild02 / yun_f02 系列"],
+          ["juno-nogg-1", "博物館職員", "諾可羅德洞穴：準備凝固的岩漿 10", "收集", "諾可羅德洞穴 40, 150", "諾哥羅德 2 樓：mag_dun02 / mag_d02 系列"],
+          ["juno-nogg-2", "博物館職員", "諾可羅德洞穴：討伐七彩夢魘 30 隻", "討伐", "諾可羅德洞穴 40, 150", "諾哥羅德 2 樓：mag_dun02 / mag_d02 系列"],
+          ["juno-nogg-3", "博物館職員", "諾可羅德洞穴：討伐七彩飛龍 30 隻、七彩地龍 30 隻", "討伐", "諾可羅德洞穴 40, 150", "諾哥羅德 2 樓：mag_dun02 / mag_d02 系列"],
+          ["juno-harpy-nest-1", "搜查隊艾蜜莉", "尋找遺失的東西-哈比的巢穴：準備噬人樹花與哈比的羽毛，在 5 個標記點放置材料", "收集＋互動", "巴基力航空 255, 208", "哈比巢穴標記點：依任務導航 5 點互動"],
+          ["juno-book-1", "土黎", "司書圖書館員和護衛的工作：使用魔杖抓取落跑吧魔書 5 隻", "互動", "朱諾 308, 170", "朱諾城內：抓落跑吧魔書"]
+        ]
+      },
+      {
+        id: "hugel-town",
+        name: "毀葛村內 / 原野",
+        tasks: [
+          ["hugel-food-1", "西伊岱", "探索新食材：採集夢克絲香菇、夢克絲卵殼；採香菇時記得帶花", "採集", "毀葛 hugel 83, 97", "毀葛原野 06：hu_fild06 香菇點 / 卵殼點"],
+          ["hugel-perfect-taste-1", "西雷托", "向完美的口味前進：準備蘋果 5、短劍 1、綠色藥草 10，並捕捉小盜蟲 3 隻", "跑腿＋抓怪", "毀葛室內 hu_in01 15, 372", "毀葛 / 毀葛室內：倉庫 hu_in01 40,381 抓小盜蟲"],
+          ["hugel-taste-1", "傑特", "毀葛之味：準備鉗子 5、穀物 3、檸檬 1、葡萄 3，跑雞蛋與起司配送線", "材料＋跑腿", "毀葛室內 hu_in01 246, 300", "毀葛原野 06 錫麗卡 209,217；毀葛柯蘿娜 61,103"],
+          ["hugel-house-1", "玫西多雷", "整修住宅：交付瑪哪樹枝 15", "收集", "毀葛室內 hu_in01 289, 249", "材料任務：回舒茨曼住宅交付"]
+        ]
+      },
+      {
+        id: "odin",
+        name: "奧丁神殿",
+        tasks: [
+          ["odin-plasma-1", "主持牧師", "移除危險物體：討伐藍色、紫色、綠色等離子體各 5 隻", "討伐", "毀葛室內 hu_in01 152, 177", "奧丁神殿：odin_tem01 起依導航找等離子體"],
+          ["odin-skogul-1", "莫勒巴德", "從打電報的傢伙開始：討伐皮影魔 20 隻", "討伐", "毀葛 hugel 198, 105", "奧丁神殿：SKOGUL / 皮影魔"],
+          ["odin-frus-1", "莫勒巴德", "淨化惡魔：討伐彩色皮影魔 20 隻", "討伐", "毀葛 hugel 198, 105", "奧丁神殿：FRUS / 彩色皮影魔"],
+          ["odin-skeggiold-1", "莫勒巴德", "在被迷惑之前：討伐褐方體惡魔 5 隻、黑方體惡魔 5 隻", "討伐", "毀葛 hugel 198, 105", "奧丁神殿：SKEGGIOLD / SKEGGIOLD_"]
+        ]
+      }
+    ];
+
+    const MONSTER_ELEMENTS = {
+      "螳螂": "地1",
+      "邪惡向日葵": "地1",
+      "眼鏡蛇": "毒1",
+      "鳥人哈比": "風3",
+      "七彩大嘴鳥": "風2",
+      "魔羌": "地3",
+      "沙妖": "地3",
+      "七彩夢魘": "念3",
+      "七彩飛龍": "火2",
+      "七彩地龍": "地2",
+      "落跑吧魔書": "無3",
+      "小盜蟲": "無1",
+      "藍色": "水4",
+      "紫色": "暗4",
+      "綠色": "地4",
+      "皮影魔": "暗3",
+      "彩色皮影魔": "暗3",
+      "褐方體惡魔": "聖2",
+      "黑方體惡魔": "聖2"
+    };
+
+    function monsterElementsMarkup(text) {
+      const matches = Object.entries(MONSTER_ELEMENTS)
+        .filter(([name]) => text.includes(name));
+      if (!matches.length) return "";
+      return `<span class="monster-elements" aria-label="怪物屬性">${matches.map(([name, element]) => {
+        const elementType = element.replace(/\d/g, "");
+        return `<span class="monster-element" data-element="${elementType}" title="${name}：${element}屬性"><span>${name}</span><strong>${element}</strong></span>`;
+      }).join("")}</span>`;
+    }
+
+    document.querySelectorAll(".quest-list li").forEach((item) => {
+      item.insertAdjacentHTML("beforeend", monsterElementsMarkup(item.textContent));
+    });
+
+    function fallbackCopyText(text) {
+      const field = document.createElement("textarea");
+      field.value = text;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.left = "-9999px";
+      field.style.top = "0";
+      document.body.appendChild(field);
+      field.select();
+      const copied = document.execCommand("copy");
+      field.remove();
+      if (!copied) throw new Error("Copy command failed");
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard?.writeText && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      fallbackCopyText(text);
+    }
+
+    function showCopiedState(button) {
+      const originalLabel = button.dataset.label || button.textContent;
+      button.dataset.label = originalLabel;
+      button.textContent = "已複製";
+      button.classList.add("copied");
+      window.clearTimeout(Number(button.dataset.copyTimer || 0));
+      button.dataset.copyTimer = String(window.setTimeout(() => {
+        button.textContent = button.dataset.label;
+        button.classList.remove("copied");
+      }, 900));
+    }
+
+    document.querySelectorAll(".coord[data-navi]").forEach((button) => {
+      button.title = `點擊複製 ${button.dataset.navi}`;
+      button.addEventListener("click", async () => {
+        try {
+          await copyText(button.dataset.navi);
+          showCopiedState(button);
+        } catch {
+          window.prompt("複製失敗，請手動複製這段導航指令：", button.dataset.navi);
+        }
+      });
+    });
+
+    const STORAGE_KEY = "ro-lv100-daily-checklist-v1";
+    const allTasks = DAILY_TASKS.flatMap((group) => group.tasks);
+    const totalTasks = allTasks.length;
+    const dialog = document.getElementById("dailyChecklist");
+    const groupsElement = document.getElementById("checklistGroups");
+    let activeFilter = "all";
+    let checklistState = loadChecklist();
+
+    function localDateKey(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function emptyChecklist() {
+      return { date: localDateKey(), tasks: {} };
+    }
+
+    function loadChecklist() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return saved && saved.date === localDateKey() && saved.tasks ? saved : emptyChecklist();
+      } catch {
+        return emptyChecklist();
+      }
+    }
+
+    function saveChecklist() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checklistState));
+    }
+
+    function taskState(id) {
+      return checklistState.tasks[id] || { hunted: false, reported: false };
+    }
+
+    function renderChecklist() {
+      groupsElement.innerHTML = DAILY_TASKS.map((group) => `
+        <section class="check-group" data-group="${group.id}">
+          <div class="check-group-title">
+            <span>${group.name}</span>
+            <span class="check-group-count">${group.tasks.length} 個任務</span>
+          </div>
+          <div>
+            ${group.tasks.map(([id, npc, task, kind, location, target]) => {
+              const state = taskState(id);
+              return `
+                <article class="check-task${state.reported ? " done" : ""}" data-task="${id}">
+                  <div>
+                    <div class="task-meta">
+                      <span class="task-kind">${kind}</span>
+                      <span class="task-location">接：${location}</span>
+                      <span class="task-target">去：${target || "依任務導航"}</span>
+                    </div>
+                    <span class="task-npc">${npc}</span>
+                    <strong class="task-name">${task}</strong>
+                    ${monsterElementsMarkup(task)}
+                  </div>
+                  <div class="task-checks">
+                    <label class="task-check">
+                      <input type="checkbox" data-kind="hunted" ${state.hunted ? "checked" : ""} aria-label="${task} 已打完">
+                      <span>已打完</span>
+                    </label>
+                    <label class="task-check report">
+                      <input type="checkbox" data-kind="reported" ${state.reported ? "checked" : ""} aria-label="${task} 已回報">
+                      <span>已回報</span>
+                    </label>
+                  </div>
+                </article>`;
+            }).join("")}
+          </div>
+        </section>`).join("");
+
+      groupsElement.querySelectorAll("input[type='checkbox']").forEach((input) => {
+        input.addEventListener("change", handleCheckChange);
+      });
+      applyFilter();
+      updateProgress();
+    }
+
+    function handleCheckChange(event) {
+      const taskElement = event.target.closest(".check-task");
+      const id = taskElement.dataset.task;
+      const state = { ...taskState(id) };
+
+      if (event.target.dataset.kind === "reported") {
+        state.reported = event.target.checked;
+        if (state.reported) state.hunted = true;
+      } else {
+        state.hunted = event.target.checked;
+        if (!state.hunted) state.reported = false;
+      }
+
+      checklistState.tasks[id] = state;
+      saveChecklist();
+      renderChecklist();
+    }
+
+    function getCounts() {
+      return allTasks.reduce((counts, [id]) => {
+        const state = taskState(id);
+        if (state.hunted) counts.hunted += 1;
+        if (state.reported) counts.reported += 1;
+        return counts;
+      }, { hunted: 0, reported: 0 });
+    }
+
+    function updateProgress() {
+      const counts = getCounts();
+      const huntedPercent = counts.hunted / totalTasks * 100;
+      const reportedPercent = counts.reported / totalTasks * 100;
+      document.getElementById("huntedProgress").textContent = `${counts.hunted} / ${totalTasks}`;
+      document.getElementById("reportedProgress").textContent = `${counts.reported} / ${totalTasks}`;
+      document.getElementById("huntedBar").style.width = `${huntedPercent}%`;
+      document.getElementById("reportedBar").style.width = `${reportedPercent}%`;
+      document.getElementById("launchProgress").textContent = `${counts.hunted}/${totalTasks}`;
+
+      const notice = document.getElementById("statusNotice");
+      notice.classList.remove("show");
+      if (counts.reported === totalTasks) {
+        notice.textContent = `今日 ${totalTasks} 個任務已全部回報完成。`;
+        notice.classList.add("show");
+      } else if (counts.hunted === totalTasks) {
+        notice.textContent = `${totalTasks} 個任務都打完了，還有 ${totalTasks - counts.reported} 個待回報。`;
+        notice.classList.add("show");
+      }
+    }
+
+    function applyFilter() {
+      let visibleTasks = 0;
+      document.querySelectorAll(".check-group").forEach((groupElement) => {
+        let groupVisible = 0;
+        groupElement.querySelectorAll(".check-task").forEach((taskElement) => {
+          const state = taskState(taskElement.dataset.task);
+          const visible = activeFilter === "all"
+            || (activeFilter === "hunt" && !state.hunted)
+            || (activeFilter === "report" && state.hunted && !state.reported);
+          taskElement.hidden = !visible;
+          if (visible) groupVisible += 1;
+        });
+        groupElement.hidden = groupVisible === 0;
+        visibleTasks += groupVisible;
+      });
+      document.getElementById("checklistEmpty").classList.toggle("show", visibleTasks === 0);
+    }
+
+    function formatChecklistDate() {
+      return new Intl.DateTimeFormat("zh-TW", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+      }).format(new Date());
+    }
+
+    document.getElementById("openChecklist").addEventListener("click", () => {
+      if (checklistState.date !== localDateKey()) {
+        checklistState = emptyChecklist();
+        saveChecklist();
+        renderChecklist();
+      }
+      document.getElementById("checklistDate").textContent = formatChecklistDate();
+      dialog.showModal();
+    });
+
+    document.getElementById("closeChecklist").addEventListener("click", () => dialog.close());
+
+    dialog.addEventListener("click", (event) => {
+      const rect = dialog.getBoundingClientRect();
+      const inside = event.clientX >= rect.left && event.clientX <= rect.right
+        && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      if (!inside) dialog.close();
+    });
+
+    document.querySelectorAll(".filter-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll(".filter-button").forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+        applyFilter();
+      });
+    });
+
+    document.querySelectorAll("[data-reset-checklist]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!window.confirm(`確定要清除今天 ${totalTasks} 個任務的全部勾選紀錄嗎？`)) return;
+        checklistState = emptyChecklist();
+        saveChecklist();
+        renderChecklist();
+      });
+    });
+
+    document.getElementById("checklistDate").textContent = formatChecklistDate();
+    renderChecklist();
+  </script>
+</body>
+</html>
+
