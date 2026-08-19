@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RO樂園 Base Lv.100 每日任務跑圖動線</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ee;
+      --paper: #fffdf9;
+      --ink: #202329;
+      --muted: #69707d;
+      --line: #ddd5ca;
+      --accent: #a5282d;
+      --accent-strong: #7f171c;
+      --gold: #c8922d;
+      --mint: #236c5f;
+      --shadow: 0 18px 50px rgba(47, 39, 29, 0.12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(135deg, rgba(165, 40, 45, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(35, 108, 95, 0.09), transparent 38%),
+        var(--bg);
+      overflow-x: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .topbar,
+    .header-actions,
+    .tabs,
+    .route-head,
+    .route-grid,
+    .step-title,
+    .chip-row,
+    .route-item,
+    .route-end {
+      display: flex;
+    }
+
+    .topbar {
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand > div { min-width: 0; }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(165, 40, 45, 0.25);
+      border-radius: var(--radius);
+      background: #fff8ed;
+      box-shadow: inset 0 0 0 3px rgba(200, 146, 45, 0.12);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    h2, h3 { letter-spacing: 0; }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+    .nav-link,
+    .tab,
+    .navi {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.78);
+      color: var(--muted);
+      text-decoration: none;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .nav-link:hover, .nav-link:focus-visible, .tab:hover, .tab:focus-visible, .navi:hover, .navi:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-strong);
+      outline: none;
+    }
+
+    .tabs {
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .tab.active {
+      border-color: rgba(165, 40, 45, 0.3);
+      background: #fff2ee;
+      color: var(--accent-strong);
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.54fr);
+      gap: 22px;
+      align-items: center;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .hero h2 {
+      margin-bottom: 10px;
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1.18;
+    }
+
+    .hero p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .method {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid rgba(35, 108, 95, 0.25);
+      border-radius: var(--radius);
+      background: #eef8f3;
+    }
+
+    .method strong { color: var(--mint); font-size: 14px; }
+    .method span { color: #445a54; font-size: 13px; line-height: 1.65; }
+
+    .route-nav {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .route-nav a {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      color: #4e5662;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .route-nav small { color: var(--accent-strong); font-size: 11px; }
+
+    .route {
+      scroll-margin-top: 78px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .route-head {
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(165, 40, 45, 0.07), rgba(35, 108, 95, 0.06));
+    }
+
+    .route-head h2 {
+      margin-bottom: 7px;
+      font-size: clamp(23px, 3vw, 31px);
+      line-height: 1.2;
+    }
+
+    .route-head p { margin-bottom: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+    .count {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border: 1px solid rgba(35, 108, 95, 0.24);
+      border-radius: var(--radius);
+      background: #eef8f3;
+      color: var(--mint);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .route-body { padding: 18px; }
+
+    .carry {
+      margin-bottom: 16px;
+      padding: 14px;
+      border: 1px solid rgba(200, 146, 45, 0.34);
+      border-radius: var(--radius);
+      background: #fff6e3;
+    }
+
+    .carry strong { color: #76520d; }
+    .carry p { margin: 6px 0 0; color: #66593f; font-size: 14px; line-height: 1.68; }
+
+    .route-grid {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffaf1;
+    }
+
+    .step-title {
+      align-items: center;
+      gap: 10px;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fffdf9;
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .step-title h3 { margin: 0; font-size: 17px; }
+    .step-title span { color: var(--muted); font-size: 12px; font-weight: 800; }
+
+    .step-body { display: grid; gap: 10px; padding: 14px; }
+
+    .route-item {
+      align-items: flex-start;
+      gap: 10px;
+      min-width: 0;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .route-item:last-child { padding-bottom: 0; border-bottom: 0; }
+
+    .map-tag {
+      flex: 0 0 auto;
+      padding: 4px 7px;
+      border: 1px solid rgba(35, 108, 95, 0.22);
+      border-radius: var(--radius);
+      background: #eef8f3;
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .route-item > div { min-width: 0; flex: 1 1 auto; }
+    .route-item strong { font-size: 14px; }
+    .route-item p { margin: 3px 0 0; color: var(--muted); font-size: 13px; line-height: 1.62; }
+
+    .chip-row { flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+    .navi {
+      min-height: 28px;
+      padding: 4px 7px;
+      border-color: rgba(35, 108, 95, 0.24);
+      background: #fff;
+      color: var(--mint);
+      font-size: 11px;
+    }
+
+    .route-end {
+      align-items: center;
+      gap: 8px;
+      margin-top: 2px;
+      padding: 11px 12px;
+      border: 1px solid rgba(165, 40, 45, 0.22);
+      border-radius: var(--radius);
+      background: #fff2ee;
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.55;
+    }
+
+    .route-end b { flex: 0 0 auto; }
+
+    .note {
+      margin: 16px 0 0;
+      padding: 13px 14px;
+      border-left: 4px solid var(--mint);
+      background: #eef8f3;
+      color: #435852;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .source {
+      padding: 15px 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .source p { margin-bottom: 0; }
+    .source a { color: var(--accent-strong); font-weight: 900; }
+
+    @media (max-width: 760px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .header-actions { width: 100%; }
+      .nav-link { flex: 1 1 auto; }
+      .hero { grid-template-columns: 1fr; }
+      .route-head { flex-direction: column; }
+    }
+
+    @media (max-width: 520px) {
+      .shell { width: min(1120px, calc(100% - 22px)); padding-top: 18px; }
+      .hero, .route-head, .route-body { padding: 16px; }
+      .route-item { flex-direction: column; gap: 7px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">100</div>
+        <div>
+          <h1>Base Lv.100 每日跑圖動線</h1>
+          <p class="subtitle">RO樂園・先接齊、集中處理、順路回報</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="nav-link" href="daily-quests-100.html">任務資料</a>
+        <a class="nav-link" href="index.html">回首頁</a>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="頁面分頁">
+      <a class="tab" href="daily-quests-100.html">100 每日任務</a>
+      <a class="tab active" href="daily-quests-100-route.html" aria-current="page">跑圖動線</a>
+    </nav>
+
+    <section class="panel hero" aria-label="動線說明">
+      <div>
+        <h2>兩條路線，避免在城鎮與原野間反覆折返</h2>
+        <p>朱諾與毀葛各跑一圈。每一段都先列接任務 NPC，再把同一張圖或同一方向的內容合併處理，最後依回城路線回報。導航按鈕會複製遊戲可貼上的 <code>/navi</code> 指令。</p>
+      </div>
+      <div class="method">
+        <strong>使用順序</strong>
+        <span>1. 先備好材料</span>
+        <span>2. 照「接取」走一輪</span>
+        <span>3. 照「處理」完成地圖內容</span>
+        <span>4. 照「回報」依序交任務</span>
+      </div>
+    </section>
+
+    <nav class="route-nav" aria-label="路線快速跳轉">
+      <a href="#juno-route">朱諾線 <small>13 個</small></a>
+      <a href="#hugel-route">毀葛線 <small>4 個</small></a>
+    </nav>
+
+    <section class="panel route" id="juno-route">
+      <header class="route-head">
+        <div>
+          <h2>朱諾線</h2>
+          <p>國界檢查站、朱諾城內、海伊洛學院外圍與諾可羅德洞穴共 13 個。諾可羅德任務需先具備伊甸園成員資格。</p>
+        </div>
+        <span class="count">Base Lv.100・13 個</span>
+      </header>
+      <div class="route-body">
+        <div class="carry">
+          <strong>出門前先放進背包</strong>
+          <p>柳橙 3、黃玉碎片 1、砂團 10、黃晶沙 3、凝固的岩漿 10、噬人樹花至少 10、哈比的羽毛至少 30。七彩大嘴鳥之羽 10、魔羌之毛皮 10、魔羌之角 10 可在清怪時一併準備。</p>
+        </div>
+
+        <div class="route-grid">
+          <article class="step">
+            <header class="step-title"><span class="step-number">1</span><div><h3>接取：國界檢查站 → 朱諾城內</h3><span>先處理會立即完成的便當，再把城內任務全接齊</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">艾爾帕蘭</span><div><strong>中年女性 → 警備兵</strong><p>從中年女性取得媽媽手便當後，直接送到國界檢查站警備兵；這筆在交付當下完成，不需要回中年女性。</p><div class="chip-row"><button class="navi" data-navi="/navi aldebaran 114/180">中年女性 114,180</button><button class="navi" data-navi="/navi yuno_fild01 196/154">警備兵 196,154</button></div></div></div>
+              <div class="route-item"><span class="map-tag">國界檢查站</span><div><strong>檢查站長蔡迦莉</strong><p>接螳螂 10、邪惡向日葵 10 的討伐；先接著，最後回程再交。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno_fild01 193/161">蔡迦莉 193,161</button></div></div></div>
+              <div class="route-item"><span class="map-tag">朱諾</span><div><strong>城內接取順序：博物館職員 → 艾蜜莉 → 土黎 → 弗雷里</strong><p>依城內西往東與航廈方向接齊。土黎的魔書任務可在城內當場處理；弗雷里的材料先交眼鏡蛇，完成後要回弗雷里。</p><div class="chip-row"><button class="navi" data-navi="/navi mag_dun02 40/150">博物館職員 40,150</button><button class="navi" data-navi="/navi yuno 255/208">艾蜜莉 255,208</button><button class="navi" data-navi="/navi yuno 308/170">土黎 308,170</button><button class="navi" data-navi="/navi yuno 308/80">弗雷里 308,80</button><button class="navi" data-navi="/navi yuno 99/241">眼鏡蛇 99,241</button></div></div></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <header class="step-title"><span class="step-number">2</span><div><h3>接取：海伊洛學院外圍 → 末花野外</h3><span>四位學院 NPC 在同張圖，照座標由西往東一次接完</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">yuno_fild02</span><div><strong>爾弗雷多 → 貓咪手商人 → 學院學生 → 學院警備兵</strong><p>依序接沙妖、交羽毛／毛皮、七彩大嘴鳥／魔羌、鳥人哈比任務。四人都在海伊洛學院附近，可一口氣完成。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno_fild02 146/186">爾弗雷多 146,186</button><button class="navi" data-navi="/navi yuno_fild02 172/198">貓咪手商人 172,198</button><button class="navi" data-navi="/navi yuno_fild02 179/200">學院學生 179,200</button><button class="navi" data-navi="/navi yuno_fild02 198/200">學院警備兵 198,200</button></div></div></div>
+              <div class="route-item"><span class="map-tag">yuno_fild11</span><div><strong>安傑洛</strong><p>接魔羌 10、魔羌之角 10。這個接取點是末花野外，不在海伊洛學院；完成後必須回安傑洛。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno_fild11 171/164">安傑洛 171,164</button></div></div></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <header class="step-title"><span class="step-number">3</span><div><h3>處理：依原野怪群與洞穴分段</h3><span>先在城內收魔書，再由學院周邊一路清到末花野外；洞穴獨立跑完</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">朱諾城內</span><div><strong>落跑吧魔書 5 隻</strong><p>手持土黎給的魔杖處理，完成後不用立刻回報，先繼續外圍路線。</p></div></div>
+              <div class="route-item"><span class="map-tag">yuno_fild02</span><div><strong>沙妖 30 隻</strong><p>完成「將此詩獻給冒險家」。</p></div></div>
+              <div class="route-item"><span class="map-tag">yuno_fild03</span><div><strong>鳥人哈比 15 隻</strong><p>完成學院警備兵任務；哈比巢穴的 5 個放置點依任務導航逐點處理，建議同一趟完成。</p></div></div>
+              <div class="route-item"><span class="map-tag">yuno_fild08</span><div><strong>七彩大嘴鳥 20 隻</strong><p>同步收集七彩大嘴鳥之羽，供貓咪手商人任務使用。</p></div></div>
+              <div class="route-item"><span class="map-tag">yuno_fild07</span><div><strong>魔羌：至少 20 隻</strong><p>學院學生需要 20 隻，安傑洛另需 10 隻；同時收魔羌之毛皮與魔羌之角。</p></div></div>
+              <div class="route-item"><span class="map-tag">mag_dun02</span><div><strong>七彩夢魘 30、七彩飛龍 30、七彩地龍 30</strong><p>諾可羅德三項集中在 2 樓完成，凝固的岩漿 10 直接交博物館職員。</p><div class="chip-row"><button class="navi" data-navi="/navi mag_dun02 40/150">博物館職員 40,150</button></div></div></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <header class="step-title"><span class="step-number">4</span><div><h3>回報：外圍 → 城內 → 國界檢查站</h3><span>從最遠的原野 NPC 開始反向回城，減少折返</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">外圍</span><div><strong>安傑洛 → 海伊洛學院四人</strong><p>先在末花野外回安傑洛，再回 yuno_fild02 依序交爾弗雷多、貓咪手商人、學院學生、學院警備兵。</p></div></div>
+              <div class="route-item"><span class="map-tag">朱諾 / 洞穴</span><div><strong>博物館職員 → 艾蜜莉 → 土黎 → 弗雷里</strong><p>洞穴結束先交博物館職員；回朱諾後交艾蜜莉、土黎，最後確認眼鏡蛇材料已交後回弗雷里。</p></div></div>
+              <div class="route-item"><span class="map-tag">國界檢查站</span><div><strong>檢查站長蔡迦莉</strong><p>最後回到國界檢查站交螳螂與邪惡向日葵討伐。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno_fild01 193/161">蔡迦莉 193,161</button></div></div></div>
+              <div class="route-end"><b>完成</b><span>媽媽手便當已在起點時交付完成；其他 12 項依上列回報即可。</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel route" id="hugel-route">
+      <header class="route-head">
+        <div>
+          <h2>毀葛生活每日線</h2>
+          <p>探索新食材、向完美的口味前進、毀葛之味、整修住宅共 4 個。各任務完成對應劇情後，會在 04:00 重置為每日。</p>
+        </div>
+        <span class="count">Base Lv.100・4 個</span>
+      </header>
+      <div class="route-body">
+        <div class="carry">
+          <strong>出門前先放進背包</strong>
+          <p>花、蘋果 5、短劍 1、綠色藥草 10、鉗子 5、穀物 3、檸檬 1、葡萄 3、瑪哪樹枝 15。花只用於採夢克絲香菇；小盜蟲由任務內倉庫捕捉。</p>
+        </div>
+
+        <div class="route-grid">
+          <article class="step">
+            <header class="step-title"><span class="step-number">1</span><div><h3>接取：毀葛室外 → hu_in01</h3><span>先接室外西伊岱，再將三位室內 NPC 一次接齊</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">hugel</span><div><strong>西伊岱：探索新食材</strong><p>接夢克絲香菇、夢克絲卵殼採集。</p><div class="chip-row"><button class="navi" data-navi="/navi hugel 83/97">西伊岱 83,97</button></div></div></div>
+              <div class="route-item"><span class="map-tag">hu_in01</span><div><strong>西雷托 → 傑特 → 玫西多雷</strong><p>依序接美食評鑑、雞蛋／起司配送、瑪哪樹枝交付。玫西多雷的材料已備好可直接交，其他兩項先接著一起跑。</p><div class="chip-row"><button class="navi" data-navi="/navi hu_in01 15/372">西雷托 15,372</button><button class="navi" data-navi="/navi hu_in01 246/300">傑特 246,300</button><button class="navi" data-navi="/navi hu_in01 289/249">玫西多雷 289,249</button></div></div></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <header class="step-title"><span class="step-number">2</span><div><h3>處理：先村內跑腿，再跑毀葛原野 06</h3><span>把村內的美食評鑑與起司處理好，進原野後一次完成採集、雞蛋與穀物</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">hugel</span><div><strong>村內順序：柯蘿娜 → 拉尤麻 → 玫宛 → 艾樂詹</strong><p>柯蘿娜處理起司、檸檬與葡萄；其餘三人是西雷托的美食評鑑線。之後去倉庫捕捉小盜蟲 3 隻。</p><div class="chip-row"><button class="navi" data-navi="/navi hugel 61/103">柯蘿娜 61,103</button><button class="navi" data-navi="/navi hugel 84/125">拉尤麻 84,125</button><button class="navi" data-navi="/navi hugel 87/139">玫宛 87,139</button><button class="navi" data-navi="/navi hugel 102/161">艾樂詹 102,161</button><button class="navi" data-navi="/navi hu_in01 40/381">倉庫 40,381</button></div></div></div>
+              <div class="route-item"><span class="map-tag">hu_fild06</span><div><strong>原野順序：卵殼 → 錫麗卡 → 香菇</strong><p>先在北側採夢克絲卵殼，再至錫麗卡取得雞蛋並交穀物，最後往南採香菇。採香菇前確認背包有花。</p><div class="chip-row"><button class="navi" data-navi="/navi hu_fild06 147/111">卵殼 147,111</button><button class="navi" data-navi="/navi hu_fild06 164/224">卵殼 164,224</button><button class="navi" data-navi="/navi hu_fild06 209/217">錫麗卡 209,217</button><button class="navi" data-navi="/navi hu_fild06 235/243">卵殼 235,243</button><button class="navi" data-navi="/navi hu_fild06 121/293">香菇起點 121,293</button></div></div></div>
+              <div class="route-item"><span class="map-tag">hu_fild06</span><div><strong>香菇點由南往東北收尾</strong><p>完成西伊岱採集所需的所有互動點。</p><div class="chip-row"><button class="navi" data-navi="/navi hu_fild06 158/326">香菇 158,326</button><button class="navi" data-navi="/navi hu_fild06 168/356">香菇 168,356</button><button class="navi" data-navi="/navi hu_fild06 194/341">香菇 194,341</button><button class="navi" data-navi="/navi hu_fild06 198/339">香菇 198,339</button></div></div></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <header class="step-title"><span class="step-number">3</span><div><h3>回報：西伊岱 → hu_in01 三人</h3><span>先在回村時交採集，接著進室內一口氣收尾</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">hugel</span><div><strong>西伊岱</strong><p>夢克絲香菇與卵殼都取得後，回西伊岱完成探索新食材。</p><div class="chip-row"><button class="navi" data-navi="/navi hugel 83/97">西伊岱 83,97</button></div></div></div>
+              <div class="route-item"><span class="map-tag">hu_in01</span><div><strong>西雷托 → 傑特 → 玫西多雷</strong><p>依室內動線回報。西雷托收美食評鑑與小盜蟲，傑特收雞蛋、起司與材料，玫西多雷收瑪哪樹枝。</p><div class="chip-row"><button class="navi" data-navi="/navi hu_in01 15/372">西雷托 15,372</button><button class="navi" data-navi="/navi hu_in01 246/300">傑特 246,300</button><button class="navi" data-navi="/navi hu_in01 289/249">玫西多雷 289,249</button></div></div></div>
+              <div class="route-end"><b>完成</b><span>四項生活每日全部回報完畢；下一輪重置時間為遊戲內 04:00。</span></div>
+            </div>
+          </article>
+        </div>
+        <div class="note">這頁的順序以「同圖集中、減少進出城鎮」為原則。若你使用卡普拉或傳送服務，仍可依手上的傳送點微調；任務目標與回報 NPC 則依目前 RO樂園任務導航資料固定。</div>
+      </div>
+    </section>
+
+    <section class="panel source" aria-label="資料來源">
+      <p>核對來源：<a href="https://forum.gamer.com.tw/C.php?bsn=83142&snA=3535" target="_blank" rel="noreferrer">巴哈 Base Lv.100 每日任務－朱諾</a>、<a href="https://ro-zero-site.pages.dev/data/quest-database.js?v=20260718-quest-integrated" target="_blank" rel="noreferrer">RO補給站任務資料</a>、<a href="https://www.divine-pride.net/forum/index.php?/topic/11004-twroz-changelog-august-11-2026/" target="_blank" rel="noreferrer">Divine Pride 2026-08-11 樂園任務導航資料</a>。各導航座標與最終回報點均已比對；若伺服器後續改版，以遊戲內任務提示為準。</p>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('[data-navi]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const command = button.dataset.navi;
+        try {
+          await navigator.clipboard.writeText(command);
+          const label = button.textContent;
+          button.textContent = '已複製';
+          window.setTimeout(() => { button.textContent = label; }, 1200);
+        } catch {
+          window.prompt('複製導航指令', command);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -125,6 +125,19 @@
       white-space: nowrap;
     }
 
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav-link.route-link {
+      border-color: rgba(165, 40, 45, 0.28);
+      background: #fff2ee;
+      color: var(--accent-strong);
+    }
+
     .panel {
       max-width: 100%;
       border: 1px solid var(--line);
@@ -218,6 +231,40 @@
       color: var(--accent-strong);
       font-size: 11px;
       font-weight: 900;
+    }
+
+    .level-divider {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      margin: 24px 0 16px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.88);
+    }
+
+    .level-divider h2 {
+      margin: 0;
+      font-size: clamp(21px, 3vw, 28px);
+      line-height: 1.2;
+    }
+
+    .level-divider p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .level-divider.level-100 {
+      border-left: 5px solid var(--mint);
+    }
+
+    .level-divider.level-105 {
+      border-left: 5px solid var(--gold);
+      background: #fffaf1;
     }
 
     .region {
@@ -1001,7 +1048,8 @@
 
     @media (max-width: 820px) {
       .topbar,
-      .region-head {
+      .region-head,
+      .level-divider {
         align-items: flex-start;
         grid-template-columns: 1fr;
       }
@@ -1023,6 +1071,10 @@
       }
 
       .nav-link {
+        width: 100%;
+      }
+
+      .header-actions {
         width: 100%;
       }
     }
@@ -1093,24 +1145,29 @@
           <p class="subtitle">依地區整理前置任務、NPC 位置與每日內容</p>
         </div>
       </div>
-      <a class="nav-link" href="index.html">回首頁</a>
+      <div class="header-actions">
+        <a class="nav-link route-link" href="daily-quests-100-route.html">跑圖動線</a>
+        <a class="nav-link" href="index.html">回首頁</a>
+      </div>
     </header>
 
     <section class="panel hero" aria-label="任務總覽">
       <div>
-        <h2>100 等每日跑圖清單</h2>
-          <p>這頁把朱諾與毀葛周邊的 Base Lv.100+ 每日任務整理成一張可查表，分開標示接任務地點與實際打怪、抓怪或採集地圖，避免跑到 NPC 旁邊才發現怪在另一張圖。</p>
+        <h2>Base Lv.100 / 105+ 每日任務</h2>
+          <p>Base Lv.100 的朱諾與毀葛生活每日已分成獨立區塊；Base Lv.105+ 奧丁神殿任務暫時保留原資料。要照地圖順路跑，可直接開啟「跑圖動線」。</p>
       </div>
       <div class="stats" aria-label="資料摘要">
-        <div class="stat"><span>地區</span><strong>3 區</strong></div>
-        <div class="stat"><span>每日任務</span><strong>21 個</strong></div>
+        <div class="stat"><span>Base Lv.100</span><strong>17 個</strong></div>
+        <div class="stat"><span>Base Lv.105+</span><strong>4 個</strong></div>
         <div class="stat"><span>資料日期</span><strong>2026-08-19</strong></div>
       </div>
     </section>
 
     <nav class="quick-nav" aria-label="地區快速跳轉">
+      <a href="#base-100">Base Lv.100 <small>17 個</small></a>
       <a href="#juno">朱諾 <small>有前置</small></a>
-      <a href="#hugel-town">毀葛村內 <small>100+</small></a>
+      <a href="#hugel-town">毀葛村內 <small>100</small></a>
+      <a href="#base-105">Base Lv.105+ <small>4 個</small></a>
       <a href="#odin-temple">奧丁神殿 <small>105+</small></a>
     </nav>
 
@@ -1156,6 +1213,14 @@
       </div>
     </section>
 
+    <section class="level-divider level-100" id="base-100" aria-label="Base Lv.100 任務區塊">
+      <div>
+        <h2>Base Lv.100 每日任務</h2>
+        <p>朱諾 13 個、毀葛生活每日 4 個。接取與最終回報 NPC 已依攻略與任務導航資料核對；完整跑法請看跑圖動線分頁。</p>
+      </div>
+      <a class="nav-link route-link" href="daily-quests-100-route.html">開啟跑圖動線</a>
+    </section>
+
     <section class="panel region" id="juno">
       <header class="region-head">
         <div class="region-title">
@@ -1191,7 +1256,7 @@
               <tr>
                 <td><span class="map">朱諾</span><br><button class="coord" type="button" data-navi="/navi yuno 308/80" aria-label="複製朱諾 308,80 導航">308, 80</button></td>
                 <td class="npc">弗雷里</td>
-                <td><ul class="quest-list"><li>搭建陣地：準備柳橙 3、黃玉碎片 1、砂團 10、黃晶沙 3，交給眼鏡蛇 99,241 後回報。</li></ul></td>
+                <td><ul class="quest-list"><li>搭建陣地：準備柳橙 3、黃玉碎片 1、砂團 10、黃晶沙 3，交給眼鏡蛇 99,241 後，回弗雷里 308,80 回報。</li></ul></td>
                 <td><span class="map">朱諾</span><br><button class="coord" type="button" data-navi="/navi yuno 99/241" aria-label="複製朱諾眼鏡蛇 99,241 導航">眼鏡蛇 99,241</button></td>
               </tr>
               <tr>
@@ -1298,6 +1363,14 @@
         </div>
         <div class="note"><p><strong>備註：</strong>這組排序依接任務位置：室外 `hugel` 優先，再跑 `hu_in01` 室內點。採集點很多，頁面列的是 Divine Pride 任務導航出現的座標。</p></div>
       </div>
+    </section>
+
+    <section class="level-divider level-105" id="base-105" aria-label="Base Lv.105 以上任務區塊">
+      <div>
+        <h2>Base Lv.105+ 每日任務</h2>
+        <p>以下奧丁神殿區塊先保留目前內容，尚未納入這次的 NPC 與跑圖路線重整。</p>
+      </div>
+      <span class="requirement-badge optional">本次暫不調整</span>
     </section>
 
     <section class="panel region" id="odin-temple">
