@@ -404,7 +404,7 @@
       <form class="panel form-panel" id="converterForm">
         <div class="section-title">
           <h2>輸入紀錄</h2>
-          <div class="source">BaseLv1~99 表</div>
+          <div class="source">BaseLv1~110 表</div>
         </div>
 
         <div class="field-grid">
@@ -414,7 +414,7 @@
           </div>
           <div class="field">
             <label for="manualExp">手動升級需求</label>
-            <input id="manualExp" name="manualExp" inputmode="numeric" placeholder="Lv99+ 才需要">
+            <input id="manualExp" name="manualExp" inputmode="numeric" placeholder="資料表外等級才需要">
           </div>
           <div class="field">
             <label for="startTime">開始時間</label>
@@ -596,7 +596,18 @@
       95: 2640166942,
       96: 3168200330,
       97: 3801840396,
-      98: 4562208475
+      98: 4562208475,
+      99: 5474650170,
+      100: 6569580204,
+      101: 7883496244,
+      102: 9460195492,
+      103: 11352234590,
+      104: 13622681508,
+      105: 16347217809,
+      106: 19616661370,
+      107: 23539993644,
+      108: 28247992372,
+      109: 33897590846
     };
 
     const form = document.getElementById("converterForm");
@@ -691,6 +702,10 @@
       const endSecondsRaw = parseClock(endTime.value);
       const startPct = parsePercent(startPercent.value);
       const endPct = parsePercent(endPercent.value);
+      if (level === 110) {
+        showError("Base Lv110 為目前等級上限，沒有下一級升級需求可換算。");
+        return null;
+      }
       const tableExp = BASE_EXP_TO_NEXT[level];
       const expToNext = tableExp || parseNumber(manualExp.value);
 

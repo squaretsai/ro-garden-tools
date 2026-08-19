@@ -68,7 +68,7 @@ function Convert-TimeInput {
     return $null
 }
 
-$script:BaseExpTableSource = "使用者提供的 RO樂園 BaseLv1~99 需求經驗表截圖；目前公開整理至 Lv99。"
+$script:BaseExpTableSource = "使用者提供的 RO樂園 BaseLv1~110 需求經驗表截圖。"
 $script:BaseExpToNextByLevel = @{
     1 = 2443
     2 = 2711
@@ -168,6 +168,17 @@ $script:BaseExpToNextByLevel = @{
     96 = 3168200330
     97 = 3801840396
     98 = 4562208475
+    99 = 5474650170
+    100 = 6569580204
+    101 = 7883496244
+    102 = 9460195492
+    103 = 11352234590
+    104 = 13622681508
+    105 = 16347217809
+    106 = 19616661370
+    107 = 23539993644
+    108 = 28247992372
+    109 = 33897590846
 }
 
 function Read-ChatText {
