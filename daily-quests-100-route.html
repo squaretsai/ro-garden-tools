@@ -256,6 +256,20 @@
     .carry strong { color: #76520d; }
     .carry p { margin: 6px 0 0; color: #66593f; font-size: 14px; line-height: 1.68; }
 
+    .potion-callout {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 16px;
+      padding: 16px;
+      border: 1px solid rgba(165, 40, 45, 0.34);
+      border-left: 5px solid var(--accent);
+      border-radius: var(--radius);
+      background: #fff2ee;
+    }
+
+    .potion-callout strong { color: var(--accent-strong); font-size: 17px; }
+    .potion-callout p { margin: 0; color: #68474a; font-size: 14px; line-height: 1.68; }
+
     .route-grid {
       flex-direction: column;
       gap: 12px;
@@ -405,21 +419,22 @@
 
     <section class="panel hero" aria-label="動線說明">
       <div>
-        <h2>兩條路線，避免在城鎮與原野間反覆折返</h2>
-        <p>朱諾與毀葛各跑一圈。每一段都先列接任務 NPC，再把同一張圖或同一方向的內容合併處理，最後依回城路線回報。導航按鈕會複製遊戲可貼上的 <code>/navi</code> 指令。</p>
+        <h2>先跑完兩區，再用經驗藥水一次回報</h2>
+        <p>朱諾與毀葛的任務都先接完、打完或採完，途中不交每日。兩區目標全完成後才吃經驗藥水，照最後的「總回報動線」把 17 項每日集中領取經驗。導航按鈕會複製遊戲可貼上的 <code>/navi</code> 指令。</p>
       </div>
       <div class="method">
         <strong>使用順序</strong>
-        <span>1. 先備好材料</span>
-        <span>2. 照「接取」走一輪</span>
-        <span>3. 照「處理」完成地圖內容</span>
-        <span>4. 照「回報」依序交任務</span>
+        <span>1. 朱諾全部接完、打完，不回報</span>
+        <span>2. 毀葛全部接完、打完，不回報</span>
+        <span>3. 兩區目標確認完成後吃經驗藥水</span>
+        <span>4. 照總回報動線一次領完經驗</span>
       </div>
     </section>
 
     <nav class="route-nav" aria-label="路線快速跳轉">
-      <a href="#juno-route">朱諾線 <small>13 個</small></a>
-      <a href="#hugel-route">毀葛線 <small>4 個</small></a>
+      <a href="#juno-route">朱諾：接取 / 處理 <small>13 個</small></a>
+      <a href="#hugel-route">毀葛：接取 / 處理 <small>4 個</small></a>
+      <a href="#return-route">吃藥後總回報 <small>17 個</small></a>
     </nav>
 
     <section class="panel route" id="juno-route">
@@ -440,7 +455,7 @@
           <article class="step">
             <header class="step-title"><span class="step-number">1</span><div><h3>接取：國界檢查站 → 朱諾城內</h3><span>先處理會立即完成的便當，再把城內任務全接齊</span></div></header>
             <div class="step-body">
-              <div class="route-item"><span class="map-tag">艾爾帕蘭</span><div><strong>中年女性 → 警備兵</strong><p>從中年女性取得媽媽手便當後，直接送到國界檢查站警備兵；這筆在交付當下完成，不需要回中年女性。</p><div class="chip-row"><button class="navi" data-navi="/navi aldebaran 114/180">中年女性 114,180</button><button class="navi" data-navi="/navi yuno_fild01 196/154">警備兵 196,154</button></div></div></div>
+              <div class="route-item"><span class="map-tag">艾爾帕蘭</span><div><strong>中年女性：先拿媽媽手便當</strong><p>先從中年女性取得便當，但先不要交給國界檢查站警備兵；把便當留到吃經驗藥水後再交，這樣 17 項都能吃到加成。</p><div class="chip-row"><button class="navi" data-navi="/navi aldebaran 114/180">中年女性 114,180</button><button class="navi" data-navi="/navi yuno_fild01 196/154">警備兵 196,154</button></div></div></div>
               <div class="route-item"><span class="map-tag">國界檢查站</span><div><strong>檢查站長蔡迦莉</strong><p>接螳螂 10、邪惡向日葵 10 的討伐；先接著，最後回程再交。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno_fild01 193/161">蔡迦莉 193,161</button></div></div></div>
               <div class="route-item"><span class="map-tag">朱諾</span><div><strong>城內接取順序：博物館職員 → 艾蜜莉 → 土黎 → 弗雷里</strong><p>依城內西往東與航廈方向接齊。土黎的魔書任務可在城內當場處理；弗雷里的材料先交眼鏡蛇，完成後要回弗雷里。</p><div class="chip-row"><button class="navi" data-navi="/navi mag_dun02 40/150">博物館職員 40,150</button><button class="navi" data-navi="/navi yuno 255/208">艾蜜莉 255,208</button><button class="navi" data-navi="/navi yuno 308/170">土黎 308,170</button><button class="navi" data-navi="/navi yuno 308/80">弗雷里 308,80</button><button class="navi" data-navi="/navi yuno 99/241">眼鏡蛇 99,241</button></div></div></div>
             </div>
@@ -467,12 +482,11 @@
           </article>
 
           <article class="step">
-            <header class="step-title"><span class="step-number">4</span><div><h3>回報：外圍 → 城內 → 國界檢查站</h3><span>從最遠的原野 NPC 開始反向回城，減少折返</span></div></header>
+            <header class="step-title"><span class="step-number">4</span><div><h3>暫不回報：前往毀葛</h3><span>朱諾目標全完成後保留任務，別先領經驗</span></div></header>
             <div class="step-body">
-              <div class="route-item"><span class="map-tag">外圍</span><div><strong>安傑洛 → 海伊洛學院四人</strong><p>先在末花野外回安傑洛，再回 yuno_fild02 依序交爾弗雷多、貓咪手商人、學院學生、學院警備兵。</p></div></div>
-              <div class="route-item"><span class="map-tag">朱諾 / 洞穴</span><div><strong>博物館職員 → 艾蜜莉 → 土黎 → 弗雷里</strong><p>洞穴結束先交博物館職員；回朱諾後交艾蜜莉、土黎，最後確認眼鏡蛇材料已交後回弗雷里。</p></div></div>
-              <div class="route-item"><span class="map-tag">國界檢查站</span><div><strong>檢查站長蔡迦莉</strong><p>最後回到國界檢查站交螳螂與邪惡向日葵討伐。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno_fild01 193/161">蔡迦莉 193,161</button></div></div></div>
-              <div class="route-end"><b>完成</b><span>媽媽手便當已在起點時交付完成；其他 12 項依上列回報即可。</span></div>
+              <div class="route-item"><span class="map-tag">確認</span><div><strong>檢查所有朱諾任務都已達成</strong><p>包含魔書、學院外圍四項、安傑洛、哈比巢穴與諾可羅德三項；媽媽手便當則保持在背包中，所有朱諾任務一律先不要回報。</p></div></div>
+              <div class="route-item"><span class="map-tag">移動</span><div><strong>由朱諾巴基力航空前往毀葛</strong><p>接著跑毀葛 4 項每日；經驗藥水留到毀葛目標也全部完成後才使用。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno 255/208">朱諾航空 255,208</button></div></div></div>
+              <div class="route-end"><b>保留任務</b><span>朱諾 13 項先不交，最後會連同毀葛 4 項在同一瓶經驗藥水時間內回報。</span></div>
             </div>
           </article>
         </div>
@@ -512,15 +526,58 @@
           </article>
 
           <article class="step">
-            <header class="step-title"><span class="step-number">3</span><div><h3>回報：西伊岱 → hu_in01 三人</h3><span>先在回村時交採集，接著進室內一口氣收尾</span></div></header>
+            <header class="step-title"><span class="step-number">3</span><div><h3>暫不回報：確認 4 項目標完成</h3><span>四個 NPC 都先不要對話完成，經驗藥水在下一段才吃</span></div></header>
             <div class="step-body">
-              <div class="route-item"><span class="map-tag">hugel</span><div><strong>西伊岱</strong><p>夢克絲香菇與卵殼都取得後，回西伊岱完成探索新食材。</p><div class="chip-row"><button class="navi" data-navi="/navi hugel 83/97">西伊岱 83,97</button></div></div></div>
-              <div class="route-item"><span class="map-tag">hu_in01</span><div><strong>西雷托 → 傑特 → 玫西多雷</strong><p>依室內動線回報。西雷托收美食評鑑與小盜蟲，傑特收雞蛋、起司與材料，玫西多雷收瑪哪樹枝。</p><div class="chip-row"><button class="navi" data-navi="/navi hu_in01 15/372">西雷托 15,372</button><button class="navi" data-navi="/navi hu_in01 246/300">傑特 246,300</button><button class="navi" data-navi="/navi hu_in01 289/249">玫西多雷 289,249</button></div></div></div>
-              <div class="route-end"><b>完成</b><span>四項生活每日全部回報完畢；下一輪重置時間為遊戲內 04:00。</span></div>
+              <div class="route-item"><span class="map-tag">確認</span><div><strong>西伊岱、西雷托、傑特、玫西多雷的目標全部完成</strong><p>確認香菇／卵殼、小盜蟲與美食評鑑、雞蛋／起司配送、瑪哪樹枝四條任務都已達成，但暫時不點 NPC 回報。</p></div></div>
+              <div class="route-end"><b>準備吃藥</b><span>此時朱諾 12 項與毀葛 4 項都已完成未領，接著就能吃經驗藥水開始總回報。</span></div>
             </div>
           </article>
         </div>
-        <div class="note">這頁的順序以「同圖集中、減少進出城鎮」為原則。若你使用卡普拉或傳送服務，仍可依手上的傳送點微調；任務目標與回報 NPC 則依目前 RO樂園任務導航資料固定。</div>
+        <div class="note">這頁的前半段只負責接任務與完成目標。經驗藥水請留到下方「吃藥後總回報」才使用，避免藥水時間花在打怪、採集或飛空艇移動。</div>
+      </div>
+    </section>
+
+    <section class="panel route" id="return-route">
+      <header class="route-head">
+        <div>
+          <h2>吃經驗藥水後：總回報動線</h2>
+          <p>朱諾與毀葛的目標都完成後，先從毀葛搭飛空艇回朱諾但不要回報；在朱諾開始吃藥，集中領完朱諾，再飛回毀葛收尾。</p>
+        </div>
+        <span class="count">未回報 17 項</span>
+      </header>
+      <div class="route-body">
+        <div class="potion-callout">
+          <strong>在朱諾航空附近吃經驗藥水</strong>
+          <p>從毀葛完成所有目標後，先不回任何 NPC，搭飛空艇回朱諾。抵達朱諾、確定 13 項朱諾任務都在可回報狀態後才吃藥水；媽媽手便當要維持在背包內，直到這個階段才交給警備兵。</p>
+        </div>
+
+        <div class="route-grid">
+          <article class="step">
+            <header class="step-title"><span class="step-number">1</span><div><h3>毀葛 → 朱諾：先移動，不回報</h3><span>把飛空艇時間放在藥水開始前</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">hugel</span><div><strong>從毀葛航空搭乘秀發茲發德國內線回朱諾</strong><p>四項毀葛每日都先保留完成狀態。抵達朱諾後，立刻在航廈周邊開始經驗藥水。</p><div class="chip-row"><button class="navi" data-navi="/navi hugel 186/147">毀葛航空 186,147</button><button class="navi" data-navi="/navi yuno 255/208">朱諾航空 255,208</button></div></div></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <header class="step-title"><span class="step-number">2</span><div><h3>朱諾：城內 → 學院外圍 → 洞穴 / 國界</h3><span>吃藥後先交數量最多的朱諾 13 項</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">朱諾城內</span><div><strong>艾蜜莉 → 土黎 → 弗雷里</strong><p>先交哈比巢穴、落跑吧魔書、搭建陣地。弗雷里需確認眼鏡蛇材料已先交過。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno 255/208">艾蜜莉 255,208</button><button class="navi" data-navi="/navi yuno 308/170">土黎 308,170</button><button class="navi" data-navi="/navi yuno 308/80">弗雷里 308,80</button></div></div></div>
+              <div class="route-item"><span class="map-tag">學院外圍</span><div><strong>學院警備兵 → 學院學生 → 貓咪手商人 → 爾弗雷多 → 安傑洛</strong><p>沿學院座標反向交四項，再到末花野外交安傑洛的魔羌任務。</p><div class="chip-row"><button class="navi" data-navi="/navi yuno_fild02 198/200">學院警備兵 198,200</button><button class="navi" data-navi="/navi yuno_fild02 179/200">學院學生 179,200</button><button class="navi" data-navi="/navi yuno_fild02 172/198">貓咪手商人 172,198</button><button class="navi" data-navi="/navi yuno_fild02 146/186">爾弗雷多 146,186</button><button class="navi" data-navi="/navi yuno_fild11 171/164">安傑洛 171,164</button></div></div></div>
+              <div class="route-item"><span class="map-tag">洞穴 / 國界</span><div><strong>博物館職員 → 警備兵 → 檢查站長蔡迦莉</strong><p>交諾可羅德三項後，最後到國界檢查站交媽媽手便當，再找蔡迦莉交螳螂與邪惡向日葵。朱諾 13 項至此全部結束。</p><div class="chip-row"><button class="navi" data-navi="/navi mag_dun02 40/150">博物館職員 40,150</button><button class="navi" data-navi="/navi yuno_fild01 196/154">警備兵 196,154</button><button class="navi" data-navi="/navi yuno_fild01 193/161">蔡迦莉 193,161</button></div></div></div>
+              <div class="route-end"><b>朱諾完成</b><span>此時經驗藥水還在作用中，直接回朱諾航空搭飛空艇前往毀葛，收最後 4 項。</span></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <header class="step-title"><span class="step-number">3</span><div><h3>毀葛：西伊岱 → hu_in01 三人</h3><span>飛抵毀葛後，四項生活每日一次收尾</span></div></header>
+            <div class="step-body">
+              <div class="route-item"><span class="map-tag">hugel</span><div><strong>西伊岱</strong><p>先交夢克絲香菇與夢克絲卵殼。</p><div class="chip-row"><button class="navi" data-navi="/navi hugel 83/97">西伊岱 83,97</button></div></div></div>
+              <div class="route-item"><span class="map-tag">hu_in01</span><div><strong>西雷托 → 傑特 → 玫西多雷</strong><p>最後依室內動線交美食評鑑、小盜蟲、雞蛋／起司配送與瑪哪樹枝。</p><div class="chip-row"><button class="navi" data-navi="/navi hu_in01 15/372">西雷托 15,372</button><button class="navi" data-navi="/navi hu_in01 246/300">傑特 246,300</button><button class="navi" data-navi="/navi hu_in01 289/249">玫西多雷 289,249</button></div></div></div>
+              <div class="route-end"><b>全部完成</b><span>朱諾 13 項 + 毀葛 4 項都在同一瓶經驗藥水時間內回報完畢。</span></div>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
