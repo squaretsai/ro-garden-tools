@@ -498,7 +498,8 @@
   </main>
 
   <script>
-    const BASE_EXP_TO_NEXT = {
+    // Source table's BaseLv column is used directly: Lv100 = 5,474,650,170.
+    const BASE_EXP_TABLE_PREVIOUS_INDEX = {
       1: 2443,
       2: 2711,
       3: 3009,
@@ -609,6 +610,10 @@
       108: 28247992372,
       109: 33897590846
     };
+
+    const BASE_EXP_TO_NEXT = Object.fromEntries(
+      Object.entries(BASE_EXP_TABLE_PREVIOUS_INDEX).map(([level, exp]) => [Number(level) + 1, exp])
+    );
 
     const form = document.getElementById("converterForm");
     const baseLevel = document.getElementById("baseLevel");

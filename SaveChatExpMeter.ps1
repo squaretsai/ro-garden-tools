@@ -69,7 +69,7 @@ function Convert-TimeInput {
 }
 
 $script:BaseExpTableSource = "使用者提供的 RO樂園 BaseLv1~110 需求經驗表截圖。"
-$script:BaseExpToNextByLevel = @{
+$script:BaseExpTablePreviousIndex = @{
     1 = 2443
     2 = 2711
     3 = 3009
@@ -179,6 +179,12 @@ $script:BaseExpToNextByLevel = @{
     107 = 23539993644
     108 = 28247992372
     109 = 33897590846
+}
+
+# The screenshot labels Base Lv100 as 5,474,650,170, so shift its stored rows to the matching current level.
+$script:BaseExpToNextByLevel = @{}
+foreach ($entry in $script:BaseExpTablePreviousIndex.GetEnumerator()) {
+    $script:BaseExpToNextByLevel[[int]$entry.Key + 1] = $entry.Value
 }
 
 function Read-ChatText {
@@ -499,7 +505,9 @@ if (-not [string]::IsNullOrWhiteSpace($gamePercentStartText)) {
 }
 
 $baseExpToNext = $null
-if ($BaseLevel -gt 0) {
+if ($BaseLevel -ge 110) {
+    Write-Host "Base Lv110 為目前等級上限，沒有下一級升級需求可換算。" -ForegroundColor Yellow
+} elseif ($BaseLevel -gt 0) {
     if ($script:BaseExpToNextByLevel.ContainsKey($BaseLevel)) {
         $baseExpToNext = [double]$script:BaseExpToNextByLevel[$BaseLevel]
     } else {
