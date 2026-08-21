@@ -119,15 +119,15 @@
         <div class="formula" aria-label="精煉公式摘要">
           <span>防具 DEF = 精煉值²</span>
           <span>武器基本加成 = 依武器等級</span>
-          <span>特殊精煉另有隨機 ATK</span>
+          <span>過度精煉傷害會波動</span>
         </div>
       </div>
       <div class="hero-visual" role="img" aria-label="國家武器精煉效果圖片"></div>
     </section>
 
     <section class="quick-grid" aria-label="常用精煉數值">
-      <article class="panel quick"><strong>+7 四級武器</strong><span>基本 +56 ATK／MATK；特殊精煉額外 +1～42。</span></article>
-      <article class="panel quick"><strong>+10 四級武器</strong><span>基本 +80 ATK／MATK；特殊精煉額外 +1～84。</span></article>
+      <article class="panel quick"><strong>+7 四級武器</strong><span>面板基本固定 +56 ATK／MATK；過度精煉傷害每次會波動 +1～42。</span></article>
+      <article class="panel quick"><strong>+10 四級武器</strong><span>面板基本固定 +80 ATK／MATK；過度精煉傷害每次會波動 +1～84。</span></article>
       <article class="panel quick"><strong>+7 任一防具</strong><span>固定 +49 DEF。防具不需要區分等級。</span></article>
     </section>
 
@@ -171,10 +171,10 @@
     <section class="panel section">
       <div class="section-head">
         <div>
-          <h2>特殊精煉：額外隨機 ATK／MATK</h2>
-          <p>下表是特殊精煉時，會再加到基本精煉數值上的額外範圍。數字為最小 +1 至最高值；「—」表示該武器等級尚未有特殊加成。</p>
+          <h2>過度精煉：額外傷害波動</h2>
+          <p>超過各武器安全精煉值後，傷害端會多一段隨機波動。這不是精煉成功時抽到的永久 ATK，也不會讓兩把同樣 +9 的武器面板 ATK 不同；表中為每次傷害額外加上的最小 +1 至最高值。</p>
         </div>
-        <span class="pill">額外值不取代基本加成</span>
+        <span class="pill">傷害波動不改面板 ATK</span>
       </div>
       <div class="special-grid">
         <div class="table-wrap">
@@ -201,14 +201,14 @@
           </table>
         </div>
         <aside class="notice">
-          <strong>怎麼看這張表？</strong>
+          <strong>+9／+10 武器會不會不一樣？</strong>
           <p>以 +10 四級武器為例：</p>
           <ul>
             <li>基本精煉固定給 <strong>+80 ATK／MATK</strong>。</li>
-            <li>特殊精煉再隨機給 <strong>+1～84 ATK／MATK</strong>。</li>
-            <li>因此在特殊精煉條件成立時，額外精煉部分合計為 <strong>+81～164</strong>。</li>
+            <li>每次造成傷害時，過度精煉再有 <strong>+1～84</strong> 的傷害波動。</li>
+            <li>所以兩把同為 +10 四級武器的基本 ATK 完全相同；不同的是每一發傷害可能出現的浮動。</li>
           </ul>
-          <p>防具沒有這張武器特殊 ATK 表，基礎顯示 DEF 則固定按精煉值平方計算。</p>
+          <p>技能是否完整帶入這段波動，仍要看各技能自己的傷害公式。防具沒有這段武器過度精煉傷害，顯示 DEF 固定按精煉值平方計算。</p>
         </aside>
       </div>
       <p class="source-note">資料依 Ragnarok Zero 精煉規則整理。精煉機率、破壞與使用的材料，請搭配 <a href="refine-calculator.html">精煉成本與鐵祝計算器</a> 一起查看。外部原始參考：<a href="https://rozerodb.com/guides/refine" target="_blank" rel="noreferrer">RO Zero Database Refine Guide</a>。</p>
