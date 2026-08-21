@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RO樂園 Base Lv.90 每日任務獵人專用魔物圖鑑：依地區整理種族、屬性、體型、95%迴避與魔法解除提醒。">
+  <title>RO樂園｜90 每日獵人魔物圖鑑</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f2eb;
+      --paper: #fffdf8;
+      --ink: #20242b;
+      --muted: #68717c;
+      --line: #ded6ca;
+      --red: #a52b31;
+      --red-dark: #7d171c;
+      --gold: #bc8326;
+      --green: #267460;
+      --blue: #2b6c99;
+      --radius: 8px;
+      --shadow: 0 18px 48px rgba(46, 39, 28, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(165, 43, 49, .07), transparent 33%),
+        linear-gradient(320deg, rgba(38, 116, 96, .08), transparent 38%),
+        var(--bg);
+    }
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    .shell { width: min(1240px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 48px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .mark { display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px; border: 1px solid rgba(165,43,49,.24); border-radius: var(--radius); background: #fff8ec; box-shadow: inset 0 0 0 3px rgba(188,131,38,.12); color: var(--red); font-size: 17px; font-weight: 900; }
+    h1 { margin: 0; font-size: clamp(24px, 4vw, 39px); line-height: 1.13; letter-spacing: 0; }
+    .subtitle { margin: 5px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .top-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .nav-link { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(255,253,248,.84); color: #505964; font-size: 13px; font-weight: 900; text-decoration: none; }
+    .nav-link.primary { border-color: rgba(165,43,49,.28); background: #fff1e2; color: var(--red-dark); }
+    .nav-link:hover, .nav-link:focus-visible { border-color: rgba(165,43,49,.58); outline: none; }
+    .panel { border: 1px solid var(--line); border-radius: var(--radius); background: rgba(255,253,248,.91); box-shadow: var(--shadow); }
+
+    .hero { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr); min-height: 278px; margin-bottom: 16px; }
+    .hero-copy { padding: 25px; }
+    .eyebrow { color: var(--red); font-size: 12px; font-weight: 900; letter-spacing: .09em; }
+    .hero h2 { max-width: 700px; margin: 8px 0 9px; font-size: clamp(27px, 4.5vw, 46px); line-height: 1.1; letter-spacing: 0; }
+    .hero p { max-width: 690px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.72; }
+    .hero-note { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; margin-top: 17px; padding: 6px 10px; border: 1px solid rgba(165,43,49,.24); border-radius: var(--radius); background: #fff1ef; color: var(--red-dark); font-size: 12px; font-weight: 900; }
+    .hero-visual { position: relative; overflow: hidden; min-height: 278px; background: linear-gradient(155deg, #233c43, #17282e 72%); }
+    .hero-visual::after { content: "獵人每日攻略"; position: absolute; right: 16px; bottom: 16px; z-index: 2; padding: 7px 10px; border: 1px solid rgba(255,255,255,.42); border-radius: var(--radius); background: rgba(17,23,28,.62); color: #fff; font-size: 12px; font-weight: 900; }
+    .sprite { position: absolute; display: grid; place-items: center; width: 116px; height: 116px; border: 1px solid rgba(255,255,255,.17); border-radius: var(--radius); background: rgba(255,255,255,.11); box-shadow: 0 16px 34px rgba(0,0,0,.22); }
+    .sprite img { max-width: 82px; max-height: 82px; image-rendering: auto; }
+    .sprite.one { top: 27px; left: 34px; transform: rotate(-4deg); }
+    .sprite.two { top: 58px; right: 48px; transform: rotate(5deg); }
+    .sprite.three { bottom: 22px; left: 42%; transform: rotate(-2deg); }
+
+    .summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .summary-card { padding: 14px 15px; border-top: 4px solid var(--gold); }
+    .summary-card:nth-child(2) { border-top-color: var(--blue); }
+    .summary-card:nth-child(3) { border-top-color: var(--green); }
+    .summary-card:nth-child(4) { border-top-color: var(--red); }
+    .summary-card span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .summary-card strong { display: block; margin-top: 4px; color: var(--red-dark); font-size: 23px; line-height: 1.1; }
+
+    .guide { display: grid; grid-template-columns: 1.06fr .94fr; gap: 16px; margin-bottom: 16px; }
+    .guide > section { padding: 18px; }
+    .guide h2 { margin: 0; font-size: 20px; line-height: 1.25; }
+    .guide p { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .race-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+    .race-token, .tag { display: inline-flex; align-items: center; min-height: 28px; padding: 4px 8px; border-radius: var(--radius); font-size: 12px; font-weight: 900; }
+    .race-token { border: 1px solid rgba(38,116,96,.22); background: #eef7f3; color: var(--green); }
+    .dispel-box { display: flex; gap: 12px; align-items: flex-start; border: 1px solid rgba(165,43,49,.3); background: #fff1ef; }
+    .warning-mark { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; background: var(--red); color: #fff; font-weight: 900; }
+    .dispel-box strong { color: var(--red-dark); }
+    .dispel-box p { color: #684c4c; }
+
+    .filters { position: sticky; top: 10px; z-index: 4; display: grid; grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(130px, .28fr)); gap: 10px; padding: 13px; margin-bottom: 16px; }
+    input, select { min-width: 0; height: 42px; padding: 8px 10px; border: 1px solid #cfc7bd; border-radius: var(--radius); background: #fff; color: var(--ink); font-size: 14px; font-weight: 800; outline: none; }
+    input:focus, select:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(165,43,49,.13); }
+    .filter-count { display: flex; align-items: center; justify-content: center; min-height: 42px; padding: 7px 10px; border: 1px solid rgba(188,131,38,.3); border-radius: var(--radius); color: #66502c; background: #fff7e8; font-size: 12px; font-weight: 900; white-space: nowrap; }
+
+    .region { margin-top: 20px; scroll-margin-top: 86px; }
+    .region-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; padding: 0 2px 10px; border-bottom: 2px solid var(--line); }
+    .region-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 9px; }
+    .region h2 { margin: 0; font-size: clamp(23px, 3.2vw, 31px); line-height: 1.1; }
+    .region-head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .region-count { display: inline-flex; align-items: center; min-height: 29px; padding: 4px 9px; border: 1px solid rgba(43,108,153,.22); border-radius: var(--radius); background: #eef6fb; color: var(--blue); font-size: 12px; font-weight: 900; white-space: nowrap; }
+    .monster-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-top: 13px; }
+    .monster-card { position: relative; display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; min-height: 176px; padding: 13px; overflow: hidden; }
+    .monster-card[hidden], .region[hidden] { display: none; }
+    .monster-image { display: grid; place-items: center; width: 92px; height: 92px; align-self: start; border: 1px solid rgba(188,131,38,.25); border-radius: var(--radius); background: linear-gradient(145deg, #fff5de, #f5eee1); }
+    .monster-image img { max-width: 72px; max-height: 72px; }
+    .monster-content { min-width: 0; }
+    .monster-name { display: flex; align-items: flex-start; gap: 7px; }
+    .monster-name h3 { margin: 0; font-size: 18px; line-height: 1.23; letter-spacing: 0; }
+    .task-count { display: inline-flex; flex: 0 0 auto; align-items: center; min-height: 24px; padding: 3px 6px; border-radius: var(--radius); color: #76521c; background: #fff2d7; font-size: 11px; font-weight: 900; white-space: nowrap; }
+    .alias { margin: 4px 0 0; color: #887563; font-size: 11px; line-height: 1.45; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .tag { min-height: 24px; padding: 3px 6px; border: 1px solid transparent; font-size: 11px; }
+    .tag.race { color: #2c6a5c; background: #edf7f3; border-color: rgba(38,116,96,.17); }
+    .tag.size { color: #675934; background: #fbf5e9; border-color: rgba(188,131,38,.18); }
+    .tag.element { color: #4f5966; background: #f0f3f6; border-color: rgba(79,89,102,.14); }
+    .tag.element[data-element="火"] { color: #ab3e31; background: #fff0ed; }
+    .tag.element[data-element="水"] { color: #286b9d; background: #edf7ff; }
+    .tag.element[data-element="風"] { color: #277a5d; background: #ecf8f2; }
+    .tag.element[data-element="地"] { color: #697629; background: #f4f7e8; }
+    .tag.element[data-element="暗"] { color: #4f4a6e; background: #f1f0f8; }
+    .tag.element[data-element="不死"] { color: #6b533f; background: #f7f0e9; }
+    .tag.element[data-element="念"] { color: #985070; background: #fff0f7; }
+    .tag.element[data-element="毒"] { color: #7d3d82; background: #faf0fb; }
+    .flee { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 7px; margin-top: -2px; padding-top: 9px; border-top: 1px solid var(--line); }
+    .flee span { color: var(--muted); font-size: 11px; font-weight: 800; }
+    .flee strong { color: var(--blue); font-size: 18px; line-height: 1; font-variant-numeric: tabular-nums; }
+    .map-note { grid-column: 1 / -1; margin: -4px 0 0; color: #68717c; font-size: 11px; line-height: 1.5; }
+    .map-note strong { color: #535d68; }
+    .dispel-tag { position: absolute; top: 9px; right: 9px; display: inline-flex; align-items: center; min-height: 25px; padding: 3px 7px; border: 1px solid rgba(165,43,49,.34); border-radius: var(--radius); color: var(--red-dark); background: #fff1ef; font-size: 11px; font-weight: 900; }
+    .empty { display: none; margin: 28px 0; padding: 20px; text-align: center; color: var(--muted); }
+    .empty.show { display: block; }
+    .source { margin: 26px 2px 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .source a { color: var(--red-dark); font-weight: 900; }
+
+    @media (max-width: 1000px) { .monster-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .filters { grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(130px, .34fr)); } .filter-count { grid-column: 1 / -1; } }
+    @media (max-width: 760px) { .topbar, .hero, .guide { grid-template-columns: 1fr; } .topbar { align-items: flex-start; flex-direction: column; } .top-actions { justify-content: flex-start; width: 100%; } .top-actions .nav-link { flex: 1; } .hero-visual { min-height: 184px; } .sprite.two { right: 24px; } .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } .filters { position: static; grid-template-columns: 1fr; } .filter-count { grid-column: auto; } }
+    @media (max-width: 540px) { .shell { width: min(100% - 22px, 1240px); padding-top: 18px; } .hero-copy, .guide > section { padding: 16px; } .monster-grid { grid-template-columns: 1fr; } .monster-card { min-height: 158px; } .region-head { align-items: flex-start; flex-direction: column; } .sprite.one { left: 21px; } .sprite.three { left: 40%; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">90</div>
+        <div>
+          <h1>90 每日獵人魔物圖鑑</h1>
+          <p class="subtitle">RO樂園・依地區準備種族弓、屬性弓與迴避門檻</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <a class="nav-link primary" href="daily-quests-90.html">90 每日任務清單</a>
+        <a class="nav-link" href="index.html">回首頁</a>
+      </div>
+    </header>
+
+    <section class="panel hero" aria-label="獵人圖鑑說明">
+      <div class="hero-copy">
+        <div class="eyebrow">HUNTER DAILY FIELD GUIDE</div>
+        <h2>每天出門前，先把弓配對。</h2>
+        <p>收錄 Base Lv.90 每日任務的全部直接討伐目標，共 30 種。用地區、種族與屬性篩選後，可以先換好對應的弓或箭矢；每張卡都標有種族、屬性、體型與達成 95% 迴避所需 FLEE。</p>
+        <div class="hero-note">魔法解除提醒：崑崙的妖仙女會使用「魔法效果解除」</div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="sprite one"><img src="assets/daily-quests-90-hunter/monsters/1321.gif" alt=""></div>
+        <div class="sprite two"><img src="assets/daily-quests-90-hunter/monsters/1416.gif" alt=""></div>
+        <div class="sprite three"><img src="assets/daily-quests-90-hunter/monsters/1405.gif" alt=""></div>
+      </div>
+    </section>
+
+    <section class="summary" aria-label="圖鑑摘要">
+      <article class="panel summary-card"><span>直接討伐目標</span><strong id="monsterTotal">30 種</strong></article>
+      <article class="panel summary-card"><span>每日任務地區</span><strong>6 區</strong></article>
+      <article class="panel summary-card"><span>最高 95% 迴避</span><strong>419 FLEE</strong></article>
+      <article class="panel summary-card"><span>會魔法解除</span><strong>1 種</strong></article>
+    </section>
+
+    <section class="guide" aria-label="獵人配裝參考">
+      <section class="panel">
+        <h2>用種族篩選，決定帶哪把弓</h2>
+        <p>下方篩選器能直接只留一種種族。這頁刻意保留種族與屬性兩個維度，方便你以種族增傷弓為主，再視魔物屬性換箭矢或屬性武器。</p>
+        <div class="race-list" id="raceSummary"></div>
+      </section>
+      <section class="panel dispel-box">
+        <span class="warning-mark" aria-hidden="true">!</span>
+        <div>
+          <strong>妖仙女：魔法效果解除</strong>
+          <p>崑崙武陵道院的妖仙女在資料庫技能列中有「魔法效果解除」。要打她前，先把需要維持的輔助狀態與補放順序算進去；本頁其餘直接討伐目標沒有列出這個技能。</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel filters" aria-label="篩選魔物">
+      <input id="search" type="search" placeholder="搜尋魔物、地圖、種族或屬性">
+      <select id="regionFilter" aria-label="篩選地區"><option value="">全部地區</option></select>
+      <select id="raceFilter" aria-label="篩選種族"><option value="">全部種族</option></select>
+      <select id="elementFilter" aria-label="篩選屬性"><option value="">全部屬性</option></select>
+      <span class="filter-count" id="filterCount">顯示 30 種目標</span>
+    </section>
+
+    <div id="regions"></div>
+    <p class="panel empty" id="empty">找不到符合目前篩選條件的每日討伐目標。</p>
+    <p class="source">魔物數值取自本站 <a href="monster-stat-table.html">RO樂園魔物命中迴避表</a> 所使用的 TWROZ 魔物資料。95% 迴避為該怪物所需 FLEE，不是命中值；菁英怪未另列，避免把同一每日目標重複計算。資料庫中「火焰龜」對應 90 每日任務文字的「火靈龜」。</p>
+  </main>
+
+  <script>
+    const REGIONS = [
+      { id: "turtle", name: "龜島", note: "龜島、龜島密穴、良龜村與舊良宮。任務文字的火靈龜，資料庫名為火焰龜。", monsters: [
+        ["刺尾蜻蜓", 1321, "昆蟲", "風2", "中", 324, "10 隻", "龜島 1F"],
+        ["彈簧兔", 1322, "動物", "地2", "中", 317, "10 隻", "龜島 1F"],
+        ["果樹龜", 1314, "動物", "無2", "中", 318, "10 隻", "龜島 1F／密穴"],
+        ["岩石龜", 1316, "動物", "地2", "中", 324, "10 隻", "龜島密穴"],
+        ["水靈龜", 1319, "動物", "水2", "中", 341, "10 隻", "龜島密穴／良龜村"],
+        ["火靈龜", 1318, "動物", "火2", "中", 385, "10 隻", "良龜村／舊良宮", "資料庫名：火焰龜"],
+        ["風靈龜", 1315, "人形", "風2", "中", 419, "10 隻", "良龜村／舊良宮"]
+      ]},
+      { id: "kunlun", name: "崑崙", note: "原野、西王母神殿、圍棋臺與武陵道院。妖仙女有魔法解除。", monsters: [
+        ["元宵童子", 1409, "人形", "無1", "小", 280, "15 隻", "崑崙原野"],
+        ["妖仙女", 1416, "惡魔", "暗3", "中", 379, "15 隻", "崑崙武陵道院", "會使用魔法效果解除", true],
+        ["猴桃木", 1410, "植物", "地2", "中", 370, "15 隻", "西王母神殿／圍棋臺"],
+        ["人蔘精", 1413, "植物", "火2", "小", 367, "15 隻", "崑崙武陵道院"]
+      ]},
+      { id: "ayothaya", name: "泰國／哎喲泰雅", note: "古代神殿內部、迷宮與原野。紅色流蘇、竹籃也分別由塔嚕安、克萊本掉落。", monsters: [
+        ["群葉貓", 1586, "動物", "地1", "小", 279, "15 隻", "哎喲泰雅原野／古代神殿"],
+        ["克萊本", 1587, "無形", "念2", "中", 314, "15 隻", "古代神殿內部／迷宮"],
+        ["塔嚕安", 1584, "惡魔", "暗3", "大", 322, "10 隻", "古代神殿內部"]
+      ]},
+      { id: "amatsu", name: "天津", note: "原野、地下森林戰場與地下神舍。天狗與火忍西怒畢須先完成天津前置。", monsters: [
+        ["釣魚河童", 1406, "魚貝", "水1", "中", 334, "30 隻", "天津町原野"],
+        ["傘妖", 1400, "無形", "無3", "中", 326, "30 隻", "天津町原野"],
+        ["米雅畢", 1404, "惡魔", "暗1", "中", 356, "30 隻", "地下森林戰場／地下神舍"],
+        ["武士火槍兵", 1403, "不死", "不死2", "中", 368, "20 隻", "地下森林戰場／地下神舍"],
+        ["牛蛙", 1402, "動物", "毒2", "中", 337, "30 隻", "地下森林戰場／原野"],
+        ["天狗", 1405, "惡魔", "地2", "大", 368, "20 隻", "地下神舍", "天津主線／副本前置"],
+        ["火忍西怒畢", 1401, "人形", "暗3", "中", 358, "20 隻", "地下森林戰場／地下神舍", "天津主線／副本前置"]
+      ]},
+      { id: "louyang", name: "洛陽／龍之城", note: "王陵、王陵內部與審良宮。舞獅同時出現在兩個每日，合計要打 40 隻。", monsters: [
+        ["豹皮怪", 1517, "惡魔", "地3", "中", 330, "30 隻", "龍之城王陵"],
+        ["狐仙", 1513, "動物", "風2", "中", 343, "30 隻", "龍之城審良宮"],
+        ["舞獅", 1514, "龍", "風2", "中", 335, "共 40 隻", "王陵內部／審良宮", "10 隻素材任務 + 30 隻討伐"],
+        ["妖君", 1512, "不死", "不死2", "中", 345, "30 隻", "龍之城王陵內部"],
+        ["小青", 1631, "人形", "風2", "中", 345, "30 隻", "龍之城審良宮"]
+      ]},
+      { id: "niflheim", name: "死都／尼芙菲姆", note: "偏僻村落斯凱領頓與鬼峽谷。此區暗屬性與不死屬性目標比例高。", monsters: [
+        ["銀月魔女", 1505, "惡魔", "暗4", "大", 400, "20 隻", "尼芙菲姆鬼峽谷"],
+        ["嗜血怪人", 1507, "人形", "暗3", "大", 395, "20 隻", "尼芙菲姆鬼峽谷"],
+        ["假面鬼", 1506, "惡魔", "地4", "中", 368, "20 隻", "偏僻村落斯凱領頓"],
+        ["無顱武士", 1504, "不死", "不死2", "中", 379, "20 隻", "偏僻村落／鬼峽谷"]
+      ]}
+    ];
+
+    const allMonsters = REGIONS.flatMap(region => region.monsters.map(([name, id, race, element, size, flee, amount, map, note = "", dispel = false]) => ({ name, id, race, element, size, flee, amount, map, note, dispel, region })));
+    const elementType = element => element.replace(/\d/g, "");
+    const unique = values => [...new Set(values)].sort((a, b) => a.localeCompare(b, "zh-Hant"));
+
+    const regionFilter = document.getElementById("regionFilter");
+    const raceFilter = document.getElementById("raceFilter");
+    const elementFilter = document.getElementById("elementFilter");
+    const search = document.getElementById("search");
+    const regionsElement = document.getElementById("regions");
+    const filterCount = document.getElementById("filterCount");
+    const empty = document.getElementById("empty");
+
+    function fillOptions(select, values, label) {
+      select.innerHTML = `<option value="">全部${label}</option>${values.map(value => `<option value="${value}">${value}</option>`).join("")}`;
+    }
+
+    function renderRegion(region) {
+      return `<section class="region" id="${region.id}" data-region="${region.name}">
+        <header class="region-head"><div class="region-title"><h2>${region.name}</h2><p>${region.note}</p></div><span class="region-count">${region.monsters.length} 種目標</span></header>
+        <div class="monster-grid">${region.monsters.map(([name, id, race, element, size, flee, amount, map, note = "", dispel = false]) => `
+          <article class="panel monster-card" data-name="${name}" data-race="${race}" data-element="${elementType(element)}" data-search="${[name, race, element, size, map, note, region.name].join(" ").toLowerCase()}">
+            ${dispel ? '<span class="dispel-tag">魔法解除</span>' : ''}
+            <div class="monster-image"><img src="assets/daily-quests-90-hunter/monsters/${id}.gif" alt="${name}"></div>
+            <div class="monster-content"><div class="monster-name"><h3>${name}</h3><span class="task-count">${amount}</span></div>${note ? `<p class="alias">${note}</p>` : ''}<div class="tag-row"><span class="tag race">${race}</span><span class="tag element" data-element="${elementType(element)}">${element}</span><span class="tag size">${size}型</span></div></div>
+            <div class="flee"><span>95% 迴避所需 FLEE</span><strong>${flee}</strong></div>
+            <p class="map-note"><strong>主要出沒：</strong>${map}</p>
+          </article>`).join("")}</div>
+      </section>`;
+    }
+
+    function applyFilters() {
+      const query = search.value.trim().toLowerCase();
+      const selectedRegion = regionFilter.value;
+      const selectedRace = raceFilter.value;
+      const selectedElement = elementFilter.value;
+      let visible = 0;
+
+      document.querySelectorAll(".region").forEach(regionElement => {
+        let regionVisible = 0;
+        regionElement.querySelectorAll(".monster-card").forEach(card => {
+          const match = (!query || card.dataset.search.includes(query))
+            && (!selectedRegion || regionElement.dataset.region === selectedRegion)
+            && (!selectedRace || card.dataset.race === selectedRace)
+            && (!selectedElement || card.dataset.element === selectedElement);
+          card.hidden = !match;
+          if (match) regionVisible += 1;
+        });
+        regionElement.hidden = regionVisible === 0;
+        visible += regionVisible;
+      });
+      filterCount.textContent = `顯示 ${visible} 種目標`;
+      empty.classList.toggle("show", visible === 0);
+    }
+
+    fillOptions(regionFilter, REGIONS.map(region => region.name), "地區");
+    fillOptions(raceFilter, unique(allMonsters.map(monster => monster.race)), "種族");
+    fillOptions(elementFilter, unique(allMonsters.map(monster => elementType(monster.element))), "屬性");
+    document.getElementById("monsterTotal").textContent = `${allMonsters.length} 種`;
+    document.getElementById("raceSummary").innerHTML = unique(allMonsters.map(monster => monster.race)).map(race => `<span class="race-token">${race} ${allMonsters.filter(monster => monster.race === race).length}</span>`).join("");
+    regionsElement.innerHTML = REGIONS.map(renderRegion).join("");
+    [search, regionFilter, raceFilter, elementFilter].forEach(control => control.addEventListener(control === search ? "input" : "change", applyFilters));
+  </script>
+</body>
+</html>

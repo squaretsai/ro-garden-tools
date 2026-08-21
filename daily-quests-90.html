@@ -125,6 +125,13 @@
       white-space: nowrap;
     }
 
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
     .panel {
       max-width: 100%;
       border: 1px solid var(--line);
@@ -985,6 +992,14 @@
       .nav-link {
         width: 100%;
       }
+
+      .topbar-actions {
+        width: 100%;
+      }
+
+      .topbar-actions .nav-link {
+        flex: 1 1 0;
+      }
     }
 
     @media (max-width: 520px) {
@@ -1053,7 +1068,10 @@
           <p class="subtitle">依地區整理前置任務、NPC 位置與每日內容</p>
         </div>
       </div>
-      <a class="nav-link" href="index.html">回首頁</a>
+      <div class="topbar-actions">
+        <a class="nav-link" href="daily-quests-90-hunter.html">獵人魔物圖鑑</a>
+        <a class="nav-link" href="index.html">回首頁</a>
+      </div>
     </header>
 
     <section class="panel hero" aria-label="任務總覽">
