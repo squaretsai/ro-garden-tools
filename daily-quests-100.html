@@ -566,6 +566,13 @@
       font-weight: 900;
     }
 
+    .quest-name {
+      min-width: 118px;
+      color: var(--ink);
+      font-weight: 900;
+      line-height: 1.5;
+    }
+
     .quest-list {
       margin: 0;
       padding-left: 19px;
@@ -1239,72 +1246,83 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>接任務地圖 / 座標</th><th>NPC</th><th>任務內容</th><th>打怪 / 進行地圖</th></tr></thead>
+            <thead><tr><th>接任務地圖 / 座標</th><th>NPC</th><th>任務名稱</th><th>任務內容</th><th>打怪 / 進行地圖</th></tr></thead>
             <tbody>
               <tr>
                 <td><span class="map">艾爾帕蘭 / aldebaran</span><br><button class="coord" type="button" data-navi="/navi aldebaran 114/180" aria-label="複製艾爾帕蘭 114,180 導航">114, 180</button></td>
                 <td class="npc">中年女性</td>
-                <td><ul class="quest-list"><li>媽媽手便當：送便當到國界檢查站給警備兵 196,154，純對話。</li></ul></td>
+                <td class="quest-name">媽媽手便當</td>
+                <td><ul class="quest-list"><li>送便當到國界檢查站給警備兵 196,154，純對話。</li></ul></td>
                 <td><span class="map">國界檢查站 / yuno_fild01</span><br><button class="coord" type="button" data-navi="/navi yuno_fild01 196/154" aria-label="複製國界檢查站警備兵 196,154 導航">警備兵 196,154</button></td>
               </tr>
               <tr>
                 <td><span class="map">國界檢查站 / yuno_fild01</span><br><button class="coord" type="button" data-navi="/navi yuno_fild01 193/161" aria-label="複製國界檢查站 193,161 導航">193, 161</button></td>
                 <td class="npc">檢查站長蔡迦莉</td>
-                <td><ul class="quest-list"><li>國界檢查站的工作：螳螂 10 隻、邪惡向日葵 10 隻。</li></ul></td>
+                <td class="quest-name">國界檢查站的工作</td>
+                <td><ul class="quest-list"><li>螳螂 10 隻、邪惡向日葵 10 隻。</li></ul></td>
                 <td><span class="map">國界檢查站周邊</span><br><span class="coord-note">依任務導航</span></td>
               </tr>
               <tr>
                 <td><span class="map">yuno_fild09</span><br><button class="coord" type="button" data-navi="/navi yuno_fild09 308/80" aria-label="複製 yuno_fild09 308,80 導航">308, 80</button></td>
                 <td class="npc">弗雷里</td>
-                <td><ul class="quest-list"><li>搭建陣地：準備柳橙 3、黃玉碎片 1、砂團 10、黃晶沙 3，交給眼鏡蛇 99,241 後，回弗雷里 308,80 回報。</li></ul></td>
+                <td class="quest-name">搭建陣地</td>
+                <td><ul class="quest-list"><li>準備柳橙 3、黃玉碎片 1、砂團 10、黃晶沙 3，交給眼鏡蛇 99,241 後，回弗雷里 308,80 回報。</li></ul></td>
                 <td><span class="map">yuno_fild09</span><br><button class="coord" type="button" data-navi="/navi yuno_fild09 99/241" aria-label="複製 yuno_fild09 眼鏡蛇 99,241 導航">眼鏡蛇 99,241</button></td>
               </tr>
               <tr>
                 <td><span class="map">海伊洛學院 / yuno_fild08</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 198/200" aria-label="複製海伊洛學院 yuno_fild08 198,200 導航">198, 200</button></td>
                 <td class="npc">學院警備兵</td>
-                <td><ul class="quest-list"><li>強化學院安全：鳥人哈比 15 隻；可與沙妖任務一起處理。</li></ul></td>
+                <td class="quest-name">強化學院安全</td>
+                <td><ul class="quest-list"><li>鳥人哈比 15 隻；可與沙妖任務一起處理。</li></ul></td>
                 <td><span class="map">爾邁斯 瀑雷德</span><br><span class="coord-note">yuno_fild03 / yun_f03 系列</span></td>
               </tr>
               <tr>
                 <td><span class="map">海伊洛學院 / yuno_fild08</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 179/200" aria-label="複製海伊洛學院 yuno_fild08 179,200 導航">179, 200</button></td>
                 <td class="npc">海伊洛學院學生</td>
-                <td><ul class="quest-list"><li>完美的結尾：七彩大嘴鳥 20 隻、魔羌 20 隻；可與呼喚雨水的祈禱一起處理。</li></ul></td>
+                <td class="quest-name">完美的結尾</td>
+                <td><ul class="quest-list"><li>七彩大嘴鳥 20 隻、魔羌 20 隻；可與呼喚雨水的祈禱一起處理。</li></ul></td>
                 <td><span class="map">海伊洛學院外 / 爾邁斯峽谷</span><br><span class="coord-note">七彩大嘴鳥：yuno_fild08 / 魔羌：yuno_fild07</span></td>
               </tr>
               <tr>
                 <td><span class="map">海伊洛學院 / yuno_fild08</span><br><button class="coord" type="button" data-navi="/navi yuno_fild08 172/198" aria-label="複製海伊洛學院 yuno_fild08 172,198 導航">172, 198</button></td>
                 <td class="npc">貓咪手商人</td>
-                <td><ul class="quest-list"><li>突破性的業務項目：交付七彩大嘴鳥之羽 10、魔羌之毛皮 10。</li></ul></td>
+                <td class="quest-name">突破性的業務項目</td>
+                <td><ul class="quest-list"><li>交付七彩大嘴鳥之羽 10、魔羌之毛皮 10。</li></ul></td>
                 <td><span class="map">海伊洛學院外 / 爾邁斯峽谷</span><br><span class="coord-note">同七彩大嘴鳥、魔羌地圖</span></td>
               </tr>
               <tr>
                 <td><span class="map">末花野外 / yuno_fild11</span><br><button class="coord" type="button" data-navi="/navi yuno_fild11 171/164" aria-label="複製末花野外 171,164 導航">171, 164</button></td>
                 <td class="npc">安傑洛</td>
-                <td><ul class="quest-list"><li>呼喚雨水的祈禱：魔羌 10 隻，並交付魔羌之角 10。</li></ul></td>
+                <td class="quest-name">呼喚雨水的祈禱</td>
+                <td><ul class="quest-list"><li>魔羌 10 隻，並交付魔羌之角 10。</li></ul></td>
                 <td><span class="map">爾邁斯峽谷</span><br><span class="coord-note">yuno_fild07 / yun_f07 系列</span></td>
               </tr>
               <tr>
                 <td><span class="map">海伊洛別墅 / yuno_fild02</span><br><button class="coord" type="button" data-navi="/navi yuno_fild02 146/186" aria-label="複製海伊洛別墅 yuno_fild02 146,186 導航">146, 186</button></td>
                 <td class="npc">爾弗雷多</td>
-                <td><ul class="quest-list"><li>將此詩獻給冒險家：沙妖 30 隻；可與鳥人哈比任務一起處理。</li></ul></td>
+                <td class="quest-name">將此詩獻給冒險家</td>
+                <td><ul class="quest-list"><li>沙妖 30 隻；可與鳥人哈比任務一起處理。</li></ul></td>
                 <td><span class="map">啟 海伊洛 別墅</span><br><span class="coord-note">yuno_fild02 / yun_f02 系列</span></td>
               </tr>
               <tr>
                 <td><span class="map">yuno_fild03</span><br><button class="coord" type="button" data-navi="/navi yuno_fild03 40/150" aria-label="複製 yuno_fild03 40,150 導航">40, 150</button></td>
                 <td class="npc">博物館職員</td>
-                <td><ul class="quest-list"><li>諾可羅德洞穴：準備凝固的岩漿 10；七彩夢魘 30 隻、七彩飛龍 30 隻、七彩地龍 30 隻後交付材料；需先成為伊甸園成員。</li></ul></td>
+                <td class="quest-name">諾可羅德洞穴</td>
+                <td><ul class="quest-list"><li>準備凝固的岩漿 10；七彩夢魘 30 隻、七彩飛龍 30 隻、七彩地龍 30 隻後交付材料；需先成為伊甸園成員。</li></ul></td>
                 <td><span class="map">諾哥羅德 2 樓</span><br><span class="coord-note">mag_dun02 / mag_d02 系列</span></td>
               </tr>
               <tr>
                 <td><span class="map">巴基力航空 / yuno_fild04</span><br><button class="coord" type="button" data-navi="/navi yuno_fild04 255/208" aria-label="複製巴基力航空 yuno_fild04 255,208 導航">255, 208</button></td>
                 <td class="npc">搜查隊艾蜜莉</td>
-                <td><ul class="quest-list"><li>尋找遺失的東西-哈比的巢穴：至少準備噬人樹花 10、哈比的羽毛 30，在 5 個標記點各放樹花 1、羽毛 3；可能失敗。</li></ul></td>
+                <td class="quest-name">尋找遺失的東西 - 哈比的巢穴</td>
+                <td><ul class="quest-list"><li>至少準備噬人樹花 10、哈比的羽毛 30，在 5 個標記點各放樹花 1、羽毛 3；可能失敗。</li></ul></td>
                 <td><span class="map">哈比巢穴標記點</span><br><span class="coord-note">依任務導航 5 點互動</span></td>
               </tr>
               <tr>
                 <td><span class="map">yuno_fild06</span><br><button class="coord" type="button" data-navi="/navi yuno_fild06 308/170" aria-label="複製 yuno_fild06 308,170 導航">308, 170</button></td>
                 <td class="npc">土黎</td>
-                <td><ul class="quest-list"><li>司書圖書館員和護衛的工作：使用司書圖書館員的魔杖抓取落跑吧魔書 5 隻。</li></ul></td>
+                <td class="quest-name">司書圖書館員和護衛的工作</td>
+                <td><ul class="quest-list"><li>使用司書圖書館員的魔杖抓取落跑吧魔書 5 隻。</li></ul></td>
                 <td><span class="map">朱諾城內</span><br><span class="coord-note">抓落跑吧魔書</span></td>
               </tr>
             </tbody>
@@ -1332,30 +1350,34 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>接任務地圖 / 座標</th><th>NPC</th><th>任務內容</th><th>打怪 / 進行地圖</th></tr></thead>
+            <thead><tr><th>接任務地圖 / 座標</th><th>NPC</th><th>任務名稱</th><th>任務內容</th><th>打怪 / 進行地圖</th></tr></thead>
             <tbody>
               <tr>
                 <td><span class="map">毀葛</span><br><button class="coord" type="button" data-navi="/navi hugel 83/97" aria-label="複製毀葛 83,97 導航">hugel 83, 97</button></td>
                 <td class="npc">西伊岱</td>
-                <td><ul class="quest-list"><li>探索新食材：採集夢克絲香菇、夢克絲卵殼；採香菇時記得帶花。</li></ul></td>
+                <td class="quest-name">探索新食材</td>
+                <td><ul class="quest-list"><li>採集夢克絲香菇、夢克絲卵殼；採香菇時記得帶花。</li></ul></td>
                 <td><span class="map">毀葛原野 06</span><br><span class="coord-note">香菇</span> <button class="coord" type="button" data-navi="/navi hu_fild06 168/356" aria-label="複製香菇 168,356 導航">168,356</button> <button class="coord" type="button" data-navi="/navi hu_fild06 194/341" aria-label="複製香菇 194,341 導航">194,341</button> <button class="coord" type="button" data-navi="/navi hu_fild06 198/339" aria-label="複製香菇 198,339 導航">198,339</button> <button class="coord" type="button" data-navi="/navi hu_fild06 158/326" aria-label="複製香菇 158,326 導航">158,326</button> <button class="coord" type="button" data-navi="/navi hu_fild06 121/293" aria-label="複製香菇 121,293 導航">121,293</button><br><span class="coord-note">卵殼</span> <button class="coord" type="button" data-navi="/navi hu_fild06 164/224" aria-label="複製卵殼 164,224 導航">164,224</button> <button class="coord" type="button" data-navi="/navi hu_fild06 147/111" aria-label="複製卵殼 147,111 導航">147,111</button> <button class="coord" type="button" data-navi="/navi hu_fild06 235/243" aria-label="複製卵殼 235,243 導航">235,243</button></td>
               </tr>
               <tr>
                 <td><span class="map">毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hu_in01 15/372" aria-label="複製毀葛室內 15,372 導航">hu_in01 15, 372</button></td>
                 <td class="npc">西雷托</td>
-                <td><ul class="quest-list"><li>向完美的口味前進：美食評鑑跑腿，準備蘋果 5、短劍 1、綠色藥草 10，並捕捉小盜蟲 3 隻。</li></ul></td>
+                <td class="quest-name">向完美的口味前進</td>
+                <td><ul class="quest-list"><li>美食評鑑跑腿，準備蘋果 5、短劍 1、綠色藥草 10，並捕捉小盜蟲 3 隻。</li></ul></td>
                 <td><span class="map">毀葛 / 毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hugel 87/139" aria-label="複製玫宛 87,139 導航">玫宛 87,139</button> <button class="coord" type="button" data-navi="/navi hugel 84/125" aria-label="複製拉尤麻 84,125 導航">拉尤麻 84,125</button> <button class="coord" type="button" data-navi="/navi hu_in01 40/381" aria-label="複製倉庫 40,381 導航">倉庫 40,381</button> <button class="coord" type="button" data-navi="/navi hugel 102/161" aria-label="複製艾樂詹 102,161 導航">艾樂詹 102,161</button></td>
               </tr>
               <tr>
                 <td><span class="map">毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hu_in01 246/300" aria-label="複製毀葛室內 246,300 導航">hu_in01 246, 300</button></td>
                 <td class="npc">傑特</td>
-                <td><ul class="quest-list"><li>毀葛之味：跑雞蛋、起司配送線；準備鉗子 5、穀物 3、檸檬 1、葡萄 3。</li></ul></td>
+                <td class="quest-name">毀葛之味</td>
+                <td><ul class="quest-list"><li>跑雞蛋、起司配送線；準備鉗子 5、穀物 3、檸檬 1、葡萄 3。</li></ul></td>
                 <td><span class="map">毀葛 / 毀葛原野 06</span><br><button class="coord" type="button" data-navi="/navi hu_fild06 209/217" aria-label="複製錫麗卡 209,217 導航">錫麗卡 209,217</button> <button class="coord" type="button" data-navi="/navi hugel 61/103" aria-label="複製柯蘿娜 61,103 導航">柯蘿娜 61,103</button></td>
               </tr>
               <tr>
                 <td><span class="map">毀葛室內</span><br><button class="coord" type="button" data-navi="/navi hu_in01 289/249" aria-label="複製毀葛室內 289,249 導航">hu_in01 289, 249</button></td>
                 <td class="npc">玫西多雷</td>
-                <td><ul class="quest-list"><li>整修住宅：交付瑪哪樹枝 15。</li></ul></td>
+                <td class="quest-name">整修住宅</td>
+                <td><ul class="quest-list"><li>交付瑪哪樹枝 15。</li></ul></td>
                 <td><span class="map">材料任務</span><br><span class="coord-note">瑪哪樹枝可先備好；回舒茨曼住宅交付</span></td>
               </tr>
             </tbody>
